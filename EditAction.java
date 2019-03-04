@@ -4,6 +4,7 @@ import javax.swing.*;
 
 public class EditAction extends JPanel implements ActionListener{
 	public void createAndShowGUI() {		
+		// 2x jlabel 1x jtextpane 4x jradiobutton 3x jcheckbox 3x jspinner 3x jbutton
 		final int frameWidth = 400;
 		final int frameHeight = 600;
 		
