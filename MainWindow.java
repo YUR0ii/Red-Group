@@ -4,7 +4,7 @@ public class MainWindow extends JWindow {
 
 	public static void main(String[] args)
 	{
-
+		new MainWindow();
 	}
 
 }
