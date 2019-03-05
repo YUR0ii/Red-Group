@@ -43,6 +43,7 @@ public class MainPage extends JPanel implements ActionListener{
 		input.setText("Input");
 		input.setVisible(true);
 		input.setActionCommand("Add a Task");
+		input.setPreferredSize(new Dimension(490,25));
 		this.setPreferredSize(new Dimension(500,400));
 		this.add(input); 
 		mainFrame.setLocation(250,100);
