@@ -4,11 +4,12 @@ import java.util.Calendar;
 
 import javax.swing.*;
 
-public class EditAction extends JPanel implements ActionListener{
+public class EditAction implements ActionListener{
 	public void createAndShowGUI() {		
-		// 2x jlabel 1x jtextpane 4x jradiobutton 3x jcheckbox 3x jspinner 3x jbutton
 		final int frameWidth = 400;
 		final int frameHeight = 600;
+		String itemName = null;
+		String commentText = null;
 		
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,13 +51,44 @@ public class EditAction extends JPanel implements ActionListener{
 		panel.add(urgentDateBox, c);
 		
 		SpinnerDateModel spinnerModel = new SpinnerDateModel();
-		JSpinner urgentDateSelect = new JSpinner(spinnerModel);
+		JSpinner selectUrgentDate = new JSpinner(spinnerModel);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 1;
+		panel.add(selectUrgentDate, c);
+		
+		JCheckBox currentDateBox = new JCheckBox("Current");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
-		panel.add(setInactiveStatus, c);
+		panel.add(currentDateBox, c);
 		
-		frame.add(panel);
+		JSpinner selectCurrentDate = new JSpinner(spinnerModel);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 2;
+		panel.add(selectCurrentDate, c);
+		
+		JCheckBox eventualDateBox = new JCheckBox("Eventual");
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 3;
+		panel.add(eventualDateBox, c);
+		
+		JSpinner selectEventualDate = new JSpinner(spinnerModel);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 1;
+		c.gridy = 3;
+		panel.add(selectEventualDate, c);
+		
+		JLabel displayItemName = new JLabel("Edit " + itemName);
+		Font itemNameFont = new Font("Arial", Font.PLAIN, 18);
+		displayItemName.setFont(itemNameFont);
+		JLabel displayCommentTitle = new JLabel("Comments");
+		
+		frame.getContentPane().setLayout(new BorderLayout());
+		frame.getContentPane().add(displayItemName, BorderLayout.PAGE_START);
+		frame.getContentPane().add(panel, BorderLayout.CENTER);
 		frame.setVisible(true);
 	}
 
