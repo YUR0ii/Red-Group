@@ -50,7 +50,7 @@ public class EditAction extends JPanel implements ActionListener{
 		panel.add(urgentDateBox, c);
 		
 		SpinnerDateModel spinnerModel = new SpinnerDateModel();
-		JSpinner urgentDateSelect = new JSpinner();
+		JSpinner urgentDateSelect = new JSpinner(spinnerModel);
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 2;
