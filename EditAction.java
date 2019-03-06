@@ -3,16 +3,15 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class EditAction extends JPanel implements ActionListener{
-	public void createAndShowGUI() {
-		// creates GUI for Edit Action Page
-		
+	public void createAndShowGUI() {		
+		// 2x jlabel 1x jtextpane 4x jradiobutton 3x jcheckbox 3x jspinner 3x jbutton
 		final int frameWidth = 400;
 		final int frameHeight = 600;
 		
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(frameWidth, frameHeight);
-		frame.setTitle("Edit Action Items");
+		frame.setTitle("Edit Item");
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -31,7 +30,4 @@ public class EditAction extends JPanel implements ActionListener{
 		EditAction e = new EditAction();
 		e.createAndShowGUI();
 	}
-	
-	//Harun was here
 }
-
