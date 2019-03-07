@@ -7,9 +7,9 @@ public abstract class Event {
 	private String sentence;
 	
 	Event(){
-		createSentence();
 		//Should never be called here
 		System.out.println("You called the event superclass constructor");
+		createSentence();
 	}
 	
 	//Creates the sentence to be stores until retrieved
@@ -17,6 +17,7 @@ public abstract class Event {
 	//respectively to create these sentences
 	public abstract String createSentence();
 	
+	//another way to get the sentence
 	public String getSentence() {
 		return sentence;
 	}
