@@ -3,8 +3,8 @@ import java.util.*;
 
 public abstract class Event {
 	
-	private Date date;
-	private String sentence;
+	protected Date date;
+	protected String sentence;
 	
 	Event(){
 		//Should never be called here
