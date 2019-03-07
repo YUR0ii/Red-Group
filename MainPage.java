@@ -5,7 +5,8 @@ import javax.swing.*;
 
 public class MainPage extends JPanel implements ActionListener{
 	private JFrame mainFrame=new JFrame();
-	private JScrollPane scroll=new JScrollPane(this);
+	private JPanel scrollPanel=new JPanel();
+	private JScrollPane scroll=new JScrollPane(scrollPanel);
 	private JMenuBar menuBar=new JMenuBar();
 	private JMenu file=new JMenu("File"); 
 	private JPopupMenu fileMenu=new JPopupMenu();
@@ -44,6 +45,7 @@ public class MainPage extends JPanel implements ActionListener{
 		input.setVisible(true);
 		input.setActionCommand("Add a Task");
 		input.setPreferredSize(new Dimension(490,25));
+		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
 		this.setPreferredSize(new Dimension(500,400));
 		this.add(input); 
 		mainFrame.setLocation(250,100);
@@ -57,14 +59,14 @@ public class MainPage extends JPanel implements ActionListener{
 			incompleteTasks.add(temp);
 			containers.add(new taskContainer(temp));
 			int index=incompleteTasks.indexOf(temp);
-			this.add(containers.get(index).getLabel());
+			scrollPanel.add(containers.get(index).getLabel());
 		}
 	}
 	public void paintComponent(Graphics g) {
 		
 		
 	}
-	class taskContainer{
+	public class taskContainer{
 		private JLabel container;
 		private String date;
 		taskContainer(Task task){
@@ -88,7 +90,7 @@ public class MainPage extends JPanel implements ActionListener{
 			}else if(e.getComponent().equals(restore)) {
 				
 			}else if(e.getComponent().equals(print)) {
-				
+				//test
 			}
 			fileMenu.setVisible(false);
 		}
