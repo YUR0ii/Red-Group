@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JButton;
@@ -10,8 +11,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 
-public class closedPage extends MainPage {
-	closedPage(){
+public class ClosedPage extends MainPage {
+	ClosedPage(){
 		JFrame closeFrame=new JFrame();
 		JPanel panel = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(panel);
@@ -23,6 +24,7 @@ public class closedPage extends MainPage {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
         scrollPane.setBounds(0, 0, 500, 400);
+        panel.setBackground(new Color(247,232,210));
         JPanel contentPane = new JPanel(null);
         contentPane.setPreferredSize(new Dimension(500, 400));
         contentPane.add(scrollPane);

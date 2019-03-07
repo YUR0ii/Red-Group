@@ -15,38 +15,44 @@ public class MainPage extends JPanel implements ActionListener{
 	private JMenuItem print=new JMenuItem("Print");
 	private JMenuItem closed=new JMenuItem("Closed");
 	private JMenuItem quit=new JMenuItem("Quit");
-	private JPopupMenu taskMenu=new JPopupMenu();
 	private JTextField input=new JTextField();
 	private ArrayList<Task> incompleteTasks=new ArrayList<Task>();
 	private ArrayList<Task> completeTasks=new ArrayList<Task>();
 	private ArrayList<taskContainer> containers=new ArrayList<taskContainer>();
-	MainPage(){
-		mainFrame.setJMenuBar(menuBar);
-		mainFrame.setContentPane(this);
-		this.add(scroll);
-		menuBar.add(file);
-		menuBar.add(closed);
-		menuBar.add(quit);	
-		file.add(fileMenu);
-		fileMenu.add(save);
-		fileMenu.add(restore);
-		fileMenu.add(print);
+	MainPage(){		
 		file.addMouseListener(new menuListener());
 		closed.addMouseListener(new menuListener());
 		quit.addMouseListener(new menuListener());
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
+		createGUI();
+	}
+	public void createGUI() {
+		mainFrame.setJMenuBar(menuBar);
+		mainFrame.setContentPane(this);
+		mainFrame.setBackground(new Color(247,232,210));
+		menuBar.add(file);
+		menuBar.add(closed);
+		menuBar.add(quit);	
+		file.add(fileMenu);
+		file.setPreferredSize(new Dimension(200,20));
+		fileMenu.add(save);
+		fileMenu.add(restore);
+		fileMenu.add(print);
+		this.add(scroll);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
-		scroll.setPreferredSize(new Dimension(500,350));
+		scroll.setPreferredSize(new Dimension(600,360));
 		input.addActionListener(this);
 		input.setEditable(true);
-		input.setText("Input");
+		input.setText("New Task");
 		input.setVisible(true);
 		input.setActionCommand("Add a Task");
-		input.setPreferredSize(new Dimension(490,25));
+		input.setPreferredSize(new Dimension(590,25));
 		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
-		this.setPreferredSize(new Dimension(500,400));
+		scrollPanel.setBackground(new Color(247,232,210));
+		scrollPanel.setBorder(BorderFactory.createEmptyBorder(5,50,5,50));
+		this.setPreferredSize(new Dimension(600,400));
 		this.add(input); 
 		mainFrame.setLocation(250,100);
 		mainFrame.pack();
@@ -60,6 +66,7 @@ public class MainPage extends JPanel implements ActionListener{
 			containers.add(new taskContainer(temp));
 			int index=incompleteTasks.indexOf(temp);
 			scrollPanel.add(containers.get(index).getLabel());
+			//repaint();
 		}
 	}
 	public void paintComponent(Graphics g) {
@@ -72,9 +79,6 @@ public class MainPage extends JPanel implements ActionListener{
 		taskContainer(Task task){
 			container=new JLabel(task.getName());
 			System.out.println(task.getName());
-			//if(task.getPriorityLevel().equals("inactive")) {
-				//add a date
-			//}
 		}
 		public JLabel getLabel() {
 			return container;
@@ -90,7 +94,7 @@ public class MainPage extends JPanel implements ActionListener{
 			}else if(e.getComponent().equals(restore)) {
 				
 			}else if(e.getComponent().equals(print)) {
-				//test
+				
 			}
 			fileMenu.setVisible(false);
 		}
@@ -100,14 +104,10 @@ public class MainPage extends JPanel implements ActionListener{
 			if(e.getComponent().equals(quit)) {
 				 mainFrame.dispose();
 			}else if(e.getComponent().equals(closed)) {
-				closedPage complete=new closedPage();
+				ClosedPage complete=new ClosedPage();
 			}else if(e.getComponent().equals(file)) {
 				fileMenu.show(e.getComponent(),e.getX(),e.getY());
 			}
-		}
-	}class taskListener extends MouseAdapter {
-		public void mouseClicked(MouseEvent e) {
-			taskMenu.show(e.getComponent(),e.getX(),e.getY());
 		}
 	}
 }
