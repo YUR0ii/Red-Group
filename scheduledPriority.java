@@ -6,6 +6,7 @@ public class scheduledPriority {
 	String level;
 	Date date;
 	
+	//Initially sets the level and date
 	scheduledPriority(String Level, Date Date){
 		level = Level;
 		date = Date;
