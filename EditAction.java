@@ -6,89 +6,54 @@ import javax.swing.*;
 
 public class EditAction implements ActionListener{
 	public void createAndShowGUI() {		
-		final int frameWidth = 400;
-		final int frameHeight = 600;
 		String itemName = null;
 		String commentText = null;
 		
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(frameWidth, frameHeight);
+		frame.setSize(new Dimension(400,500));
 		frame.setTitle("Edit Item");
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		String[] radiobnames = new String[] {"Urgent", "Current", "Eventual", "Inactive"};
+		JPanel radioButtonPanel = new JPanel(new FlowLayout());
+		ButtonGroup group = new ButtonGroup();
+		for (String s:radiobnames) {
+			JRadioButton radiob = new JRadioButton(s);
+			group.add(radiob);
+			radioButtonPanel.add(radiob);
+		}
 		
-		JRadioButton setUrgentStatus = new JRadioButton("Urgent");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		panel.add(setUrgentStatus, c);
+		String[] checkbnames = new String[] {"Urgent", "Current", "Eventual"};
+		JPanel checkBoxPanel = new JPanel();
+		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
+		for(String s:checkbnames) {
+			JCheckBox checkb = new JCheckBox(s);
+			checkBoxPanel.add(checkb);
+		}
 		
-		JRadioButton setCurrentStatus = new JRadioButton("Current");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 0;
-		panel.add(setCurrentStatus, c);
-		
-		JRadioButton setEventualStatus = new JRadioButton("Eventual");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 2;
-		c.gridy = 0;
-		panel.add(setEventualStatus, c);
-		
-		JRadioButton setInactiveStatus = new JRadioButton("Inactive");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 3;
-		c.gridy = 0;
-		panel.add(setInactiveStatus, c);
-		
-		JCheckBox urgentDateBox = new JCheckBox("Urgent");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 1;
-		panel.add(urgentDateBox, c);
-		
-		SpinnerDateModel spinnerModel = new SpinnerDateModel();
-		JSpinner selectUrgentDate = new JSpinner(spinnerModel);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 1;
-		panel.add(selectUrgentDate, c);
-		
-		JCheckBox currentDateBox = new JCheckBox("Current");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 2;
-		panel.add(currentDateBox, c);
-		
-		JSpinner selectCurrentDate = new JSpinner(spinnerModel);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 2;
-		panel.add(selectCurrentDate, c);
-		
-		JCheckBox eventualDateBox = new JCheckBox("Eventual");
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 3;
-		panel.add(eventualDateBox, c);
-		
-		JSpinner selectEventualDate = new JSpinner(spinnerModel);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.gridy = 3;
-		panel.add(selectEventualDate, c);
+		JPanel spinnerPanel = new JPanel();
+		spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.Y_AXIS));
+		for (int i = 0; i < 4; i++) {
+			
+		}
 		
 		JLabel displayItemName = new JLabel("Edit " + itemName);
 		Font itemNameFont = new Font("Arial", Font.PLAIN, 18);
 		displayItemName.setFont(itemNameFont);
 		JLabel displayCommentTitle = new JLabel("Comments");
+		JTextField commentField = new JTextField(commentText);
+		commentField.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(commentField);
+		scrollPane.setPreferredSize(new Dimension(400, 200));
 		
-		frame.getContentPane().setLayout(new BorderLayout());
-		frame.getContentPane().add(displayItemName, BorderLayout.PAGE_START);
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+		frame.getContentPane().add(displayItemName);
+		displayItemName.setAlignmentX((float) 0.5);
+		frame.getContentPane().add(radioButtonPanel);
+		frame.getContentPane().add(displayCommentTitle);
+		displayCommentTitle.setAlignmentX((float) 0.5);
+		frame.getContentPane().add(scrollPane);
+		scrollPane.setAlignmentX((float) 0.5);
 		frame.setVisible(true);
 	}
 
@@ -97,6 +62,8 @@ public class EditAction implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	//make constructor that accepts task as a parameter
 	
 	public static void main(String[] args) {
 		EditAction e = new EditAction();
