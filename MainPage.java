@@ -90,7 +90,7 @@ public class MainPage extends JPanel implements ActionListener{
 			}else if(e.getComponent().equals(restore)) {
 				
 			}else if(e.getComponent().equals(print)) {
-				//test
+				
 			}
 			fileMenu.setVisible(false);
 		}
