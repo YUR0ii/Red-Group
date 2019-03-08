@@ -10,6 +10,9 @@ public class taskContainer extends JComponent implements Comparable
 {
 	Task task;
 	JLabel name;
+	JMenuItem complete=new JMenuItem("Complete the task"); 
+	JMenuItem delete=new JMenuItem("Delete the task"); 
+	JMenuItem edit=new JMenuItem("Edit the task"); 
 
 	taskContainer(Task task)
 	{
@@ -18,7 +21,7 @@ public class taskContainer extends JComponent implements Comparable
 		this.setLayout(new FlowLayout());
 		this.add(name);
 
-		this.addMouseListener(new MouseListener()
+		this.addMouseListener(new MouseAdapter()
 		{
 
 			@Override
@@ -28,36 +31,10 @@ public class taskContainer extends JComponent implements Comparable
 				{
 					new contextMenu();
 				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
-	}
-
-	class contextMenu extends JMenu
+		};
+	});
+//possibly get rid of this?
+	class contextMenu extends JPopupMenu
 	{	
 		contextMenu()
 		{
