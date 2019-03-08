@@ -7,6 +7,9 @@ public class scheduledPriority {
 	Date date;
 	
 	//Initially sets the level and date
+	scheduledPriority(String Level){
+		level=Level;
+	}
 	scheduledPriority(String Level, Date Date){
 		level = Level;
 		date = Date;
@@ -30,7 +33,7 @@ public class scheduledPriority {
 	
 	public void setDateLevel(Date Date,String Level){
 		date = Date;
-		Level = level;
+		level = Level;
 	}
 	
 }
