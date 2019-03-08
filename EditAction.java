@@ -4,40 +4,52 @@ import java.util.Calendar;
 
 import javax.swing.*;
 
-public class EditAction implements ActionListener{
-	public void createAndShowGUI() {		
-		String itemName = null;
-		String commentText = null;
-		
+public class EditAction implements ActionListener {
+	Task editingTask;
+	String commentText = null;
+
+	public EditAction(Task task) {
+		editingTask = task;
+	}
+
+	public void createAndShowGUI() {
+
+		// create JFrame
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(new Dimension(400,500));
+		frame.setSize(new Dimension(400, 500));
 		frame.setTitle("Edit Item");
-		
-		String[] radiobnames = new String[] {"Urgent", "Current", "Eventual", "Inactive"};
+
+		// create and add radio buttons
+		String[] radiobnames = new String[] { "Urgent", "Current", "Eventual", "Inactive" };
 		JPanel radioButtonPanel = new JPanel(new FlowLayout());
 		ButtonGroup group = new ButtonGroup();
-		for (String s:radiobnames) {
+		for (String s : radiobnames) {
 			JRadioButton radiob = new JRadioButton(s);
 			group.add(radiob);
 			radioButtonPanel.add(radiob);
 		}
-		
-		String[] checkbnames = new String[] {"Urgent", "Current", "Eventual"};
+
+		// create and add checkboxes
+		String[] checkbnames = new String[] { "Urgent", "Current", "Eventual" };
 		JPanel checkBoxPanel = new JPanel();
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
-		for(String s:checkbnames) {
+		for (String s : checkbnames) {
 			JCheckBox checkb = new JCheckBox(s);
 			checkBoxPanel.add(checkb);
 		}
-		
+
+		// create and add JSpinners (date selection)
 		JPanel spinnerPanel = new JPanel();
 		spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.Y_AXIS));
 		for (int i = 0; i < 4; i++) {
-			
+			SpinnerDateModel model = new SpinnerDateModel();
+			JSpinner spinner = new JSpinner(model);
+			spinnerPanel.add(spinner);
 		}
-		
-		JLabel displayItemName = new JLabel("Edit " + itemName);
+
+		// create JLabels and JScrollPane for comment display
+		JLabel displayItemName = new JLabel("Edit " + editingTask.getName());
 		Font itemNameFont = new Font("Arial", Font.PLAIN, 18);
 		displayItemName.setFont(itemNameFont);
 		JLabel displayCommentTitle = new JLabel("Comments");
@@ -45,7 +57,8 @@ public class EditAction implements ActionListener{
 		commentField.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(commentField);
 		scrollPane.setPreferredSize(new Dimension(400, 200));
-		
+
+		// add components to JFrame
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 		frame.getContentPane().add(displayItemName);
 		displayItemName.setAlignmentX((float) 0.5);
@@ -60,13 +73,13 @@ public class EditAction implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	//make constructor that accepts task as a parameter ahshsafsafqweqwewqe
-	
+
+	// make constructor that accepts task as a parameter
 	public static void main(String[] args) {
-		EditAction e = new EditAction();
+		Task testTask = new Task("testing");
+		EditAction e = new EditAction(testTask);
 		e.createAndShowGUI();
 	}
 }
