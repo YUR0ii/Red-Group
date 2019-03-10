@@ -1,3 +1,4 @@
+import java.util.Calendar;
 
 public class priorityEvent extends Event{
 	
@@ -8,7 +9,7 @@ public class priorityEvent extends Event{
 	priorityEvent(String OldLevel, String NewLevel){
 		oldLevel = OldLevel;
 		newLevel = NewLevel;
-		
+		date=Calendar.getInstance().getTime();
 		createSentence();
 	}
 	

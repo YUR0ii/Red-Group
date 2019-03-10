@@ -4,7 +4,6 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 import javax.swing.*;
 
-import taskContainer.contextMenu;
 
 public class MainPage extends JPanel implements ActionListener {
 	private JFrame mainFrame = new JFrame();
@@ -19,9 +18,9 @@ public class MainPage extends JPanel implements ActionListener {
 	private JMenuItem closed = new JMenuItem("Closed");
 	private JMenuItem quit = new JMenuItem("Quit");
 	private JTextField input = new JTextField();
-	private ArrayList<Task> incompleteTasks = new ArrayList<Task>();
-	private ArrayList<Task> completeTasks = new ArrayList<Task>();
-	private ArrayList<taskContainer> containers = new ArrayList<taskContainer>();
+	protected ArrayList<Task> incompleteTasks = new ArrayList<Task>();
+	protected ArrayList<Task> completeTasks = new ArrayList<Task>();
+	protected ArrayList<taskContainer> containers = new ArrayList<taskContainer>();
 
 	MainPage() {
 		file.addMouseListener(new menuListener());
@@ -72,193 +71,99 @@ public class MainPage extends JPanel implements ActionListener {
 			containers.add(new taskContainer(temp));
 			int index = incompleteTasks.indexOf(temp);
 			scrollPanel.add(containers.get(index));
-			// repaint();
+			//scrollPanel.repaint();
 		}
 	}
 
 	public void paintComponent(Graphics g) {
-
 	}
 
-	public class taskContainer extends JComponent implements Comparable {
+	public class taskContainer extends JComponent implements Comparable{
 		private Task task;
 		private JLabel name;
-		taskContainer(Task task) {
-			this.task = task;
+		private JLabel date;
+		private JFrame taskFrame=new JFrame();
+		private taskMenuPane taskMenu=new taskMenuPane();
+		taskContainer(Task otask) {
+			task = otask;
 			name=new JLabel(task.getName());
-			this.setLayout(new FlowLayout());
-			this.add(name);
-
+			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			this.setSize(500,50);
+			name.setSize(500,50);
+			if(task.getPriorityLevel().contentEquals("inactive")) {
+				date=new JLabel();
+				String dateString=Calendar.getInstance().getTime().toString();
+				date.setText(dateString);
+				date.setSize(500,50);
+				this.add(date);
+			}
+			this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 			this.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == e.BUTTON3) {
-						new contextMenu();
+						System.out.println("test");
+						taskMenu.createMenu();
+						taskFrame.setVisible(true);
 					}
 				}
 			});
+			this.add(name);
+			scrollPanel.repaint();
 		}
-		class contextMenu extends JPopupMenu {
-			contextMenu() {
-				Action complete = new Action() {
-
-					@Override
+		public class taskMenuPane extends JPanel{
+			private JButton complete=new JButton("Complete the task");
+			private JButton delete=new JButton("Delete the task");
+			private JButton edit=new JButton("Edit the task");
+			public void createMenu() {
+				taskFrame.setContentPane(taskMenu);
+				Action taskMenuListener=new AbstractAction(){
 					public void actionPerformed(ActionEvent e) {
-						task.complete();
-					}
-
-					@Override
-					public void addPropertyChangeListener(PropertyChangeListener listener) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public Object getValue(String key) {
-						if (key.equals("NAME"))
-							return "Mark Task as Completed";
-						return null;
-					}
-
-					@Override
-					public boolean isEnabled() {
-						// TODO Auto-generated method stub
-						return false;
-					}
-
-					@Override
-					public void putValue(String key, Object value) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void removePropertyChangeListener(PropertyChangeListener listener) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void setEnabled(boolean b) {
-						// TODO Auto-generated method stub
-
-					}
-
-				};
-				Action edit = new Action() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						new EditAction(task).createAndShowGUI();
-					}
-
-					@Override
-					public void addPropertyChangeListener(PropertyChangeListener listener) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public Object getValue(String key) {
-						if (key.equals("NAME"))
-							return "Edit Task";
-						return null;
-					}
-
-					@Override
-					public boolean isEnabled() {
-						// TODO Auto-generated method stub
-						return false;
-					}
-
-					@Override
-					public void putValue(String key, Object value) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void removePropertyChangeListener(PropertyChangeListener listener) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void setEnabled(boolean b) {
-						// TODO Auto-generated method stub
-
-					}
-
-				};
-				Action delete = new Action() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						JWindow confirm = new JWindow();
-						JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
-						JButton del = new JButton("Delete");
-						JButton cancel = new JButton("Cancel");
-
-						confirm.setLayout(new FlowLayout());
-						confirm.add(text);
-						confirm.add(del);
-						confirm.add(cancel);
-						del.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								// delete task
-							}
-						});
-						cancel.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								confirm.dispose();
-							}
-						});
-					}
-
-					@Override
-					public void addPropertyChangeListener(PropertyChangeListener listener) {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public Object getValue(String key) {
-						if (key.equals("NAME"))
-							return "Delete Task";
-						return null;
-					}
-
-					@Override
-					public boolean isEnabled() {
-						// TODO Auto-generated method stub
-						return false;
-					}
-
-					@Override
-					public void putValue(String key, Object value) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void removePropertyChangeListener(PropertyChangeListener listener) {
-						// TODO Auto-generated method stub
-
-					}
-
-					@Override
-					public void setEnabled(boolean b) {
-						// TODO Auto-generated method stub
-
+						if (e.getActionCommand().equals("complete")) {
+							task.complete();
+							completeTasks.add(task);
+							int index=completeTasks.indexOf(task);
+							scrollPanel.remove(containers.get(index));
+							containers.remove(index);
+							System.out.println("test55");
+						} else if (e.getActionCommand().equals("delete")) {
+							task.delete();
+							int index=incompleteTasks.indexOf(task);
+							incompleteTasks.remove(task);
+							containers.remove(containers.get(index));
+							System.out.println("test66");
+						} else if (e.getActionCommand().equals("edit")) {
+							task.edit();
+							System.out.println("test77");
+						}
+						taskFrame.dispose();
+						scrollPanel.repaint();
 					}
 				};
+				complete.setAction(taskMenuListener);
+				delete.setAction(taskMenuListener);
+				edit.setAction(taskMenuListener);
+				complete.setActionCommand("complete");
+				delete.setActionCommand("delete");
+				edit.setActionCommand("edit");
+				complete.setText("Complete the task");
+				delete.setText("Delete the task");
+				edit.setText("Edit the task");
 				this.add(complete);
-				this.add(edit);
 				this.add(delete);
+				this.add(edit);
+				this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+				complete.setPreferredSize(new Dimension(110,20));
+				delete.setPreferredSize(new Dimension(110,20));
+				edit.setPreferredSize(new Dimension(110,20));
+				this.setSize(300,300);
+				taskFrame.setLocation(name.getX(),name.getY());
+				taskFrame.pack();
 			}
+			
 		}
-
+		
+		/*
 		@Override
 		public int compareTo(Object o) {
 			return 0;
@@ -270,14 +175,14 @@ public class MainPage extends JPanel implements ActionListener {
 			} else {
 				// return Integer.compare(task.getPriorityLevel(), t.task.getPriorityLevel());
 			}
-		}
+		}*/
 	}
 
 	public static void main(String[] args) {
 		MainPage page = new MainPage();
 	}
 
-	class fileListener extends MouseAdapter {
+	private class fileListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
 
@@ -290,7 +195,7 @@ public class MainPage extends JPanel implements ActionListener {
 		}
 	}
 
-	class menuListener extends MouseAdapter {
+	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(quit)) {
 				mainFrame.dispose();
@@ -301,4 +206,5 @@ public class MainPage extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
 }
