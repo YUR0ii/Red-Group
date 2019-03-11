@@ -26,6 +26,10 @@ public class Task {
 	public void delete() {
 		//deletes the task
 	}
+	public void edit() {
+		EditAction edit=new EditAction(this);
+		edit.createAndShowGUI();
+	}
 	public void complete() {
 		complete=true;
 	}
