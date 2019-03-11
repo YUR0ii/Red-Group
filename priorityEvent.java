@@ -35,31 +35,10 @@ public class priorityEvent extends Event{
 	public String createSentence() {
 		// TODO Auto-generated method stub
 		
-		String day;
-		int dayNum = date.getDay();
-		if(dayNum == 0) {
-			day = "Sunday";
-		}
-		else if(dayNum ==1) {
-			day = "Monday";
-		}
-		else if(dayNum ==2) {
-			day = "Tuesday";
-		}
-		else if(dayNum ==3) {
-			day = "Wednesday";
-		}
-		else if(dayNum ==4) {
-			day = "Thursday";
-		}
-		else if(dayNum ==5) {
-			day = "Friday";
-		}
-		else{
-			day = "Saturday";
-		}
+		String day = Event.convertDay(date.getDate());
+		String month = Event.convertMonth(date.getMonth());
 		
-		String output = "The priority level changed from " + oldLevel +" to " + newLevel + " on " + day + " " + date.getMonth() +"/" + date.getDate()+ "/" + date.getYear(); 
+		String output = "The priority level changed from " + oldLevel +" to " + newLevel + " on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear()); 
 				
 		return output;
 	}
@@ -72,12 +51,15 @@ public class priorityEvent extends Event{
 	@Override
 	public String getOldComment() {
 		// TODO Auto-generated method stub
+		
+		System.out.println("Ya cant get comments from priority events dum dum");
 		return null;
 	}
 
 	@Override
 	public String getNewComment() {
 		// TODO Auto-generated method stub
+		System.out.println("Ya cant get comments from priority events dum dum");
 		return null;
 	}
 

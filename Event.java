@@ -38,6 +38,72 @@ public abstract class Event {
 	public abstract String getOldComment();
 	public abstract String getNewComment();
 	
+	protected static String convertMonth(int num) {
+		String month;
+		if(num == 0) {
+			month = "January";
+		}
+		else if(num ==1) {
+			month = "February";
+		}
+		else if(num ==2) {
+			month = "March";
+		}
+		else if(num ==3) {
+			month = "April";
+		}
+		else if(num ==4) {
+			month = "May";
+		}
+		else if(num ==5) {
+			month = "June";
+		}
+		else if(num ==6) {
+			month = "July";
+		}
+		else if(num ==7) {
+			month = "August";
+		}
+		else if(num ==8) {
+			month = "September";
+		}
+		else if(num ==9) {
+			month = "October";
+		}
+		else if(num ==10) {
+			month = "November";
+		}
+		else{
+			month = "December";
+		}
+		return month;
+	}
+	
+	protected static String convertDay(int num) {
+		String day;
+		if(num == 0) {
+			day = "Sunday";
+		}
+		else if(num ==1) {
+			day = "Monday";
+		}
+		else if(num ==2) {
+			day = "Tuesday";
+		}
+		else if(num ==3) {
+			day = "Wednesday";
+		}
+		else if(num ==4) {
+			day = "Thursday";
+		}
+		else if(num ==5) {
+			day = "Friday";
+		}
+		else{
+			day = "Saturday";
+		}
+		return day;
+	}
 	
 
 }
