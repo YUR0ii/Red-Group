@@ -24,7 +24,7 @@ public class Task {
 		return events;
 	}
 	public void delete() {
-		//deletes the task
+		
 	}
 	public void edit() {
 		EditAction edit=new EditAction(this);

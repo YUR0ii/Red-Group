@@ -90,6 +90,7 @@ public class MainPage extends JPanel implements ActionListener {
 			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			this.setSize(500,50);
 			name.setSize(500,50);
+			//if the Task is inactive, will create a date string and add it
 			if(task.getPriorityLevel().contentEquals("inactive")) {
 				date=new JLabel();
 				String dateString=Calendar.getInstance().getTime().toString();
@@ -100,6 +101,7 @@ public class MainPage extends JPanel implements ActionListener {
 			this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 			this.addMouseListener(new MouseAdapter() {
 				@Override
+				//this creates the window when a Task is right-clicked
 				public void mouseClicked(MouseEvent e) {
 					if (e.getButton() == e.BUTTON3) {
 						System.out.println("test");
@@ -111,14 +113,17 @@ public class MainPage extends JPanel implements ActionListener {
 			this.add(name);
 			scrollPanel.repaint();
 		}
+		//this is the popup that appears when the Task is right-clicked
 		public class taskMenuPane extends JPanel{
 			private JButton complete=new JButton("Complete the task");
 			private JButton delete=new JButton("Delete the task");
 			private JButton edit=new JButton("Edit the task");
+			private JWindow deletePrompt=new JWindow();
 			public void createMenu() {
 				taskFrame.setContentPane(taskMenu);
 				Action taskMenuListener=new AbstractAction(){
 					public void actionPerformed(ActionEvent e) {
+						//this makes an action complete, removes it from the main page
 						if (e.getActionCommand().equals("complete")) {
 							task.complete();
 							completeTasks.add(task);
@@ -126,12 +131,14 @@ public class MainPage extends JPanel implements ActionListener {
 							scrollPanel.remove(containers.get(index));
 							containers.remove(index);
 							System.out.println("test55");
+						//this deletes an action, removes it from the main page
 						} else if (e.getActionCommand().equals("delete")) {
 							task.delete();
 							int index=incompleteTasks.indexOf(task);
 							incompleteTasks.remove(task);
 							containers.remove(containers.get(index));
 							System.out.println("test66");
+						//this opens the Edit Action page
 						} else if (e.getActionCommand().equals("edit")) {
 							task.edit();
 							System.out.println("test77");
@@ -140,6 +147,7 @@ public class MainPage extends JPanel implements ActionListener {
 						scrollPanel.repaint();
 					}
 				};
+				//GUI stuff
 				complete.setAction(taskMenuListener);
 				delete.setAction(taskMenuListener);
 				edit.setAction(taskMenuListener);
@@ -181,7 +189,7 @@ public class MainPage extends JPanel implements ActionListener {
 	public static void main(String[] args) {
 		MainPage page = new MainPage();
 	}
-
+	//called in the file menu
 	private class fileListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
@@ -194,7 +202,7 @@ public class MainPage extends JPanel implements ActionListener {
 			fileMenu.setVisible(false);
 		}
 	}
-
+	//called on the menu bar
 	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(quit)) {
