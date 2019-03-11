@@ -24,10 +24,12 @@ public class Task {
 	}
 
 	public String getPriorityLevel() {
+		//returns priority level
 		return priority;
 	}
 
 	public void setPriorityLevel(String priority) {
+		//changes the priority level
 		addEventToHistory(new priorityEvent(this.priority,priority));
 		this.priority = priority;
 	}

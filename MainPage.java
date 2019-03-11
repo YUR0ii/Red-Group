@@ -29,9 +29,9 @@ public class MainPage extends JPanel implements ActionListener {
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
-		createGUI();
+		//createGUI();
 	}
-
+	//creates GUI components for main page
 	public void createGUI() {
 		mainFrame.setJMenuBar(menuBar);
 		mainFrame.setContentPane(this);
@@ -62,7 +62,7 @@ public class MainPage extends JPanel implements ActionListener {
 		mainFrame.pack();
 		mainFrame.setVisible(true);
 	}
-
+	//adds functionality to text field for adding tasks
 	public void actionPerformed(ActionEvent e) {
 		String eventName = e.getActionCommand();
 		if (eventName.equals("Add a Task")) {
@@ -106,6 +106,7 @@ public class MainPage extends JPanel implements ActionListener {
 				{
 					if(e.getButton() == e.BUTTON3)
 					{
+						//creates menu when file button is clicked
 						menu=new contextMenu();
 						System.out.println("show");
 						menu.show(e.getComponent(), e.getX(), e.getY());
@@ -117,12 +118,14 @@ public class MainPage extends JPanel implements ActionListener {
 		{	
 			contextMenu()
 			{
+				//creates an action to complete a task
 				Action complete = new AbstractAction()
 				{
 
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
+						//completes a task
 						System.out.println("complete");
 						task.setComplete(true);
 						completeTasks.add(task);
@@ -141,6 +144,7 @@ public class MainPage extends JPanel implements ActionListener {
 					}
 
 				};
+				//creates an action to edit a task
 				Action edit = new AbstractAction()
 				{
 					@Override
@@ -157,12 +161,14 @@ public class MainPage extends JPanel implements ActionListener {
 					}
 
 				};
+				//creates an action to delete a task
 				Action delete = new AbstractAction()
 				{
 
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
+						//creates an "Are you sure?" popup
 						JPopupMenu confirm = new JPopupMenu();
 						
 						JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
@@ -173,7 +179,8 @@ public class MainPage extends JPanel implements ActionListener {
 						confirm.add(text);
 						confirm.add(del);
 						confirm.add(cancel);
-						
+
+						//adds deleting function to delete button
 						del.addActionListener(new ActionListener(){
 
 							@Override
@@ -190,6 +197,7 @@ public class MainPage extends JPanel implements ActionListener {
 							}
 							
 						});
+						//adds cancelling function to cancel button
 						cancel.addActionListener(new ActionListener() {
 
 							@Override
@@ -210,34 +218,12 @@ public class MainPage extends JPanel implements ActionListener {
 					}
 
 				};
+				//adds actions to menu in Action form
 				this.add(complete);
 				this.add(delete);
 				this.add(edit);
 				this.createActionComponent(complete);
 				
-			}
-			class contentMenuListener extends MouseAdapter{
-				public void mouseClicked(MouseEvent e) {
-					System.out.println("clicked");
-					if (e.getComponent().equals(completeI)) {
-						System.out.println("complete");
-						task.setComplete(true);
-						completeTasks.add(task);
-						int index=completeTasks.indexOf(task);
-						scrollPanel.remove(containers.get(index));
-						containers.remove(index);
-					} else if (e.getComponent().equals(deleteI)) {
-						System.out.println("delete");
-						task.delete();
-						int index=incompleteTasks.indexOf(task);
-						incompleteTasks.remove(task);
-						containers.remove(containers.get(index));
-					} else if (e.getComponent().equals(editI)) {
-						System.out.println("edit");
-						task.edit();
-					}
-					menu.setVisible(false);
-				}
 			}
 		}
 		
@@ -262,8 +248,9 @@ public class MainPage extends JPanel implements ActionListener {
 	}	
 	public static void main(String[] args) {
 		MainPage page = new MainPage();
+		page.createGUI();
 	}
-
+	//deals with functions in file menu
 	private class fileListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
@@ -276,7 +263,7 @@ public class MainPage extends JPanel implements ActionListener {
 			fileMenu.setVisible(false);
 		}
 	}
-
+	//deals with functions in menu bar
 	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(quit)) {
