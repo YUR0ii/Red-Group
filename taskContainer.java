@@ -10,13 +10,7 @@ public class taskContainer extends JComponent implements Comparable
 {
 	Task task;
 	JLabel name;
-<<<<<<< HEAD
 	taskContainer cont = this;
-=======
-	JMenuItem complete=new JMenuItem("Complete the task"); 
-	JMenuItem delete=new JMenuItem("Delete the task"); 
-	JMenuItem edit=new JMenuItem("Edit the task"); 
->>>>>>> branch 'master' of https://github.com/YUR0ii/Red-Group.git
 
 	taskContainer(Task task)
 	{
@@ -25,12 +19,11 @@ public class taskContainer extends JComponent implements Comparable
 		this.setLayout(new FlowLayout());
 		this.add(name);
 
-		this.addMouseListener(new MouseAdapter()
+		this.addMouseListener(new MouseListener()
 		{
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-<<<<<<< HEAD
 				new contextMenu(cont);
 			}
 
@@ -61,15 +54,6 @@ public class taskContainer extends JComponent implements Comparable
 		});
 	}
 
-=======
-				if(e.getButton() == e.BUTTON3)
-				{
-					new contextMenu();
-				}
-		};
-	});
-//possibly get rid of this?
->>>>>>> branch 'master' of https://github.com/YUR0ii/Red-Group.git
 	class contextMenu extends JPopupMenu
 	{	
 		contextMenu(Component parent)
