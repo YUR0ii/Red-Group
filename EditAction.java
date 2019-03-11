@@ -6,34 +6,12 @@ import javax.swing.*;
 
 public class EditAction implements ActionListener {
 	Task editingTask;
-	String commentText = "No comment. No comment. No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. "
-			+ "\n No comment. No comment. ";
 
 	public EditAction(Task task) {
 		editingTask = task;
 	}
-	
-	public void chopStrings(String s) {
-		StringBuilder sb = new StringBuilder(s);
-		// make long strings fit inside text box
-		commentText = sb.toString();
-	}
 
 	public void createAndShowGUI() {
-
 		// create JFrame
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,6 +19,7 @@ public class EditAction implements ActionListener {
 		frame.setTitle("Edit Item");
 
 		// create and add radio buttons
+		// has to be individual buttons or else can't set action listener
 		String[] radiobnames = new String[] { "Urgent", "Current", "Eventual", "Inactive" };
 		JPanel radioButtonPanel = new JPanel(new FlowLayout());
 		ButtonGroup group = new ButtonGroup();
@@ -49,6 +28,9 @@ public class EditAction implements ActionListener {
 			group.add(radiob);
 			radioButtonPanel.add(radiob);
 		}
+		
+		// add action listener to radio buttons
+		
 
 		// create and add checkboxes
 		String[] checkbnames = new String[] { "Urgent", "Current", "Eventual" };
@@ -73,17 +55,50 @@ public class EditAction implements ActionListener {
 		checkBoxAndSpinnerPanel.add(checkBoxPanel);
 		checkBoxAndSpinnerPanel.add(spinnerPanel);
 
-		// create JLabels and JScrollPane for comment display
+		// create regular JLabels
 		JLabel displayItemName = new JLabel("Edit " + editingTask.getName());
 		Font itemNameFont = new Font("Arial", Font.PLAIN, 18);
 		displayItemName.setFont(itemNameFont);
 		JLabel displayCommentTitle = new JLabel("Comments");
-		JTextArea commentField = new JTextArea(commentText);
-		commentField.setPreferredSize(new Dimension(350, 200));
-		commentField.setEditable(false);
+		
+		// create JLabels for displaying comments
+		// commentList array, getAllComments method, getComment(int index) method
+		
+		// create comment area and make scrollable
+		JPanel commentField = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(commentField);
 		scrollPane.setPreferredSize(new Dimension(350, 200));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		// history, done, print buttons
+		JButton historyButton = new JButton("History");
+		historyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				historyPage newHistory = new historyPage(editingTask);
+				newHistory.openHistoryPage();
+			}
+		});
+		
+		JButton doneButton = new JButton("Done");
+		doneButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+			}
+		});
+		
+		JButton printButton = new JButton(); // set printer icon later
+		printButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// set print operation later
+			}
+		});
+		
+		// add buttons to a panel
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.add(historyButton); buttonPanel.add(doneButton); buttonPanel.add(printButton);
 
 		// add components to JFrame
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
@@ -95,16 +110,15 @@ public class EditAction implements ActionListener {
 		displayCommentTitle.setAlignmentX((float) 0.5);
 		frame.getContentPane().add(scrollPane);
 		scrollPane.setAlignmentX((float) 0.5);
+		frame.getContentPane().add(buttonPanel);
 		frame.setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
-	// make constructor that accepts task as a parameter
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
 		EditAction e = new EditAction(testTask);
