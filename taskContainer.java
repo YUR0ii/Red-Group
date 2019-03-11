@@ -10,6 +10,7 @@ public class taskContainer extends JComponent implements Comparable
 {
 	Task task;
 	JLabel name;
+	taskContainer cont = this;
 
 	taskContainer(Task task)
 	{
@@ -20,14 +21,10 @@ public class taskContainer extends JComponent implements Comparable
 
 		this.addMouseListener(new MouseListener()
 		{
-
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				if(e.getButton() == e.BUTTON3)
-				{
-					new contextMenu();
-				}
+				new contextMenu(cont);
 			}
 
 			@Override
@@ -57,182 +54,78 @@ public class taskContainer extends JComponent implements Comparable
 		});
 	}
 
-	class contextMenu extends JMenu
+	class contextMenu extends JPopupMenu
 	{	
-		contextMenu()
+		contextMenu(Component parent)
 		{
-			Action complete = new Action()
+			JMenuItem complete = new JMenuItem("Mark task as completed");
+			JMenuItem edit = new JMenuItem("Edit task");
+			JMenuItem delete = new JMenuItem("Delete task");
+			this.add(complete);
+			this.add(edit);
+			this.add(delete);
+			this.show(parent, parent.getMousePosition().x, parent.getMousePosition().y);
+
+			complete.addActionListener(new ActionListener()
 			{
 
 				@Override
-				public void actionPerformed(ActionEvent e)
+				public void actionPerformed(ActionEvent arg0)
 				{
 					task.complete();
 				}
 
-				@Override
-				public void addPropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public Object getValue(String key) {
-					if(key.equals("NAME"))
-						return "Mark Task as Completed";
-					return null;
-				}
-
-				@Override
-				public boolean isEnabled() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public void putValue(String key, Object value) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void removePropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void setEnabled(boolean b) {
-					// TODO Auto-generated method stub
-
-				}
-
-			};
-			Action edit = new Action()
+			});
+			edit.addActionListener(new ActionListener()
 			{
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					task.edit();
+				}
+			});
+			delete.addActionListener(new ActionListener()
+			{
+				@Override
+				public void actionPerformed(ActionEvent arg0)
+				{
+					new confirm();
+				}
+			});
+		}
+	}
 
+	class confirm extends JWindow
+	{
+		JLabel text = new JLabel("Delete " + task.getName() + "?");
+		JButton y = new JButton("Yes");
+		JButton n = new JButton("No");
+		confirm()
+		{
+			add(text);
+			add(y);
+			add(n);
+			setLayout(new FlowLayout());
+			this.setVisible(true);
+
+			n.addActionListener(new ActionListener()
+			{
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					new EditAction(task).createAndShowGUI();
+					dispose();
 				}
+			});
 
-				@Override
-				public void addPropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public Object getValue(String key) {
-					if(key.equals("NAME"))
-						return "Edit Task";
-					return null;
-				}
-
-				@Override
-				public boolean isEnabled() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public void putValue(String key, Object value) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void removePropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void setEnabled(boolean b) {
-					// TODO Auto-generated method stub
-
-				}
-
-			};
-			Action delete = new Action()
+			y.addActionListener(new ActionListener()
 			{
-
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					JWindow confirm = new JWindow();
-					
-					JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
-					JButton del = new JButton("Delete");
-					JButton cancel = new JButton("Cancel");
-					
-					confirm.setLayout(new FlowLayout());
-					confirm.add(text);
-					confirm.add(del);
-					confirm.add(cancel);
-					
-					del.addActionListener(new ActionListener(){
-
-						@Override
-						public void actionPerformed(ActionEvent e)
-						{
-//							delete task
-						}
-						
-					});
-					cancel.addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent e)
-						{
-							confirm.dispose();
-						}
-						
-					});
+					task.delete();
+					dispose();
 				}
-
-				@Override
-				public void addPropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public Object getValue(String key) {
-					if(key.equals("NAME"))
-						return "Delete Task";
-					return null;
-				}
-
-				@Override
-				public boolean isEnabled() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public void putValue(String key, Object value) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void removePropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void setEnabled(boolean b) {
-					// TODO Auto-generated method stub
-
-				}
-
-			};
-			this.add(complete);
-			this.add(edit);
-			this.add(delete);
+			});
 		}
 	}
 
