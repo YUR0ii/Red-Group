@@ -5,11 +5,14 @@ public class scheduledPriority {
 	
 	String level;
 	
+<<<<<<< HEAD
 	Date date = new Date();
 	
 	scheduledPriority(String Level){
 		level=Level;
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/YUR0ii/Red-Group
 	//Initially sets the level and date
 	scheduledPriority(String Level, Date Date){
 		level = Level;
@@ -35,7 +38,7 @@ public class scheduledPriority {
 	
 	public void setDateLevel(Date Date,String Level){
 		date = Date;
-		level = Level;
+		Level = level;
 	}
 	
 }

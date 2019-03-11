@@ -1,4 +1,3 @@
-import java.util.Calendar;
 
 public class priorityEvent extends Event{
 	
@@ -9,16 +8,12 @@ public class priorityEvent extends Event{
 	priorityEvent(String OldLevel, String NewLevel){
 		oldLevel = OldLevel;
 		newLevel = NewLevel;
-		date=Calendar.getInstance().getTime();
-		createSentence();
 	}
 	
 	//takes scheduledPriority instances and converts them into level Strings
 	priorityEvent(scheduledPriority oldPriority, scheduledPriority newPriority){
 		oldLevel = oldPriority.getLevel();
 		newLevel = newPriority.getLevel();
-		
-		createSentence();
 	}
 	
 	public String getOldLevel(){
@@ -29,11 +24,11 @@ public class priorityEvent extends Event{
 		return newLevel;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	//Still working here
 	public String createSentence() {
 		// TODO Auto-generated method stub
+<<<<<<< HEAD
 		
 		String day = Event.convertDay(date.getDate());
 		String month = Event.convertMonth(date.getMonth());
@@ -41,6 +36,9 @@ public class priorityEvent extends Event{
 		String output = "The priority level changed from " + oldLevel +" to " + newLevel + " on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear()); 
 				
 		return output;
+=======
+//		String output = ""
+>>>>>>> branch 'master' of https://github.com/YUR0ii/Red-Group
 	}
 
 	@Override
