@@ -71,113 +71,195 @@ public class MainPage extends JPanel implements ActionListener {
 			containers.add(new taskContainer(temp));
 			int index = incompleteTasks.indexOf(temp);
 			scrollPanel.add(containers.get(index));
-			//scrollPanel.repaint();
+			scrollPanel.repaint();
 		}
 	}
 
 	public void paintComponent(Graphics g) {
 	}
 
-	public class taskContainer extends JComponent implements Comparable{
-		private Task task;
-		private JLabel name;
-		private JLabel date;
-		private JFrame taskFrame=new JFrame();
-		private taskMenuPane taskMenu=new taskMenuPane();
-		taskContainer(Task otask) {
-			task = otask;
+	public class taskContainer extends JComponent implements Comparable
+	{
+		Task task;
+		JLabel name;
+		Date date;
+		JMenuItem complete=new JMenuItem("Complete the task"); 
+		JMenuItem delete=new JMenuItem("Delete the task"); 
+		JMenuItem edit=new JMenuItem("Edit the task"); 
+		contextMenu menu;
+		taskContainer(Task task)
+		{
+			this.task = task;
 			name=new JLabel(task.getName());
-			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-			this.setSize(500,50);
-			name.setSize(500,50);
-			if(task.getPriorityLevel().contentEquals("inactive")) {
-				date=new JLabel();
-				String dateString=Calendar.getInstance().getTime().toString();
-				date.setText(dateString);
-				date.setSize(500,50);
-				this.add(date);
+			this.setLayout(new FlowLayout());
+			//adds a date if it is inactive
+			if(task.getPriorityLevel().equals("inactive")) {
+				this.add(new JLabel(Calendar.getInstance().getTime().toString()));
 			}
-			this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-			this.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (e.getButton() == e.BUTTON3) {
-						System.out.println("test");
-						taskMenu.createMenu();
-						taskFrame.setVisible(true);
-					}
-				}
-			});
 			this.add(name);
 			scrollPanel.repaint();
-		}
-		public class taskMenuPane extends JPanel{
-			private JButton complete=new JButton("Complete the task");
-			private JButton delete=new JButton("Delete the task");
-			private JButton edit=new JButton("Edit the task");
-			public void createMenu() {
-				taskFrame.setContentPane(taskMenu);
-				Action taskMenuListener=new AbstractAction(){
-					public void actionPerformed(ActionEvent e) {
-						if (e.getActionCommand().equals("complete")) {
-							task.complete();
-							completeTasks.add(task);
-							int index=completeTasks.indexOf(task);
-							scrollPanel.remove(containers.get(index));
-							containers.remove(index);
-							System.out.println("test55");
-						} else if (e.getActionCommand().equals("delete")) {
-							task.delete();
-							int index=incompleteTasks.indexOf(task);
-							incompleteTasks.remove(task);
-							containers.remove(containers.get(index));
-							System.out.println("test66");
-						} else if (e.getActionCommand().equals("edit")) {
-							task.edit();
-							System.out.println("test77");
-						}
-						taskFrame.dispose();
-						scrollPanel.repaint();
+			this.addMouseListener(new MouseAdapter()
+			{
+
+				@Override
+				public void mouseClicked(MouseEvent e)
+				{
+					if(e.getButton() == e.BUTTON3)
+					{
+						menu=new contextMenu();
+						System.out.println("show");
+						menu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				};
-				complete.setAction(taskMenuListener);
-				delete.setAction(taskMenuListener);
-				edit.setAction(taskMenuListener);
-				complete.setActionCommand("complete");
-				delete.setActionCommand("delete");
-				edit.setActionCommand("edit");
-				complete.setText("Complete the task");
-				delete.setText("Delete the task");
-				edit.setText("Edit the task");
+			});
+		}
+		class contextMenu extends JPopupMenu
+		{	
+			contextMenu()
+			{
+				Action complete = new AbstractAction()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						System.out.println("complete");
+						task.setComplete(true);
+						completeTasks.add(task);
+						int index=incompleteTasks.indexOf(task);
+						incompleteTasks.remove(index);
+						scrollPanel.remove(containers.get(index));
+						containers.remove(index);
+						scrollPanel.repaint();
+					}
+					
+					@Override
+					public Object getValue(String key) {
+						if(key.equals("NAME"))
+							return "Mark Task as Completed";
+						return null;
+					}
+
+				};
+				Action edit = new AbstractAction()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						new EditAction(task).createAndShowGUI();
+					}
+
+					@Override
+					public Object getValue(String key) {
+						if(key.equals("NAME"))
+							return "Edit Task";
+						return null;
+					}
+
+				};
+				Action delete = new AbstractAction()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						JPopupMenu confirm = new JPopupMenu();
+						
+						JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
+						JButton del = new JButton("Delete");
+						JButton cancel = new JButton("Cancel");
+						
+						confirm.setLayout(new FlowLayout());
+						confirm.add(text);
+						confirm.add(del);
+						confirm.add(cancel);
+						
+						del.addActionListener(new ActionListener(){
+
+							@Override
+							public void actionPerformed(ActionEvent e)
+							{
+								System.out.println("delete");
+								task.delete();
+								int index=incompleteTasks.indexOf(task);
+								incompleteTasks.remove(task);
+								scrollPanel.remove(containers.get(index));
+								containers.remove(index);
+								scrollPanel.repaint();
+								confirm.setVisible(false);
+							}
+							
+						});
+						cancel.addActionListener(new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e)
+							{
+								confirm.setVisible(false);
+							}
+							
+						});
+						confirm.setVisible(true);
+					}
+
+					@Override
+					public Object getValue(String key) {
+						if(key.equals("NAME"))
+							return "Delete Task";
+						return null;
+					}
+
+				};
 				this.add(complete);
 				this.add(delete);
 				this.add(edit);
-				this.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-				complete.setPreferredSize(new Dimension(110,20));
-				delete.setPreferredSize(new Dimension(110,20));
-				edit.setPreferredSize(new Dimension(110,20));
-				this.setSize(300,300);
-				taskFrame.setLocation(name.getX(),name.getY());
-				taskFrame.pack();
+				this.createActionComponent(complete);
+				
 			}
-			
+			class contentMenuListener extends MouseAdapter{
+				public void mouseClicked(MouseEvent e) {
+					System.out.println("clicked");
+					if (e.getComponent().equals(completeI)) {
+						System.out.println("complete");
+						task.setComplete(true);
+						completeTasks.add(task);
+						int index=completeTasks.indexOf(task);
+						scrollPanel.remove(containers.get(index));
+						containers.remove(index);
+					} else if (e.getComponent().equals(deleteI)) {
+						System.out.println("delete");
+						task.delete();
+						int index=incompleteTasks.indexOf(task);
+						incompleteTasks.remove(task);
+						containers.remove(containers.get(index));
+					} else if (e.getComponent().equals(editI)) {
+						System.out.println("edit");
+						task.edit();
+					}
+					menu.setVisible(false);
+				}
+			}
 		}
 		
-		/*
+
 		@Override
-		public int compareTo(Object o) {
+		public int compareTo(Object o)
+		{
 			return 0;
 		}
-
-		public int compareTo(taskContainer t) {
-			if (task.getPriorityLevel().equals(t.task.getPriorityLevel())) {
+		
+		public int compareTo(taskContainer t)
+		{
+			if(task.getPriorityLevel().equals(t.task.getPriorityLevel()))
+			{
 				return task.getName().compareToIgnoreCase(t.task.getName());
-			} else {
-				// return Integer.compare(task.getPriorityLevel(), t.task.getPriorityLevel());
 			}
-		}*/
-	}
-
+			else
+			{
+				//			return Integer.compare(task.getPriorityLevel(), t.task.getPriorityLevel());
+			}
+		}
+	}	
 	public static void main(String[] args) {
 		MainPage page = new MainPage();
 	}

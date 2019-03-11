@@ -1,7 +1,12 @@
 import javax.swing.*;
+
+import MainPage.taskContainer;
+import MainPage.taskContainer.contextMenu;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeListener;
@@ -13,11 +18,11 @@ public class taskContainer extends JComponent implements Comparable
 	JMenuItem complete=new JMenuItem("Complete the task"); 
 	JMenuItem delete=new JMenuItem("Delete the task"); 
 	JMenuItem edit=new JMenuItem("Edit the task"); 
-
+	contextMenu menu;
 	taskContainer(Task task)
 	{
 		this.task = task;
-		name.setText(task.getName());
+		name=new JLabel(task.getName());
 		this.setLayout(new FlowLayout());
 		this.add(name);
 
@@ -29,30 +34,33 @@ public class taskContainer extends JComponent implements Comparable
 			{
 				if(e.getButton() == e.BUTTON3)
 				{
-					new contextMenu();
+					menu=new contextMenu();
+					System.out.println("show");
+					menu.show(e.getComponent(), e.getX(), e.getY());
 				}
-		};
-	});
-//possibly get rid of this?
+			};
+		});
+	}
 	class contextMenu extends JPopupMenu
 	{	
 		contextMenu()
 		{
-			Action complete = new Action()
+			Action complete = new AbstractAction()
 			{
 
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					task.complete();
+					System.out.println("complete");
+					task.setComplete(true);
+					completeTasks.add(task);
+					int index=incompleteTasks.indexOf(task);
+					incompleteTasks.remove(index);
+					scrollPanel.remove(containers.get(index));
+					containers.remove(index);
+					scrollPanel.repaint();
 				}
-
-				@Override
-				public void addPropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
+				
 				@Override
 				public Object getValue(String key) {
 					if(key.equals("NAME"))
@@ -60,44 +68,13 @@ public class taskContainer extends JComponent implements Comparable
 					return null;
 				}
 
-				@Override
-				public boolean isEnabled() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public void putValue(String key, Object value) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void removePropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void setEnabled(boolean b) {
-					// TODO Auto-generated method stub
-
-				}
-
 			};
-			Action edit = new Action()
+			Action edit = new AbstractAction()
 			{
-
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
 					new EditAction(task).createAndShowGUI();
-				}
-
-				@Override
-				public void addPropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
 				}
 
 				@Override
@@ -107,38 +84,14 @@ public class taskContainer extends JComponent implements Comparable
 					return null;
 				}
 
-				@Override
-				public boolean isEnabled() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public void putValue(String key, Object value) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void removePropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void setEnabled(boolean b) {
-					// TODO Auto-generated method stub
-
-				}
-
 			};
-			Action delete = new Action()
+			Action delete = new AbstractAction()
 			{
 
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					JWindow confirm = new JWindow();
+					JPopupMenu confirm = new JPopupMenu();
 					
 					JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
 					JButton del = new JButton("Delete");
@@ -154,7 +107,14 @@ public class taskContainer extends JComponent implements Comparable
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
-//							delete task
+							System.out.println("delete");
+							task.delete();
+							int index=incompleteTasks.indexOf(task);
+							incompleteTasks.remove(task);
+							scrollPanel.remove(containers.get(index));
+							containers.remove(index);
+							scrollPanel.repaint();
+							confirm.setVisible(false);
 						}
 						
 					});
@@ -163,16 +123,11 @@ public class taskContainer extends JComponent implements Comparable
 						@Override
 						public void actionPerformed(ActionEvent e)
 						{
-							confirm.dispose();
+							confirm.setVisible(false);
 						}
 						
 					});
-				}
-
-				@Override
-				public void addPropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
+					confirm.setVisible(true);
 				}
 
 				@Override
@@ -182,43 +137,45 @@ public class taskContainer extends JComponent implements Comparable
 					return null;
 				}
 
-				@Override
-				public boolean isEnabled() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public void putValue(String key, Object value) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void removePropertyChangeListener(PropertyChangeListener listener) {
-					// TODO Auto-generated method stub
-
-				}
-
-				@Override
-				public void setEnabled(boolean b) {
-					// TODO Auto-generated method stub
-
-				}
-
 			};
 			this.add(complete);
-			this.add(edit);
 			this.add(delete);
+			this.add(edit);
+			this.createActionComponent(complete);
+			
+		}
+		class contentMenuListener extends MouseAdapter{
+			public void mouseClicked(MouseEvent e) {
+				System.out.println("clicked");
+				if (e.getComponent().equals(completeI)) {
+					System.out.println("complete");
+					task.setComplete(true);
+					completeTasks.add(task);
+					int index=completeTasks.indexOf(task);
+					scrollPanel.remove(containers.get(index));
+					containers.remove(index);
+				} else if (e.getComponent().equals(deleteI)) {
+					System.out.println("delete");
+					task.delete();
+					int index=incompleteTasks.indexOf(task);
+					incompleteTasks.remove(task);
+					containers.remove(containers.get(index));
+				} else if (e.getComponent().equals(editI)) {
+					System.out.println("edit");
+					task.edit();
+				}
+				menu.setVisible(false);
+			}
 		}
 	}
+	
 
 	@Override
 	public int compareTo(Object o)
 	{
 		return 0;
 	}
-
+	
 	public int compareTo(taskContainer t)
 	{
 		if(task.getPriorityLevel().equals(t.task.getPriorityLevel()))
