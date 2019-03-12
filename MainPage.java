@@ -58,6 +58,7 @@ public class MainPage extends JPanel implements ActionListener {
 		scrollPanel.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
 		this.setPreferredSize(new Dimension(600, 400));
 		this.add(input);
+		this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		mainFrame.setLocation(250, 100);
 		mainFrame.pack();
 		mainFrame.setVisible(true);
@@ -72,6 +73,9 @@ public class MainPage extends JPanel implements ActionListener {
 			int index = incompleteTasks.indexOf(temp);
 			scrollPanel.add(containers.get(index));
 			scrollPanel.repaint();
+			scroll.repaint();
+			this.repaint();
+			mainFrame.repaint();
 		}
 	}
 

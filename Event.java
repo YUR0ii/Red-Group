@@ -2,20 +2,11 @@ import java.util.*;
 
 
 public abstract class Event {
-	
-<<<<<<< HEAD
 	protected Date date;
 	protected String sentence;
-
-	Event() {
-		// Should never be called here
-=======
-	private Date date;
-	private String sentence;
 	
 	Event(){
 		//Should never be called here
->>>>>>> branch 'master' of https://github.com/YUR0ii/Red-Group
 		System.out.println("You called the event superclass constructor");
 		createSentence();
 	}
