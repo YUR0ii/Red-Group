@@ -14,7 +14,7 @@ public class EditAction implements ActionListener {
 	public void createAndShowGUI() {
 		// create JFrame
 		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(new Dimension(400, 500));
 		frame.setTitle("Edit Item");
 
@@ -61,14 +61,17 @@ public class EditAction implements ActionListener {
 		displayItemName.setFont(itemNameFont);
 		JLabel displayCommentTitle = new JLabel("Comments");
 		
-		// create JLabels for displaying comments
-		// commentList array, getAllComments method, getComment(int index) method
-		
 		// create comment area and make scrollable
 		JPanel commentField = new JPanel();
 		JScrollPane scrollPane = new JScrollPane(commentField);
 		scrollPane.setPreferredSize(new Dimension(350, 200));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		// create JLabels for displaying comments
+		for (String s:editingTask.getAllComments()) {
+			JLabel newLabel = new JLabel(s);
+			commentField.add(newLabel);
+		}
 		
 		// history, done, print buttons
 		JButton historyButton = new JButton("History");
@@ -121,6 +124,7 @@ public class EditAction implements ActionListener {
 
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
+		testTask.addComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blah");
 		EditAction e = new EditAction(testTask);
 		e.createAndShowGUI();
 	}
