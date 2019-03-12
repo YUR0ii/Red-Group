@@ -6,6 +6,8 @@ import javax.swing.*;
 
 public class EditAction implements ActionListener {
 	Task editingTask;
+	JFrame frame = new JFrame();
+	JPanel commentPanel = new JPanel();
 
 	public EditAction(Task task) {
 		editingTask = task;
@@ -13,24 +15,49 @@ public class EditAction implements ActionListener {
 
 	public void createAndShowGUI() {
 		// create JFrame
-		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(new Dimension(400, 500));
 		frame.setTitle("Edit Item");
 
 		// create and add radio buttons
 		// has to be individual buttons or else can't set action listener
-		String[] radiobnames = new String[] { "Urgent", "Current", "Eventual", "Inactive" };
 		JPanel radioButtonPanel = new JPanel(new FlowLayout());
 		ButtonGroup group = new ButtonGroup();
-		for (String s : radiobnames) {
-			JRadioButton radiob = new JRadioButton(s);
-			group.add(radiob);
-			radioButtonPanel.add(radiob);
-		}
+		JRadioButton button1 = new JRadioButton("Urgent");
+		JRadioButton button2 = new JRadioButton("Current");
+		JRadioButton button3 = new JRadioButton("Eventual");
+		JRadioButton button4 = new JRadioButton("Inactive");
+		group.add(button1); group.add(button2); group.add(button3); group.add(button4);
+		radioButtonPanel.add(button1); radioButtonPanel.add(button2); radioButtonPanel.add(button3); radioButtonPanel.add(button4);
 		
 		// add action listener to radio buttons
+		button1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				editingTask.setPriorityLevel("Urgent");
+			}
+		});
 		
+		button2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				editingTask.setPriorityLevel("Current");
+			}
+		});
+		
+		button3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				editingTask.setPriorityLevel("Eventual");
+			}
+		});
+		
+		button4.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				editingTask.setPriorityLevel("Inactive");
+			}
+		});
 
 		// create and add checkboxes
 		String[] checkbnames = new String[] { "Urgent", "Current", "Eventual" };
@@ -62,15 +89,15 @@ public class EditAction implements ActionListener {
 		JLabel displayCommentTitle = new JLabel("Comments");
 		
 		// create comment area and make scrollable
-		JPanel commentField = new JPanel();
-		JScrollPane scrollPane = new JScrollPane(commentField);
+		commentPanel.setLayout(new BoxLayout(commentPanel, BoxLayout.Y_AXIS));
+		JScrollPane scrollPane = new JScrollPane(commentPanel);
 		scrollPane.setPreferredSize(new Dimension(350, 200));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		// create JLabels for displaying comments
 		for (String s:editingTask.getAllComments()) {
 			JLabel newLabel = new JLabel(s);
-			commentField.add(newLabel);
+			commentPanel.add(newLabel);
 		}
 		
 		// history, done, print buttons
@@ -116,6 +143,18 @@ public class EditAction implements ActionListener {
 		frame.getContentPane().add(buttonPanel);
 		frame.setVisible(true);
 	}
+	
+	public void updateCommentPanel() {
+		// create JLabels for displaying comments again
+		for (String s:editingTask.getAllComments()) {
+			JLabel newLabel = new JLabel(s);
+			commentPanel.add(newLabel);
+		}
+		
+		// update frame
+		frame.getContentPane().repaint();
+		frame.getContentPane().revalidate();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -124,7 +163,7 @@ public class EditAction implements ActionListener {
 
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
-		testTask.addComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blah");
+		//testTask.addComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blah");
 		EditAction e = new EditAction(testTask);
 		e.createAndShowGUI();
 	}
