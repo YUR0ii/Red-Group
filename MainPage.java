@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 import javax.swing.*;
 
+import taskContainer.contextMenu;
+
 
 public class MainPage extends JPanel implements ActionListener {
 	private JFrame mainFrame = new JFrame();
@@ -104,7 +106,6 @@ public class MainPage extends JPanel implements ActionListener {
 			scrollPanel.repaint();
 			this.addMouseListener(new MouseAdapter()
 			{
-
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
@@ -123,9 +124,10 @@ public class MainPage extends JPanel implements ActionListener {
 			contextMenu()
 			{
 				//creates an action to complete a task
-				Action complete = new AbstractAction()
+				//Action complete = new AbstractAction()
+				JMenuItem complete = new JMenuItem("Mark as Complete");
+				complete.addActionListener(new ActionListener()
 				{
-
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
@@ -139,36 +141,21 @@ public class MainPage extends JPanel implements ActionListener {
 						containers.remove(index);
 						scrollPanel.repaint();
 					}
-					
-					@Override
-					public Object getValue(String key) {
-						if(key.equals("NAME"))
-							return "Mark Task as Completed";
-						return null;
-					}
-
-				};
+				});
 				//creates an action to edit a task
-				Action edit = new AbstractAction()
-				{
+				JMenuItem edit = new JMenuItem("Edit");
+				edit.addActionListener(new ActionListener()
+						{
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						new EditAction(task).createAndShowGUI();
 					}
-
-					@Override
-					public Object getValue(String key) {
-						if(key.equals("NAME"))
-							return "Edit Task";
-						return null;
-					}
-
-				};
+						});
 				//creates an action to delete a task
-				Action delete = new AbstractAction()
-				{
-
+				JMenuItem delete = new JMenuItem("Delete");
+				delete.addActionListener(new ActionListener()
+						{
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
@@ -213,20 +200,12 @@ public class MainPage extends JPanel implements ActionListener {
 						});
 						confirm.setVisible(true);
 					}
-
-					@Override
-					public Object getValue(String key) {
-						if(key.equals("NAME"))
-							return "Delete Task";
-						return null;
-					}
-
-				};
-				//adds actions to menu in Action form
+						});
+				
+				//adds actions to menu
 				this.add(complete);
 				this.add(delete);
 				this.add(edit);
-				this.createActionComponent(complete);
 				
 			}
 		}
