@@ -1,16 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
 import java.util.*;
 import javax.swing.*;
 
-import taskContainer.contextMenu;
 
 
 public class MainPage extends JPanel implements ActionListener {
 	private JFrame mainFrame = new JFrame();
 	private JPanel scrollPanel = new JPanel();
 	private JScrollPane scroll = new JScrollPane(scrollPanel);
+	private JScrollBar scrollBar = new JScrollBar();
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu file = new JMenu("File");
 	private JPopupMenu fileMenu = new JPopupMenu();
@@ -49,6 +48,7 @@ public class MainPage extends JPanel implements ActionListener {
 		this.add(scroll);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setPreferredSize(new Dimension(600, 360));
+		scroll.add(scrollBar);
 		input.addActionListener(this);
 		input.setEditable(true);
 		input.setText("New Task");
@@ -60,7 +60,6 @@ public class MainPage extends JPanel implements ActionListener {
 		scrollPanel.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
 		this.setPreferredSize(new Dimension(600, 400));
 		this.add(input);
-		this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		mainFrame.setLocation(250, 100);
 		mainFrame.pack();
 		mainFrame.setVisible(true);
@@ -74,10 +73,8 @@ public class MainPage extends JPanel implements ActionListener {
 			containers.add(new taskContainer(temp));
 			int index = incompleteTasks.indexOf(temp);
 			scrollPanel.add(containers.get(index));
+			scrollPanel.validate();
 			scrollPanel.repaint();
-			scroll.repaint();
-			this.repaint();
-			mainFrame.repaint();
 		}
 	}
 
@@ -95,6 +92,8 @@ public class MainPage extends JPanel implements ActionListener {
 		contextMenu menu;
 		taskContainer(Task task)
 		{
+			this.setSize(100,100);
+			this.setBackground(Color.RED);
 			this.task = task;
 			name=new JLabel(task.getName());
 			this.setLayout(new FlowLayout());
@@ -103,7 +102,7 @@ public class MainPage extends JPanel implements ActionListener {
 				this.add(new JLabel(Calendar.getInstance().getTime().toString()));
 			}
 			this.add(name);
-			scrollPanel.repaint();
+			
 			this.addMouseListener(new MouseAdapter()
 			{
 				@Override
@@ -113,11 +112,11 @@ public class MainPage extends JPanel implements ActionListener {
 					{
 						//creates menu when file button is clicked
 						menu=new contextMenu();
-						System.out.println("show");
 						menu.show(e.getComponent(), e.getX(), e.getY());
 					}
 				};
 			});
+			this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		}
 		class contextMenu extends JPopupMenu
 		{	
@@ -132,7 +131,6 @@ public class MainPage extends JPanel implements ActionListener {
 					public void actionPerformed(ActionEvent e)
 					{
 						//completes a task
-						System.out.println("complete");
 						task.setComplete(true);
 						completeTasks.add(task);
 						int index=incompleteTasks.indexOf(task);
@@ -177,7 +175,6 @@ public class MainPage extends JPanel implements ActionListener {
 							@Override
 							public void actionPerformed(ActionEvent e)
 							{
-								System.out.println("delete");
 								task.delete();
 								int index=incompleteTasks.indexOf(task);
 								incompleteTasks.remove(task);

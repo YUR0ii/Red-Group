@@ -59,19 +59,22 @@ public class Task {
 
 	public void setComment(String comment,int index) {
 		//changes a specific comment
-		addEventToHistory(new commentEvent(commentList.get(index),comment));
+		Event event=new commentEvent(commentList.get(index),comment);
+		addEventToHistory(event);
 		commentList.set(index,comment);
 	}
 
 	public void addComment(String comment) {
 		//adds a comment
 		commentList.add(comment);
-		addEventToHistory(new commentEvent(comment,1));
+		Event event=new commentEvent(comment,1);
+		addEventToHistory(event);
 	}
 	
 	public void removeComment(int index) {
 		//removes a specific comment
-		addEventToHistory(new commentEvent(commentList.get(index),0));
+		Event event=new commentEvent(commentList.get(index),0);
+		addEventToHistory(event);
 		commentList.remove(index);
 	}
 	
