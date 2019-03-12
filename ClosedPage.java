@@ -11,13 +11,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
 public class ClosedPage extends MainPage {
+	private ArrayList<taskContainer> closedContainers=new ArrayList<taskContainer>();
 	ClosedPage(){
 		JFrame closeFrame=new JFrame();
 		JPanel panel = new JPanel();
 		JScrollPane scrollPanel = new JScrollPane(panel);
         for (int i = 0; i<completeTasks.size(); i++) {
-        	containers.add(new taskContainer(completeTasks.get(i)));
-            panel.add(containers.get(i));completeTasks.get(i);
+        	closedContainers.add(new taskContainer(completeTasks.get(i)));
+            panel.add(closedContainers.get(i));
         }
         scrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
         scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
