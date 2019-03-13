@@ -1,18 +1,22 @@
+import java.awt.Font;
 import java.util.ArrayList;
 
+
 public class Task {
-	
 	private String name=null;
 	private String priority;
 	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3]; // look at the constructor for this, make 3 new Priorities in brackets
 	private ArrayList<Event> eventList = new ArrayList<Event>();
 	private ArrayList<String> commentList=new ArrayList<String>();
 	private boolean complete;
+	private boolean changed=false;
+	private Font font;
 
 	Task(String toBeName) {
 		name = toBeName;
 		priority = "inactive";
 		complete = false;
+		font=new Font(Font.SERIF,Font.ITALIC,14);
 	}
 
 	public String getName() {
@@ -100,5 +104,9 @@ public class Task {
 	public void setComplete(boolean complete) {
 		//sets the completion status of an event
 		this.complete = complete;
+	}
+	
+	public void setChanged(boolean bool) {
+		changed=bool;
 	}
 }

@@ -6,9 +6,11 @@ public abstract class Event {
 	protected String sentence;
 	
 	Event(){
-		//Should never be called here
+		//Should be called to set the date
+		date=Calendar.getInstance().getTime();
+		/*//Should never be called here
 		System.out.println("You called the event superclass constructor");
-		createSentence();
+		createSentence();*/
 	}
 
 	// Creates the sentence to be stores until retrieved

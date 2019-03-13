@@ -27,6 +27,7 @@ public class EditAction implements ActionListener {
 		JRadioButton button2 = new JRadioButton("Current");
 		JRadioButton button3 = new JRadioButton("Eventual");
 		JRadioButton button4 = new JRadioButton("Inactive");
+		button4.setSelected(true);
 		group.add(button1); group.add(button2); group.add(button3); group.add(button4);
 		radioButtonPanel.add(button1); radioButtonPanel.add(button2); radioButtonPanel.add(button3); radioButtonPanel.add(button4);
 		
@@ -105,7 +106,7 @@ public class EditAction implements ActionListener {
 		historyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				historyPage newHistory = new historyPage(editingTask);
+				HistoryPage newHistory = new HistoryPage(editingTask);
 				newHistory.openHistoryPage();
 			}
 		});

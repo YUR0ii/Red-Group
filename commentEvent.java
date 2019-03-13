@@ -24,7 +24,7 @@ public class commentEvent extends Event{
 		String day = Event.convertDay(date.getDate());
 		String month = Event.convertMonth(date.getMonth());
 		
-		return "The comment was changed to "+  newComment + " on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear());
+		return "The comment was changed to "+  newComment + " on " + day + " " + (date.getMonth()+1) +"/" + day+ "/" + (1900+date.getYear());
 	}
 	public String createSentence(int identifier) {
 		// TODO Auto-generated method stub
@@ -33,9 +33,9 @@ public class commentEvent extends Event{
 		String month = Event.convertMonth(date.getMonth());
 		
 		if(identifier==add) {
-			return "The comment "+newComment+" was added on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear());
+			return "The comment "+newComment+" was added on " + day + " " + (date.getMonth()+1) +"/" + day+ "/" + (1900+date.getYear());
 		}else{
-			return "The comment "+newComment+" was deleted on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear());
+			return "The comment "+newComment+" was deleted on " + day + " " + (date.getMonth()+1) +"/" + day+ "/" + (1900+date.getYear());
 		}
 	}
 
