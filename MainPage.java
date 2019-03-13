@@ -137,6 +137,7 @@ public class MainPage extends JPanel implements ActionListener {
 						incompleteTasks.remove(index);
 						scrollPanel.remove(containers.get(index));
 						containers.remove(index);
+						scrollPanel.validate();
 						scrollPanel.repaint();
 					}
 				});
@@ -180,6 +181,7 @@ public class MainPage extends JPanel implements ActionListener {
 								incompleteTasks.remove(task);
 								scrollPanel.remove(containers.get(index));
 								containers.remove(index);
+								scrollPanel.validate();
 								scrollPanel.repaint();
 								confirm.setVisible(false);
 							}
