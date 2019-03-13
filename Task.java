@@ -42,7 +42,7 @@ public class Task {
 		this.scheduledPriorities = scheduledPriorities;
 	}
 
-	public ArrayList<Event> getHistory() {
+	public ArrayList<Event> getEvents() {
 		//returns the event list of the task
 		return eventList;
 	}
