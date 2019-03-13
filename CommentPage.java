@@ -1,4 +1,4 @@
-import javax.swing.BoxLayout;
+ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,8 +29,11 @@ public class CommentPage extends JFrame {
 	private JButton commit;
 	private JButton delete;
 	private JLabel title;
-
+	private Event recentEvent;
+	private String ogComment;
+	
 	CommentPage(String CT){
+		ogComment = CT;
 		currentText = CT;
 		setLocation(500,300);
 		sp = new JSplitPane();
@@ -92,8 +95,9 @@ public class CommentPage extends JFrame {
 
 		commit.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  		
-
+				
 				currentText = textArea.getText();
+				recentEvent = new commentEvent(ogComment, currentText);
 				dispose();
 				
 			}  
@@ -102,6 +106,7 @@ public class CommentPage extends JFrame {
 		delete.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){  		
 
+				recentEvent = new commentEvent(ogComment, "");
 				currentText = "";
 				dispose();
 				
@@ -109,4 +114,9 @@ public class CommentPage extends JFrame {
 		});
 
 	}
+	
+	public Event getRecentEvent() {
+		return recentEvent;
+	}
+	
 }
