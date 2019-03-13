@@ -1,0 +1,96 @@
+import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+public class HistoryPage implements MouseListener{
+	private ArrayList<Event> events = new ArrayList<Event>(); 
+	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
+	private JScrollPane scroll;
+	private JFrame frame;
+	private JPanel contentPane;
+	private JPanel panel;
+	public HistoryPage(Task task) {
+		events =task.getEvents();
+		for(int i = 0; i<events.size();i++) {
+			add(getEvent(i),new JLabel());
+		}
+
+	}
+	//returns event at specific index
+	public Event getEvent(int index) {
+		return events.get(index);
+	}
+	//adds labels and adds listener to comment events
+	public void add(Event event, JLabel j){
+		j.setText(event.createSentence());
+		labels.add(j);
+		if(event.getType() == "Comment"){
+			j.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					if(e.getClickCount()==2){
+						openComment((commentEvent)event);
+					}
+
+				}
+			});
+		}
+
+	}
+	//creates gui
+	public void openHistoryPage() {
+		frame = new JFrame("History Page");
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+
+		scroll = new JScrollPane(panel);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
+		scroll.setBounds(0, 0, 500, 400);
+		contentPane = new JPanel();
+		contentPane.setLayout();
+		contentPane.setPreferredSize(new Dimension(500, 400));
+		contentPane.add(scroll);
+		frame.setContentPane(contentPane);
+
+		for(JLabel l : labels) {
+			contentPane.add(l);
+		}
+		
+		frame.pack();
+		frame.setVisible(true);
+
+	}
+	// opens the comment page
+	public void openComment(commentEvent event){
+		event.editComment();
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+
+	}
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+	}
+}
+

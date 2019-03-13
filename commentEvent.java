@@ -61,9 +61,4 @@ public class commentEvent extends Event{
 		//creates the comment page when a comment is double clicked
 		CommentPage page=new CommentPage(newComment);
 	}
-	
-	public String getSentence() {
-		//returns the sentence
-		return sentence;
-	}
 }
