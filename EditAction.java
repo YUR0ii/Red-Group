@@ -124,7 +124,7 @@ public class EditAction implements ActionListener {
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// ask jeffery how to do
+				// ask jeffery how to do 
 			}
 		});
 		
