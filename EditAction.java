@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.util.Calendar;
 
 import javax.swing.*;
@@ -7,7 +10,7 @@ import javax.swing.*;
 public class EditAction implements ActionListener {
 	Task editingTask;
 	JFrame frame = new JFrame();
-	JPanel commentPanel = new JPanel();
+	JTextArea commentArea = new JTextArea();
 
 	public EditAction(Task task) {
 		editingTask = task;
@@ -90,16 +93,14 @@ public class EditAction implements ActionListener {
 		JLabel displayCommentTitle = new JLabel("Comments");
 		
 		// create comment area and make scrollable
-		commentPanel.setLayout(new BoxLayout(commentPanel, BoxLayout.Y_AXIS));
-		JScrollPane scrollPane = new JScrollPane(commentPanel);
+		commentArea.setEditable(false);
+		commentArea.setLineWrap(true);
+		commentArea.setWrapStyleWord(true);
+		commentArea.setText(editingTask.getComment());
+		commentArea.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.WHITE));
+		JScrollPane scrollPane = new JScrollPane(commentArea);
 		scrollPane.setPreferredSize(new Dimension(350, 200));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		// create JLabels for displaying comments
-		JTextArea commentArea = new JTextArea();
-		commentArea.setEditable(false);
-		commentArea.setText(editingTask.getComment(index));
-		commentPanel.add(newLabel);
 			
 		// history, done, print buttons
 		JButton historyButton = new JButton("History");
@@ -146,11 +147,8 @@ public class EditAction implements ActionListener {
 	}
 	
 	public void updateCommentPanel() {
-		// create JLabels for displaying comments again
-		for (String s:editingTask.getAllComments()) {
-			JLabel newLabel = new JLabel(s);
-			commentPanel.add(newLabel);
-		}
+		// update textarea
+		commentArea.setText(editingTask.getComment());
 		
 		// update frame
 		frame.getContentPane().repaint();
