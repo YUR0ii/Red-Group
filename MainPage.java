@@ -65,6 +65,7 @@ public class MainPage extends JPanel implements ActionListener {
 		this.add(input);
 		mainFrame.setLocation(250, 100);
 		mainFrame.pack();
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
 	}
 	//adds functionality to text field for adding tasks
@@ -119,8 +120,7 @@ public class MainPage extends JPanel implements ActionListener {
 			this.task = task;
 			name=new JLabel(task.getName());
 			date=Calendar.getInstance().getTime();
-			dateString=convertDay(date.getDay())+" "+convertMonth(date.getMonth())
-						+" "+date.getDay()+", "+(1900+date.getYear());
+			dateString=getDateString();
 			this.setLayout(new FlowLayout());
 			this.add(name);
 			name.setFont(inactive);
@@ -150,72 +150,7 @@ public class MainPage extends JPanel implements ActionListener {
 			task=nTask;
 		}
 		
-		private String convertDay(int num) {
-			String day;
-			if(num == 0) {
-				day = "Sunday";
-			}
-			else if(num ==1) {
-				day = "Monday";
-			}
-			else if(num ==2) {
-				day = "Tuesday";
-			}
-			else if(num ==3) {
-				day = "Wednesday";
-			}
-			else if(num ==4) {
-				day = "Thursday";
-			}
-			else if(num ==5) {
-				day = "Friday";
-			}
-			else{
-				day = "Saturday";
-			}
-			return day;
-		}
 		
-		private String convertMonth(int num) {
-			String month;
-			if(num == 0) {
-				month = "January";
-			}
-			else if(num ==1) {
-				month = "February";
-			}
-			else if(num ==2) {
-				month = "March";
-			}
-			else if(num ==3) {
-				month = "April";
-			}
-			else if(num ==4) {
-				month = "May";
-			}
-			else if(num ==5) {
-				month = "June";
-			}
-			else if(num ==6) {
-				month = "July";
-			}
-			else if(num ==7) {
-				month = "August";
-			}
-			else if(num ==8) {
-				month = "September";
-			}
-			else if(num ==9) {
-				month = "October";
-			}
-			else if(num ==10) {
-				month = "November";
-			}
-			else{
-				month = "December";
-			}
-			return month;
-		}
 		public Date getDate() {
 			return date;
 		}
@@ -315,6 +250,8 @@ public class MainPage extends JPanel implements ActionListener {
 							
 						});
 						confirm.setVisible(true);
+						confirm.setLocation(mainFrame.getX()+mainFrame.getWidth()/2-confirm.getWidth()/2,
+											mainFrame.getY()+mainFrame.getHeight()/2-confirm.getHeight()/2);
 					}
 						});
 				
