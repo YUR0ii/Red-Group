@@ -96,11 +96,11 @@ public class EditAction implements ActionListener {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		// create JLabels for displaying comments
-		for (String s:editingTask.getAllComments()) {
-			JLabel newLabel = new JLabel(s);
-			commentPanel.add(newLabel);
-		}
-		
+		JTextArea commentArea = new JTextArea();
+		commentArea.setEditable(false);
+		commentArea.setText(editingTask.getComment(index));
+		commentPanel.add(newLabel);
+			
 		// history, done, print buttons
 		JButton historyButton = new JButton("History");
 		historyButton.addActionListener(new ActionListener() {
@@ -123,7 +123,7 @@ public class EditAction implements ActionListener {
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// set print operation later
+				// ask jeffery how to do
 			}
 		});
 		
@@ -164,7 +164,7 @@ public class EditAction implements ActionListener {
 
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
-		//testTask.addComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blah");
+		testTask.addComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blah");
 		EditAction e = new EditAction(testTask);
 		e.createAndShowGUI();
 	}
