@@ -39,7 +39,7 @@ public abstract class Event {
 	public abstract String getOldComment();
 	public abstract String getNewComment();
 	
-	protected static String convertMonth(int num) {
+	public static String convertMonth(int num) {
 		String month;
 		if(num == 0) {
 			month = "January";
@@ -80,7 +80,7 @@ public abstract class Event {
 		return month;
 	}
 	
-	protected static String convertDay(int num) {
+	public static String convertDay(int num) {
 		String day;
 		if(num == 0) {
 			day = "Sunday";
@@ -106,5 +106,9 @@ public abstract class Event {
 		return day;
 	}
 	
-
+	public static String getDateString(Date date) {
+		String dateString=Event.convertDay(date.getDay())+" "+Event.convertMonth(date.getMonth())
+		+" "+date.getDay()+", "+(1900+date.getYear());
+		return dateString;
+	}
 }
