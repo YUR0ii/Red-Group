@@ -1,22 +1,23 @@
 import java.awt.Font;
 import java.util.ArrayList;
-//reee cant push 
+
 
 public class Task {
 	private String name=null;
 	private String priority;
 	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3]; // look at the constructor for this, make 3 new Priorities in brackets
 	private ArrayList<Event> eventList = new ArrayList<Event>();
-	private String comment = "";
+	private ArrayList<String> commentList=new ArrayList<String>();
 	private boolean complete;
+	
 	private boolean changed=false;
 	private Font font;
 
 	Task(String toBeName) {
 		name = toBeName;
-		priority = "inactive";
+		priority = "urgent";
 		complete = false;
-		font=new Font(Font.SERIF,Font.ITALIC,14);
+		font=new Font(Font.SERIF,Font.BOLD,14);
 	}
 
 	public String getName() {
@@ -56,25 +57,36 @@ public class Task {
 		eventList.add(event);
 	}
 
-	public String getComment() {
+	public String getComment(int index) {
 		//returns a specific comment
-		return comment;
+		return commentList.get(index);
+	}
+
+	public void setComment(String comment,int index) {
+		//changes a specific comment
+		Event event=new commentEvent(commentList.get(index),comment);
+		addEventToHistory(event);
+		commentList.set(index,comment);
 	}
 
 	public void addComment(String comment) {
 		//adds a comment
-		this.comment = comment;
+		commentList.add(comment);
 		Event event=new commentEvent(comment,1);
 		addEventToHistory(event);
 	}
 	
 	public void removeComment(int index) {
-		//removes the comment
-		Event event=new commentEvent(comment,0); // I don't know how this works. Might need fixing. -xiaodeng
+		//removes a specific comment
+		Event event=new commentEvent(commentList.get(index),0);
 		addEventToHistory(event);
-		comment = "";
+		commentList.remove(index);
 	}
 	
+	public ArrayList<String> getAllComments() {
+		//returns the array list of comments
+		return commentList;
+	}
 	public void delete() {
 		// deletes the task
 	}
