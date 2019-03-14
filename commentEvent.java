@@ -21,13 +21,13 @@ public class commentEvent extends Event{
 		// TODO Auto-generated method stub
 		//makes the string for a change event
 		
-		return "The comment " + oldComment + "was changed to "+  newComment + " on " + Event.getDateString(date);
+		return "The comment '" + oldComment + "' was changed to '"+  newComment + "' on " + Event.getDateString(date);
 	}
 	public String createSentence(int identifier) {
 		// TODO Auto-generated method stub
 		//makes the string for a remove event
 		
-		return "The comment "+newComment+" was deleted on " + Event.getDateString(date);		
+		return "The comment '"+newComment+"' was deleted on " + Event.getDateString(date);		
 	}
 
 	@Override

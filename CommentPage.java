@@ -98,6 +98,7 @@ public class CommentPage extends JFrame {
 				
 				currentText = textArea.getText();
 				recentEvent = new commentEvent(ogComment, currentText);
+				
 				dispose();
 				
 			}  

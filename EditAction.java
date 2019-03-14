@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.*;
 
@@ -30,18 +31,24 @@ public class EditAction implements ActionListener {
 		JRadioButton button2 = new JRadioButton("Current");
 		JRadioButton button3 = new JRadioButton("Eventual");
 		JRadioButton button4 = new JRadioButton("Inactive");
-		if(editingTask.getPriorityLevel().equals("urgent")) {
+		if (editingTask.getPriorityLevel().equals("urgent")) {
 			button1.setSelected(true);
-		}else if(editingTask.getPriorityLevel().equals("current")) {
+		} else if (editingTask.getPriorityLevel().equals("current")) {
 			button2.setSelected(true);
-		}else if(editingTask.getPriorityLevel().equals("eventual")) {
+		} else if (editingTask.getPriorityLevel().equals("eventual")) {
 			button3.setSelected(true);
-		}else {
+		} else {
 			button4.setSelected(true);
 		}
-		group.add(button1); group.add(button2); group.add(button3); group.add(button4);
-		radioButtonPanel.add(button1); radioButtonPanel.add(button2); radioButtonPanel.add(button3); radioButtonPanel.add(button4);
-		
+		group.add(button1);
+		group.add(button2);
+		group.add(button3);
+		group.add(button4);
+		radioButtonPanel.add(button1);
+		radioButtonPanel.add(button2);
+		radioButtonPanel.add(button3);
+		radioButtonPanel.add(button4);
+
 		// add action listener to radio buttons
 		button1.addActionListener(new ActionListener() {
 			@Override
@@ -75,19 +82,52 @@ public class EditAction implements ActionListener {
 		String[] checkbnames = new String[] { "Urgent", "Current", "Eventual" };
 		JPanel checkBoxPanel = new JPanel();
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
-		for (String s : checkbnames) {
-			JCheckBox checkb = new JCheckBox(s);
-			checkBoxPanel.add(checkb);
-		}
+		JCheckBox urgentBox = new JCheckBox();
+		JCheckBox currentBox = new JCheckBox();
+		JCheckBox eventualBox = new JCheckBox();
+		checkBoxPanel.add(urgentBox);
+		checkBoxPanel.add(currentBox);
+		checkBoxPanel.add(eventualBox);
 
 		// create and add JSpinners (date selection)
 		JPanel spinnerPanel = new JPanel();
 		spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.Y_AXIS));
-		for (int i = 0; i < 4; i++) {
-			SpinnerDateModel model = new SpinnerDateModel();
-			JSpinner spinner = new JSpinner(model);
-			spinnerPanel.add(spinner);
-		}
+		SpinnerDateModel model = new SpinnerDateModel();
+		JSpinner urgentSpinner = new JSpinner(model);
+		JSpinner currentSpinner = new JSpinner(model);
+		JSpinner eventualSpinner = new JSpinner(model);
+		spinnerPanel.add(urgentSpinner);
+		spinnerPanel.add(currentSpinner);
+		spinnerPanel.add(eventualSpinner);
+		
+		// add action listeners to checkboxes
+		urgentBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Date date = (Date) urgentSpinner.getValue();
+				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
+				scheduledPriorities[0] = new scheduledPriority("Urgent");
+				scheduledPriorities[0].setDate(date);
+			}
+		});
+		currentBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Date date = (Date) currentSpinner.getValue();
+				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
+				scheduledPriorities[1] = new scheduledPriority("Current");
+				scheduledPriorities[1].setDateLevel(date, "Current");
+			}
+		});
+		eventualBox.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Date date = (Date) eventualSpinner.getValue();
+				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
+				scheduledPriorities[2] = new scheduledPriority("Eventual");
+				scheduledPriorities[2].setDateLevel(date, "Eventual");
+			}
+		});
 		
 		// lazy coding
 		JPanel checkBoxAndSpinnerPanel = new JPanel(new FlowLayout());
@@ -109,7 +149,40 @@ public class EditAction implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(commentArea);
 		scrollPane.setPreferredSize(new Dimension(350, 200));
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			
+		
+		// add action listener to comment area
+		commentArea.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CommentPage c = new CommentPage(editingTask.getComment());
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		// history, done, print buttons
 		JButton historyButton = new JButton("History");
 		historyButton.addActionListener(new ActionListener() {
@@ -132,7 +205,8 @@ public class EditAction implements ActionListener {
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// ask jeffery how to do 
+				Printer printer=new Printer();
+				printer.printComponent(frame);
 			}
 		});
 		
@@ -170,7 +244,7 @@ public class EditAction implements ActionListener {
 
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
-		testTask.addComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blah");
+		testTask.setComment("blahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blahblahblahblahblah blahblah blah");
 		EditAction e = new EditAction(testTask);
 		e.createAndShowGUI();
 	}
