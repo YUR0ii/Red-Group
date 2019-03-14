@@ -7,17 +7,13 @@ public class Task {
 	private String priority;
 	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3]; // look at the constructor for this, make 3 new Priorities in brackets
 	private ArrayList<Event> eventList = new ArrayList<Event>();
-	private ArrayList<String> commentList=new ArrayList<String>();
+	private String comment="new comment";
 	private boolean complete;
-	
-	private boolean changed=false;
-	private Font font;
 
 	Task(String toBeName) {
 		name = toBeName;
 		priority = "urgent";
 		complete = false;
-		font=new Font(Font.SERIF,Font.BOLD,14);
 	}
 
 	public String getName() {
@@ -57,36 +53,25 @@ public class Task {
 		eventList.add(event);
 	}
 
-	public String getComment(int index) {
+	public String getComment() {
 		//returns a specific comment
-		return commentList.get(index);
+		return comment;
 	}
 
-	public void setComment(String comment,int index) {
+	public void setComment(String newComment) {
 		//changes a specific comment
-		Event event=new commentEvent(commentList.get(index),comment);
+		Event event=new commentEvent(comment,newComment);
 		addEventToHistory(event);
-		commentList.set(index,comment);
-	}
-
-	public void addComment(String comment) {
-		//adds a comment
-		commentList.add(comment);
-		Event event=new commentEvent(comment,1);
-		addEventToHistory(event);
+		comment=newComment;
 	}
 	
 	public void removeComment(int index) {
 		//removes a specific comment
-		Event event=new commentEvent(commentList.get(index),0);
+		Event event=new commentEvent(comment,0);
 		addEventToHistory(event);
-		commentList.remove(index);
+		comment="new comment";
 	}
 	
-	public ArrayList<String> getAllComments() {
-		//returns the array list of comments
-		return commentList;
-	}
 	public void delete() {
 		// deletes the task
 	}
@@ -100,14 +85,5 @@ public class Task {
 	public boolean getComplete() {
 		//returns the completion status of a task
 		return complete;
-	}
-
-	public void setComplete(boolean complete) {
-		//sets the completion status of an event
-		this.complete = complete;
-	}
-	
-	public void setChanged(boolean bool) {
-		changed=bool;
 	}
 }

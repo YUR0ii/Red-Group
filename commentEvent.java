@@ -3,7 +3,6 @@ public class commentEvent extends Event{
 	//i added differentiation between adding, removing, and changing a comment
 	private String oldComment = null;
 	private String newComment = null;
-	private final int add=1;
 	
 	commentEvent(String oldcomment, String newcomment){
 		//makes an event when a comment is changed
@@ -21,22 +20,14 @@ public class commentEvent extends Event{
 	public String createSentence() {
 		// TODO Auto-generated method stub
 		//makes the string for a change event
-		String day = Event.convertDay(date.getDate());
-		String month = Event.convertMonth(date.getMonth());
 		
-		return "The comment was changed to "+  newComment + " on " + day + " " + (date.getMonth()+1) +"/" + day+ "/" + (1900+date.getYear());
+		return "The comment " + oldComment + "was changed to "+  newComment + " on " + Event.getDateString(date);
 	}
 	public String createSentence(int identifier) {
 		// TODO Auto-generated method stub
-		//makes the string for an add or remove event
-		String day = Event.convertDay(date.getDate());
-		String month = Event.convertMonth(date.getMonth());
+		//makes the string for a remove event
 		
-		if(identifier==add) {
-			return "The comment "+newComment+" was added on " + day + " " + (date.getMonth()+1) +"/" + day+ "/" + (1900+date.getYear());
-		}else{
-			return "The comment "+newComment+" was deleted on " + day + " " + (date.getMonth()+1) +"/" + day+ "/" + (1900+date.getYear());
-		}
+		return "The comment "+newComment+" was deleted on " + Event.getDateString(date);		
 	}
 
 	@Override

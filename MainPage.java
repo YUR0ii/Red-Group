@@ -73,21 +73,9 @@ public class MainPage extends JPanel implements ActionListener {
 		String eventName = e.getActionCommand();
 		if (eventName.equals("Add a Task")) {
 			taskContainer temp = new taskContainer(new Task(input.getText()));
-			incompleteContainers.add(temp);
-			int index = incompleteContainers.indexOf(temp);			
+			incompleteContainers.add(temp);		
 			incompleteTasks.add(temp.getTask());
-//I think we need to add the dates separate from the taskContainer
-			boolean check=true;
-			for(String d: dateStrings) {
-				if((d.equals(incompleteContainers.get(index).dateString))) {
-					check=false;
-				}
-			}
-			if(check) {
-				dateStrings.add(incompleteContainers.get(index).dateString);
-				scrollPanel.add(new JLabel(incompleteContainers.get(index).dateString));
-			}
-			scrollPanel.add(incompleteContainers.get(index));
+			scrollPanel.add(temp);
 			scrollPanel.validate();
 			scrollPanel.repaint();
 		}
@@ -98,10 +86,60 @@ public class MainPage extends JPanel implements ActionListener {
 	
 	public void updatePage(Task editedTask) {
 		int index=incompleteTasks.indexOf(editedTask);
-		incompleteContainers.get(index).update();
-		//need to check list for changed boolean?
+		taskContainer temp=incompleteContainers.get(index);
+		temp.update();
+		if((checkRemoveDate(temp.getDateString()))) {
+			int i=dateStrings.indexOf(temp.getDateString());
+			dateStrings.remove(i);		
+		}
+		if((checkAddDate(temp.getDateString()))) {
+			dateStrings.add(temp.getDateString());
+		}
+		//need a method for reordering the page properly
+		updateGUI();
 		scrollPanel.repaint();
-		//check to see if the date needs to be removed
+		
+	}
+	
+	public boolean checkRemoveDate(String date) {
+		for(taskContainer t : incompleteContainers) {
+			if(t.getDateString().equals(date)) {
+				if((t.getTask().getPriorityLevel().equals("inactive"))) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkAddDate(String date) {
+		for(taskContainer t : incompleteContainers) {
+			if(!(t.getDateString().equals(date))) {
+				if((t.getTask().getPriorityLevel().equals("inactive"))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public String checkAddDate(taskContainer t) {
+		for(String s : dateStrings) {
+			if((t.getDateString().equals(s))) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	public void updateGUI() {
+		scrollPanel.removeAll();
+		for(taskContainer t : incompleteContainers) {
+			if(!(checkAddDate(t)==null)) {
+				scrollPanel.add(new JLabel(checkAddDate(t)));
+			}
+			scrollPanel.add(t);
+		}
 	}
 	
 	public class taskContainer extends JComponent implements Comparable
@@ -123,7 +161,7 @@ public class MainPage extends JPanel implements ActionListener {
 			dateString=getDateString();
 			this.setLayout(new FlowLayout());
 			this.add(name);
-			name.setFont(inactive);
+			name.setFont(urgent);
 			this.addMouseListener(new MouseAdapter()
 			{
 				//creates menu when right clicking on a task

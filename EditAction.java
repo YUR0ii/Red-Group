@@ -30,7 +30,15 @@ public class EditAction implements ActionListener {
 		JRadioButton button2 = new JRadioButton("Current");
 		JRadioButton button3 = new JRadioButton("Eventual");
 		JRadioButton button4 = new JRadioButton("Inactive");
-		button4.setSelected(true);
+		if(editingTask.getPriorityLevel().equals("urgent")) {
+			button1.setSelected(true);
+		}else if(editingTask.getPriorityLevel().equals("current")) {
+			button2.setSelected(true);
+		}else if(editingTask.getPriorityLevel().equals("eventual")) {
+			button3.setSelected(true);
+		}else {
+			button4.setSelected(true);
+		}
 		group.add(button1); group.add(button2); group.add(button3); group.add(button4);
 		radioButtonPanel.add(button1); radioButtonPanel.add(button2); radioButtonPanel.add(button3); radioButtonPanel.add(button4);
 		
