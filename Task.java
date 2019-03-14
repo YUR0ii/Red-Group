@@ -86,4 +86,8 @@ public class Task {
 		//returns the completion status of a task
 		return complete;
 	}
+	
+	public void setComplete(boolean newComplete) {
+		complete=newComplete;
+	}
 }
