@@ -52,6 +52,7 @@ public class MainPage extends JPanel implements ActionListener {
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setPreferredSize(new Dimension(600, 360));
 		scroll.add(scrollBar);
+		scroll.validate();
 		input.addActionListener(this);
 		input.setEditable(true);
 		input.setText("New Task");
@@ -153,6 +154,13 @@ public class MainPage extends JPanel implements ActionListener {
 		private Font current=new Font(Font.SERIF,Font.PLAIN,14);
 		private Font eventual=new Font(Font.SERIF,Font.ITALIC,14);
 		private Font inactive=new Font(Font.SERIF,Font.ITALIC,14);
+		boolean dragging = false;
+		
+		int getIndex()
+		{
+			return incompleteContainers.indexOf(this);
+		}
+		
 		taskContainer(Task task)
 		{
 			this.task = task;
@@ -175,8 +183,52 @@ public class MainPage extends JPanel implements ActionListener {
 					}else if(e.getClickCount()==2){
 						task.edit();
 					}
+//					setLocation(e.getPoint());
 				};
+
+				@Override
+				public void mousePressed(MouseEvent e)
+				{
+					if(e.getButton() == e.BUTTON1)
+						dragging = true;
+				}
+				
+				@Override
+				public void mouseReleased(MouseEvent e)
+				{
+					if(dragging = true)
+					{
+						boolean h = true;
+						int i = 0;
+						for (i = incompleteContainers.size()-1; i >= 0 && h; i--)
+						{
+							if(incompleteContainers.get(i).getY() < getY())
+							{
+								h = false;
+							}
+						}
+						incompleteContainers.add(i, incompleteContainers.get(getIndex()));
+						scroll.revalidate();
+					}
+				}
 			});
+			addMouseMotionListener(new MouseMotionListener()
+					{
+
+						@Override
+						public void mouseDragged(MouseEvent e) 
+						{
+							setLocation(e.getLocationOnScreen());
+							
+						}
+
+						@Override
+						public void mouseMoved(MouseEvent arg0) {
+							// TODO Auto-generated method stub
+							
+						}
+				
+					});
 			this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		}
 		
@@ -329,15 +381,19 @@ public class MainPage extends JPanel implements ActionListener {
 	private class fileListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
-
+				Backup.createFolder("Z:\\To Do List");
+				Backup.saveFile("Z:\\To Do List\\Incompleted Tasks.ser", incompleteTasks);
+				Backup.saveFile("Z:\\To Do List\\Completed Tasks.ser", completeTasks);
 			} else if (e.getComponent().equals(restore)) {
-
+				loadFiles();
+				//create a method that updates the page
 			} else if (e.getComponent().equals(print)) {
-
+				Printer printer=new Printer();
+				printer.printComponent(mainFrame);
 			}
 			fileMenu.setVisible(false);
 		}
-	}
+
 	//deals with functions in menu bar
 	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
