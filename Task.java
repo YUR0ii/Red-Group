@@ -1,8 +1,9 @@
 import java.awt.Font;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class Task {
+public class Task implements Serializable{
 	private String name=null;
 	private String priority;
 	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3]; // look at the constructor for this, make 3 new Priorities in brackets
