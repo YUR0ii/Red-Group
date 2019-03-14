@@ -17,6 +17,7 @@ public class HistoryPage implements MouseListener{
 		for(int i = 0; i<events.size();i++) {
 			add(getEvent(i),new JLabel());
 		}
+		openHistoryPage();
 
 	}
 	//returns event at specific index
@@ -32,6 +33,8 @@ public class HistoryPage implements MouseListener{
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount()==2){
 						openComment((commentEvent)event);
+						j.setText(event.getNewComment());
+						
 					}
 
 				}
@@ -49,7 +52,8 @@ public class HistoryPage implements MouseListener{
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
 		scroll.setBounds(0, 0, 500, 400);
 		contentPane = new JPanel();
-		contentPane.setLayout();
+		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
+		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
 		contentPane.setPreferredSize(new Dimension(500, 400));
 		contentPane.add(scroll);
 		frame.setContentPane(contentPane);
@@ -93,4 +97,5 @@ public class HistoryPage implements MouseListener{
 		// TODO Auto-generated method stub
 	}
 }
+
 
