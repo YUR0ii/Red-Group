@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.*;
 
 
-public abstract class Event {
+public abstract class Event implements Serializable{
 	protected Date date;
 	protected String sentence;
 	
