@@ -22,6 +22,11 @@ public class MainPage extends JPanel implements ActionListener {
 	private ArrayList<Task> completeTasks = new ArrayList<Task>();
 	protected ArrayList<taskContainer> incompleteContainers = new ArrayList<taskContainer>();
 	protected ArrayList<taskContainer> completeContainers = new ArrayList<taskContainer>();
+	private ArrayList<Task> urgentTasks = new ArrayList<Task>();
+	private ArrayList<Task> currentTasks = new ArrayList<Task>();
+	private ArrayList<Task> eventualTasks = new ArrayList<Task>();
+	private ArrayList<Task> inactiveTasks = new ArrayList<Task>();
+	
 	private ArrayList<String> dateStrings=new ArrayList<String>();
 	
 	MainPage() {
@@ -31,8 +36,7 @@ public class MainPage extends JPanel implements ActionListener {
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
-		
-		
+		loadFiles();
 		//createGUI();
 	}
 	//creates GUI components for main page
@@ -98,7 +102,6 @@ public class MainPage extends JPanel implements ActionListener {
 		}
 		//need a method for reordering the page properly
 		updateGUI();
-		scrollPanel.repaint();
 		
 	}
 	
@@ -135,12 +138,46 @@ public class MainPage extends JPanel implements ActionListener {
 	
 	public void updateGUI() {
 		scrollPanel.removeAll();
-		for(taskContainer t : incompleteContainers) {
-			if(!(checkAddDate(t)==null)) {
-				scrollPanel.add(new JLabel(checkAddDate(t)));
+		for(Task t: incompleteTasks) {
+			if(t.getPriorityLevel().equals("urgent")) {
+				urgentTasks.add(t);
+			}else if(t.getPriorityLevel().equals("current")) {
+				currentTasks.add(t);
+			}else if(t.getPriorityLevel().equals("eventual")) {
+				eventualTasks.add(t);
+			}else {
+				inactiveTasks.add(t);
 			}
-			scrollPanel.add(t);
 		}
+		for(Task t: urgentTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			scrollPanel.add(temp);
+		}
+		for(Task t: currentTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			scrollPanel.add(temp);
+		}
+		for(Task t: eventualTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			scrollPanel.add(temp);
+		}
+		for(Task t: inactiveTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			if(!(checkAddDate(temp)==null)) {
+				scrollPanel.add(new JLabel(checkAddDate(temp)));
+			}
+			scrollPanel.add(temp);
+		}
+	}
+	
+	public void loadFiles() {
+		incompleteTasks=Backup.loadFile("Z:\\To Do List\\Incompleted Tasks.ser");
+		completeTasks=Backup.loadFile("Z:\\To Do List\\Completed Tasks.ser");
+		updateGUI();
 	}
 	
 	public class taskContainer extends JComponent implements Comparable
@@ -156,7 +193,7 @@ public class MainPage extends JPanel implements ActionListener {
 		private Font inactive=new Font(Font.SERIF,Font.ITALIC,14);
 		boolean dragging = false;
 		
-		int getIndex()
+		public int getIndex()
 		{
 			return incompleteContainers.indexOf(this);
 		}
@@ -375,25 +412,24 @@ public class MainPage extends JPanel implements ActionListener {
 	
 	public static void main(String[] args) {
 		MainPage page = new MainPage();
+		Backup.createFolder("Z:\\To Do List");
 		page.createGUI();
 	}
 	//deals with functions in file menu
 	private class fileListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
-				Backup.createFolder("Z:\\To Do List");
 				Backup.saveFile("Z:\\To Do List\\Incompleted Tasks.ser", incompleteTasks);
 				Backup.saveFile("Z:\\To Do List\\Completed Tasks.ser", completeTasks);
 			} else if (e.getComponent().equals(restore)) {
 				loadFiles();
-				//create a method that updates the page
 			} else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
 				printer.printComponent(mainFrame);
 			}
 			fileMenu.setVisible(false);
 		}
-
+	}
 	//deals with functions in menu bar
 	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
@@ -406,5 +442,4 @@ public class MainPage extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
 }
