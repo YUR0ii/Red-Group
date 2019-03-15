@@ -154,8 +154,7 @@ public class EditAction implements ActionListener {
 		commentArea.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CommentPage c = new CommentPage(editingTask.getComment());
-				
+				CommentPage c = new CommentPage(editingTask);
 			}
 
 			@Override
@@ -189,7 +188,7 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				HistoryPage newHistory = new HistoryPage(editingTask);
-				newHistory.openHistoryPage();
+				//newHistory.openHistoryPage();
 			}
 		});
 		
@@ -228,9 +227,9 @@ public class EditAction implements ActionListener {
 		frame.setVisible(true);
 	}
 	
-	public void updateCommentPanel() {
+	public void updateComment(String s) {
 		// update textarea
-		commentArea.setText(editingTask.getComment());
+		commentArea.setText(s);
 		
 		// update frame
 		frame.getContentPane().repaint();
