@@ -1,6 +1,8 @@
-import java.io.File;
+ import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -15,34 +17,24 @@ public class Backup {
 		return toDoListFolder.getAbsolutePath();
 	}
 
-	public static ArrayList loadFile(String filePath) {
-		ArrayList deserialized;
+	public static ArrayList<Task> loadFile(String filePath) throws ClassNotFoundException, IOException {
+		ArrayList<Task> deserialized;
 
-		try {
-			FileInputStream fileIn = new FileInputStream(filePath);
-			ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-			deserialized = (ArrayList) objectIn.readObject();
-			objectIn.close();
-			fileIn.close();
+		FileInputStream fileIn = new FileInputStream(filePath);
+		ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+		deserialized = (ArrayList<Task>) objectIn.readObject();
+		objectIn.close();
+		fileIn.close();
 
-			return deserialized;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
+		return deserialized;
 	}
 
-	public static void saveFile(String filePath, ArrayList list) {
-		try {
-			FileOutputStream fileOut = new FileOutputStream(filePath);
-			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-			objectOut.writeObject(list);
-			objectOut.close();
-			fileOut.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public static void saveFile(String filePath, ArrayList<Task> list) throws IOException {
+		FileOutputStream fileOut = new FileOutputStream(filePath);
+		ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+		objectOut.writeObject(list);
+		objectOut.close();
+		fileOut.close();
 	}
 
 }

@@ -6,6 +6,7 @@ public class scheduledPriority implements Serializable{
 	
 	String level;
 	Date date = new Date();
+	boolean active=false;
 	
 	scheduledPriority(String Level){
 		level=Level;
@@ -37,4 +38,11 @@ public class scheduledPriority implements Serializable{
 		Level = level;
 	}
 	
+	public boolean getActive() {
+		return active;
+	}
+	
+	public void seActive(boolean boo) {
+		active=boo;
+	}
 }
