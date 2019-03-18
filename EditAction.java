@@ -196,6 +196,8 @@ public class EditAction implements ActionListener {
 		});
 		
 		JButton printButton = new JButton(); // set printer icon later
+		printButton.setIcon(new ImageIcon("lib/smallprintericon.png"));
+		printButton.setPreferredSize(new Dimension(50, 25));
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
