@@ -105,27 +105,21 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Date date = (Date) urgentSpinner.getValue();
-				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
-				scheduledPriorities[0] = new scheduledPriority("Urgent");
-				scheduledPriorities[0].setDate(date);
+				editingTask.updatePriorityDate(date,0);
 			}
 		});
 		currentBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Date date = (Date) currentSpinner.getValue();
-				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
-				scheduledPriorities[1] = new scheduledPriority("Current");
-				scheduledPriorities[1].setDateLevel(date, "Current");
+				editingTask.updatePriorityDate(date,1);
 			}
 		});
 		eventualBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Date date = (Date) eventualSpinner.getValue();
-				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
-				scheduledPriorities[2] = new scheduledPriority("Eventual");
-				scheduledPriorities[2].setDateLevel(date, "Eventual");
+				editingTask.updatePriorityDate(date,2);
 			}
 		});
 		
