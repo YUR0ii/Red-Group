@@ -41,7 +41,7 @@ public class scheduledPriority {
 		return active;
 	}
 	
-	public void seActive(boolean boo) {
+	public void setActive(boolean boo) {
 		active=boo;
 	}
 }

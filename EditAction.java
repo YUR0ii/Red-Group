@@ -99,28 +99,31 @@ public class EditAction implements ActionListener {
 		urgentBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date date = (Date) urgentSpinner.getValue();
-				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
-				scheduledPriorities[0] = new scheduledPriority("Urgent");
-				scheduledPriorities[0].setDate(date);
+				if(urgentBox.isSelected()) {
+					Date date = (Date) urgentSpinner.getValue();
+					editingTask.updatePriorityDate(date,0);
+				}
+				editingTask.getScheduledPriority(0).setActive(urgentBox.isSelected());
 			}
 		});
 		currentBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date date = (Date) currentSpinner.getValue();
-				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
-				scheduledPriorities[1] = new scheduledPriority("Current");
-				scheduledPriorities[1].setDateLevel(date, "Current");
+				if(currentBox.isSelected()) {
+					Date date = (Date) currentSpinner.getValue();
+					editingTask.updatePriorityDate(date,1);				
+				}
+				editingTask.getScheduledPriority(1).setActive(currentBox.isSelected());
 			}
 		});
 		eventualBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date date = (Date) eventualSpinner.getValue();
-				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
-				scheduledPriorities[2] = new scheduledPriority("Eventual");
-				scheduledPriorities[2].setDateLevel(date, "Eventual");
+				if(eventualBox.isSelected()) {
+					Date date = (Date) eventualSpinner.getValue();
+					editingTask.updatePriorityDate(date,2);				
+				}
+				editingTask.getScheduledPriority(2).setActive(eventualBox.isSelected());
 			}
 		});
 		
@@ -146,34 +149,10 @@ public class EditAction implements ActionListener {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		// add action listener to comment area
-		commentArea.addMouseListener(new MouseListener() {
+		commentArea.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				CommentPage c = new CommentPage(editingTask);
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		

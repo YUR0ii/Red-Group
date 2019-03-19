@@ -62,7 +62,7 @@ public class MainPage extends JPanel implements ActionListener
 		scroll.validate();
 		input.addActionListener(this);
 		input.setEditable(true);
-		input.setText("New Task");
+		input.setText("New Action Item");
 		input.setVisible(true);
 		input.setActionCommand("Add a Task");
 		input.setPreferredSize(new Dimension(590, 25));

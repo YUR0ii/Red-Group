@@ -45,6 +45,10 @@ public class Task implements Serializable{
 		return scheduledPriorities;
 	}
 
+	public scheduledPriority getScheduledPriority(int level) {
+		return scheduledPriorities[level];
+	}
+	
 	public void updateScheduledPriorities(scheduledPriority[] scheduledPriorities) {
 		this.scheduledPriorities = scheduledPriorities;
 	}
