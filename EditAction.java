@@ -1,10 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.*;
 
 public class EditAction implements ActionListener {
@@ -78,12 +75,11 @@ public class EditAction implements ActionListener {
 		});
 
 		// create and add checkboxes
-		String[] checkbnames = new String[] { "Urgent", "Current", "Eventual" };
 		JPanel checkBoxPanel = new JPanel();
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
-		JCheckBox urgentBox = new JCheckBox();
-		JCheckBox currentBox = new JCheckBox();
-		JCheckBox eventualBox = new JCheckBox();
+		JCheckBox urgentBox = new JCheckBox("Urgent");
+		JCheckBox currentBox = new JCheckBox("Current");
+		JCheckBox eventualBox = new JCheckBox("Eventual");
 		checkBoxPanel.add(urgentBox);
 		checkBoxPanel.add(currentBox);
 		checkBoxPanel.add(eventualBox);
@@ -104,21 +100,27 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Date date = (Date) urgentSpinner.getValue();
-				editingTask.updatePriorityDate(date,0);
+				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
+				scheduledPriorities[0] = new scheduledPriority("Urgent");
+				scheduledPriorities[0].setDate(date);
 			}
 		});
 		currentBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Date date = (Date) currentSpinner.getValue();
-				editingTask.updatePriorityDate(date,1);
+				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
+				scheduledPriorities[1] = new scheduledPriority("Current");
+				scheduledPriorities[1].setDateLevel(date, "Current");
 			}
 		});
 		eventualBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Date date = (Date) eventualSpinner.getValue();
-				editingTask.updatePriorityDate(date,2);
+				scheduledPriority[] scheduledPriorities = editingTask.getScheduledPriorities();
+				scheduledPriorities[2] = new scheduledPriority("Eventual");
+				scheduledPriorities[2].setDateLevel(date, "Eventual");
 			}
 		});
 		
@@ -147,8 +149,7 @@ public class EditAction implements ActionListener {
 		commentArea.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CommentPage c = new CommentPage(editingTask.getComment());
-				
+				CommentPage c = new CommentPage(editingTask);
 			}
 
 			@Override
@@ -182,7 +183,7 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				HistoryPage newHistory = new HistoryPage(editingTask);
-				newHistory.openHistoryPage();
+				//newHistory.openHistoryPage();
 			}
 		});
 		
@@ -195,6 +196,8 @@ public class EditAction implements ActionListener {
 		});
 		
 		JButton printButton = new JButton(); // set printer icon later
+		printButton.setIcon(new ImageIcon("lib/smallprintericon.png"));
+		printButton.setPreferredSize(new Dimension(50, 25));
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -221,9 +224,9 @@ public class EditAction implements ActionListener {
 		frame.setVisible(true);
 	}
 	
-	public void updateCommentPanel() {
+	public void updateComment(String s) {
 		// update textarea
-		commentArea.setText(editingTask.getComment());
+		commentArea.setText(s);
 		
 		// update frame
 		frame.getContentPane().repaint();
@@ -233,6 +236,114 @@ public class EditAction implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+	}
+	
+	class CommentPage extends JFrame {
+		Task task;
+		private String currentText;
+
+		private JSplitPane sp;
+		private JPanel topPanel;
+		private JPanel bottomPanel;
+		private JScrollPane scroll;
+		private JTextArea textArea;
+		private JPanel inputPanel;
+		private JButton commit;
+		private JButton delete;
+		private JLabel title;
+		private Event recentEvent;
+		private String ogComment;
+		
+		CommentPage(Task t){
+			task = t;
+			ogComment = task.getComment();
+			currentText = task.getComment();
+			setLocation(500,300);
+			sp = new JSplitPane();
+			topPanel = new JPanel();         
+			bottomPanel = new JPanel();      
+			textArea = new JTextArea(); 
+			textArea.setLineWrap(true);
+			textArea.setWrapStyleWord(true);
+			textArea.setText(currentText);
+			scroll = new JScrollPane(textArea);
+			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+			title = new JLabel("Edit Comment");
+			topPanel.add(title);
+			inputPanel = new JPanel();
+			commit = new JButton("Commit");
+			commit.setPreferredSize(new Dimension(199,25));
+			delete = new JButton("Delete");
+			delete.setPreferredSize(new Dimension(199,25));
+			setPreferredSize(new Dimension(400, 400)); 
+			getContentPane().add(sp); 
+			sp.setOrientation(JSplitPane.VERTICAL_SPLIT);
+			sp.setTopComponent(topPanel);
+			sp.setBottomComponent(bottomPanel);
+			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+			bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
+			bottomPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			bottomPanel.add(scroll);
+			bottomPanel.add(inputPanel);
+			inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 75));
+			inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
+			inputPanel.add(commit);
+			inputPanel.add(delete);
+
+			pack();
+			initiateComponents();
+			setVisible(true);
+
+		}
+		
+		public String getText() {
+			
+			return currentText;
+			
+		}
+		
+		private void initiateComponents() {
+
+			textArea.addKeyListener(new KeyListener(){
+
+				public void keyPressed(KeyEvent e) {}
+				public void keyReleased(KeyEvent e) {}
+
+				public void keyTyped(KeyEvent arg0) {
+
+					currentText = textArea.getText();
+
+				}
+			});
+
+			commit.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){  		
+					
+					currentText = textArea.getText();
+					recentEvent = new commentEvent(ogComment, currentText);
+					task.setComment(currentText);
+					updateComment(currentText);
+					dispose();
+					
+				}  
+			});
+
+			delete.addActionListener(new ActionListener(){  
+				public void actionPerformed(ActionEvent e){  		
+
+					recentEvent = new commentEvent(ogComment, "");
+					currentText = "";
+					dispose();
+					
+				}  
+			});
+
+		}
+		
+		public Event getRecentEvent() {
+			return recentEvent;
+		}
+		
 	}
 
 	public static void main(String[] args) {
