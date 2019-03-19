@@ -140,6 +140,7 @@ public class MainPage extends JPanel implements ActionListener
 
 	public void updateGUI() {
 		scrollPanel.removeAll();
+		incompleteContainers.clear();
 		urgentTasks.clear();
 		currentTasks.clear();
 		eventualTasks.clear();
