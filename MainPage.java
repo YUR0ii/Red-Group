@@ -85,8 +85,7 @@ public class MainPage extends JPanel implements ActionListener
 			incompleteContainers.add(temp);		
 			incompleteTasks.add(temp.getTask());
 			scrollPanel.add(temp);
-			scrollPanel.validate();
-			scrollPanel.repaint();
+			updateGUI();
 		}
 	}
 
@@ -106,8 +105,6 @@ public class MainPage extends JPanel implements ActionListener
 		}
 		//need a method for reordering the page properly
 		updateGUI();
-		scrollPanel.repaint();
-
 	}
 
 	public boolean checkRemoveDate(String date) {
@@ -182,7 +179,8 @@ public class MainPage extends JPanel implements ActionListener
 			scrollPanel.add(temp);
 		}
 		scrollPanel.validate();
-		repaint();
+		scroll.validate();
+		scrollPanel.repaint();
 	}
 
 
@@ -341,8 +339,7 @@ public class MainPage extends JPanel implements ActionListener
 						scrollPanel.remove(incompleteContainers.get(index));
 						completeContainers.add(incompleteContainers.get(index));
 						incompleteContainers.remove(index);
-						scrollPanel.validate();
-						scrollPanel.repaint();
+						updateGUI();
 					}
 				});
 				//creates an action to edit a task
@@ -385,8 +382,7 @@ public class MainPage extends JPanel implements ActionListener
 								incompleteTasks.remove(task);
 								scrollPanel.remove(incompleteContainers.get(index));
 								incompleteContainers.remove(index);
-								scrollPanel.validate();
-								scrollPanel.repaint();
+								updateGUI();
 								confirm.setVisible(false);
 							}
 
