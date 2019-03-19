@@ -8,7 +8,8 @@ import java.awt.event.MouseListener;
 public class HistoryPage implements MouseListener{
 	private ArrayList<Event> events = new ArrayList<Event>(); 
 	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
-	private JScrollPane scroll;
+	private JScrollPane scroll = new JScrollPane();
+	private JScrollBar scrollBar = new JScrollBar();
 	private JFrame frame;
 	private JPanel contentPane;
 	private JPanel panel;
@@ -47,19 +48,22 @@ public class HistoryPage implements MouseListener{
 		frame = new JFrame("History Page");
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
 
-		scroll = new JScrollPane(panel);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
-		scroll.setBounds(0, 0, 500, 400);
+		scroll = new JScrollPane(contentPane);
+//		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+//		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
+//		scroll.setBounds(0, 0, 500, 400);
+		scroll.add(scrollBar);
+		scroll.validate();
 		contentPane = new JPanel();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
+//		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
 		contentPane.setPreferredSize(new Dimension(500, 400));
 		contentPane.add(scroll);
 		frame.setContentPane(contentPane);
 
 		for(JLabel l : labels) {
-			contentPane.add(l);
+//			contentPane.add(l);
+			scroll.add(l);
 		}
 		
 		frame.pack();
