@@ -17,7 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class CommentPage extends JFrame {
-	Task task;
+
 	private String currentText;
 
 	private JSplitPane sp;
@@ -32,10 +32,9 @@ public class CommentPage extends JFrame {
 	private Event recentEvent;
 	private String ogComment;
 	
-	CommentPage(Task t){
-		task = t;
-		ogComment = task.getComment();
-		currentText = task.getComment();
+	CommentPage(String CT){
+		ogComment = CT;
+		currentText = CT;
 		setLocation(500,300);
 		sp = new JSplitPane();
 		topPanel = new JPanel();         
@@ -99,7 +98,7 @@ public class CommentPage extends JFrame {
 				
 				currentText = textArea.getText();
 				recentEvent = new commentEvent(ogComment, currentText);
-				task.setComment(currentText);
+				
 				dispose();
 				
 			}  

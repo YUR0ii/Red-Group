@@ -1,8 +1,7 @@
-import java.io.Serializable;
 import java.util.*;
 
 
-public class scheduledPriority implements Serializable{
+public class scheduledPriority {
 	
 	String level;
 	Date date = new Date();

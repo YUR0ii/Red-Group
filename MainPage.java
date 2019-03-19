@@ -3,9 +3,9 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-//test
-import java.util.*;
-public class MainPage extends JPanel implements ActionListener {
+
+public class MainPage extends JPanel implements ActionListener
+{
 	private JFrame mainFrame = new JFrame();
 	private JPanel scrollPanel = new JPanel();
 	private JScrollPane scroll = new JScrollPane(scrollPanel);
@@ -23,21 +23,18 @@ public class MainPage extends JPanel implements ActionListener {
 	private ArrayList<Task> completeTasks = new ArrayList<Task>();
 	protected ArrayList<taskContainer> incompleteContainers = new ArrayList<taskContainer>();
 	protected ArrayList<taskContainer> completeContainers = new ArrayList<taskContainer>();
-	private ArrayList<Task> urgentTasks = new ArrayList<Task>();
-	private ArrayList<Task> currentTasks = new ArrayList<Task>();
-	private ArrayList<Task> eventualTasks = new ArrayList<Task>();
-	private ArrayList<Task> inactiveTasks = new ArrayList<Task>();
-	
 	private ArrayList<String> dateStrings=new ArrayList<String>();
-	
-	MainPage() {
+
+	MainPage()
+	{
 		file.addMouseListener(new menuListener());
 		closed.addMouseListener(new menuListener());
 		quit.addMouseListener(new menuListener());
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
-		loadFiles();
+
+
 		//createGUI();
 	}
 	//creates GUI components for main page
@@ -86,10 +83,10 @@ public class MainPage extends JPanel implements ActionListener {
 			scrollPanel.repaint();
 		}
 	}
-	
+
 	public void paintComponent(Graphics g) {
 	}
-	
+
 	public void updatePage(Task editedTask) {
 		int index=incompleteTasks.indexOf(editedTask);
 		taskContainer temp=incompleteContainers.get(index);
@@ -103,9 +100,10 @@ public class MainPage extends JPanel implements ActionListener {
 		}
 		//need a method for reordering the page properly
 		updateGUI();
-		
+		scrollPanel.repaint();
+
 	}
-	
+
 	public boolean checkRemoveDate(String date) {
 		for(taskContainer t : incompleteContainers) {
 			if(t.getDateString().equals(date)) {
@@ -116,7 +114,7 @@ public class MainPage extends JPanel implements ActionListener {
 		}
 		return true;
 	}
-	
+
 	public boolean checkAddDate(String date) {
 		for(taskContainer t : incompleteContainers) {
 			if(!(t.getDateString().equals(date))) {
@@ -127,7 +125,7 @@ public class MainPage extends JPanel implements ActionListener {
 		}
 		return false;
 	}
-	
+
 	public String checkAddDate(taskContainer t) {
 		for(String s : dateStrings) {
 			if((t.getDateString().equals(s))) {
@@ -136,51 +134,17 @@ public class MainPage extends JPanel implements ActionListener {
 		}
 		return null;
 	}
-	
+
 	public void updateGUI() {
 		scrollPanel.removeAll();
-		for(Task t: incompleteTasks) {
-			if(t.getPriorityLevel().equals("urgent")) {
-				urgentTasks.add(t);
-			}else if(t.getPriorityLevel().equals("current")) {
-				currentTasks.add(t);
-			}else if(t.getPriorityLevel().equals("eventual")) {
-				eventualTasks.add(t);
-			}else {
-				inactiveTasks.add(t);
+		for(taskContainer t : incompleteContainers) {
+			if(!(checkAddDate(t)==null)) {
+				scrollPanel.add(new JLabel(checkAddDate(t)));
 			}
-		}
-		for(Task t: urgentTasks) {
-			taskContainer temp=new taskContainer(t);
-			incompleteContainers.add(temp);
-			scrollPanel.add(temp);
-		}
-		for(Task t: currentTasks) {
-			taskContainer temp=new taskContainer(t);
-			incompleteContainers.add(temp);
-			scrollPanel.add(temp);
-		}
-		for(Task t: eventualTasks) {
-			taskContainer temp=new taskContainer(t);
-			incompleteContainers.add(temp);
-			scrollPanel.add(temp);
-		}
-		for(Task t: inactiveTasks) {
-			taskContainer temp=new taskContainer(t);
-			incompleteContainers.add(temp);
-			if(!(checkAddDate(temp)==null)) {
-				scrollPanel.add(new JLabel(checkAddDate(temp)));
-			}
-			scrollPanel.add(temp);
+			scrollPanel.add(t);
 		}
 	}
-	
-	public void loadFiles() {
-		incompleteTasks=Backup.loadFile("Z:\\To Do List\\Incompleted Tasks.ser");
-		completeTasks=Backup.loadFile("Z:\\To Do List\\Completed Tasks.ser");
-		updateGUI();
-	}
-	
+
 	public class taskContainer extends JComponent implements Comparable
 	{
 		private Task task;
@@ -193,12 +157,18 @@ public class MainPage extends JPanel implements ActionListener {
 		private Font eventual=new Font(Font.SERIF,Font.ITALIC,14);
 		private Font inactive=new Font(Font.SERIF,Font.ITALIC,14);
 		boolean dragging = false;
-		
-		public int getIndex()
+
+		int getIndex()
 		{
 			return incompleteContainers.indexOf(this);
 		}
-		
+		Point clickOffset = new Point(0,0);
+
+		public String getName()
+		{
+			return task.getName();
+		}
+
 		taskContainer(Task task)
 		{
 			this.task = task;
@@ -208,6 +178,7 @@ public class MainPage extends JPanel implements ActionListener {
 			this.setLayout(new FlowLayout());
 			this.add(name);
 			name.setFont(urgent);
+
 			this.addMouseListener(new MouseAdapter()
 			{
 				//creates menu when right clicking on a task
@@ -221,16 +192,19 @@ public class MainPage extends JPanel implements ActionListener {
 					}else if(e.getClickCount()==2){
 						task.edit();
 					}
-//					setLocation(e.getPoint());
+					//					setLocation(e.getPoint());
 				};
 
 				@Override
 				public void mousePressed(MouseEvent e)
 				{
 					if(e.getButton() == e.BUTTON1)
+					{
 						dragging = true;
+						clickOffset = e.getPoint();
+					}
 				}
-				
+
 				@Override
 				public void mouseReleased(MouseEvent e)
 				{
@@ -240,45 +214,54 @@ public class MainPage extends JPanel implements ActionListener {
 						int i = 0;
 						for (i = incompleteContainers.size()-1; i >= 0 && h; i--)
 						{
-							if(incompleteContainers.get(i).getY() < getY())
-							{
+							if(getIndex()!= i && incompleteContainers.get(i).getLocationOnScreen().getY() < e.getYOnScreen())
 								h = false;
-							}
 						}
-						incompleteContainers.add(i, incompleteContainers.get(getIndex()));
-						scroll.revalidate();
+						if(h)
+//							System.out.println("move " + incompleteContainers.get(getIndex()).getName() + " to top of list");
+						{
+							//change priority to urgent
+							task.setPriorityLevel("urgent");
+						}
+						else
+//							System.out.println("move " + incompleteContainers.get(getIndex()).getName() + " after " + incompleteContainers.get(i+1).getName());
+						{
+							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
+						}
+						
 					}
 				}
 			});
 			addMouseMotionListener(new MouseMotionListener()
-					{
+			{
 
-						@Override
-						public void mouseDragged(MouseEvent e) 
-						{
-							setLocation(e.getLocationOnScreen());
-							
-						}
+				@Override
+				public void mouseDragged(MouseEvent e) 
+				{
+					Point newP = e.getLocationOnScreen();
+					newP.translate(-(int) (scrollPanel.getLocationOnScreen().getX() + clickOffset.getX()), -(int) (scrollPanel.getLocationOnScreen().getY() + clickOffset.getY()));
+					setLocation(newP);
+				}
 
-						@Override
-						public void mouseMoved(MouseEvent arg0) {
-							// TODO Auto-generated method stub
-							
-						}
-				
-					});
+				@Override
+				public void mouseMoved(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+			});
 			this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		}
-		
+
 		public Task getTask() {
 			return task;
 		}
-		
+
 		public void setTask(Task nTask) {
 			task=nTask;
 		}
-		
-		
+
+
 		public Date getDate() {
 			return date;
 		}
@@ -324,27 +307,27 @@ public class MainPage extends JPanel implements ActionListener {
 				//creates an action to edit a task
 				JMenuItem edit = new JMenuItem("Edit");
 				edit.addActionListener(new ActionListener()
-						{
+				{
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						new EditAction(task).createAndShowGUI();
 					}
-						});
+				});
 				//creates an action to delete a task
 				JMenuItem delete = new JMenuItem("Delete");
 				delete.addActionListener(new ActionListener()
-						{
+				{
 					@Override
 					public void actionPerformed(ActionEvent e)
 					{
 						//creates an "Are you sure?" popup
 						JPopupMenu confirm = new JPopupMenu();
-						
+
 						JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
 						JButton del = new JButton("Delete");
 						JButton cancel = new JButton("Cancel");
-						
+
 						confirm.setLayout(new FlowLayout());
 						confirm.add(text);
 						confirm.add(del);
@@ -365,7 +348,7 @@ public class MainPage extends JPanel implements ActionListener {
 								scrollPanel.repaint();
 								confirm.setVisible(false);
 							}
-							
+
 						});
 						//adds cancelling function to cancel button
 						cancel.addActionListener(new ActionListener() {
@@ -375,29 +358,29 @@ public class MainPage extends JPanel implements ActionListener {
 							{
 								confirm.setVisible(false);
 							}
-							
+
 						});
 						confirm.setVisible(true);
 						confirm.setLocation(mainFrame.getX()+mainFrame.getWidth()/2-confirm.getWidth()/2,
-											mainFrame.getY()+mainFrame.getHeight()/2-confirm.getHeight()/2);
+								mainFrame.getY()+mainFrame.getHeight()/2-confirm.getHeight()/2);
 					}
-						});
-				
+				});
+
 				//adds actions to menu
 				this.add(complete);
 				this.add(delete);
 				this.add(edit);
-				
+
 			}
 		}
-		
+
 
 		@Override
 		public int compareTo(Object o)
 		{
 			return 0;
 		}
-		
+
 		public int compareTo(taskContainer t)
 		{
 			if(task.getPriorityLevel().equals(t.task.getPriorityLevel()))
@@ -410,20 +393,22 @@ public class MainPage extends JPanel implements ActionListener {
 			}
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		MainPage page = new MainPage();
-		Backup.createFolder("Z:\\To Do List");
 		page.createGUI();
 	}
 	//deals with functions in file menu
-	private class fileListener extends MouseAdapter {
+	private class fileListener extends MouseAdapter
+	{
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
+				Backup.createFolder("Z:\\To Do List");
 				Backup.saveFile("Z:\\To Do List\\Incompleted Tasks.ser", incompleteTasks);
 				Backup.saveFile("Z:\\To Do List\\Completed Tasks.ser", completeTasks);
 			} else if (e.getComponent().equals(restore)) {
 				loadFiles();
+				//create a method that updates the page
 			} else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
 				printer.printComponent(mainFrame);
@@ -431,6 +416,7 @@ public class MainPage extends JPanel implements ActionListener {
 			fileMenu.setVisible(false);
 		}
 	}
+
 	//deals with functions in menu bar
 	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
@@ -443,4 +429,5 @@ public class MainPage extends JPanel implements ActionListener {
 			}
 		}
 	}
+
 }
