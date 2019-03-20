@@ -9,6 +9,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import sun.util.calendar.LocalGregorianCalendar.Date;
+
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -31,8 +33,9 @@ public class CommentPage extends JFrame {
 	private JLabel title;
 	private Event recentEvent;
 	private String ogComment;
-	
-	CommentPage(String CT){
+	private Date eventDate;
+	CommentPage(String CT, Date date){
+		eventDate = date;
 		ogComment = CT;
 		currentText = CT;
 		setLocation(500,300);
@@ -98,7 +101,7 @@ public class CommentPage extends JFrame {
 				
 				currentText = textArea.getText();
 				recentEvent = new commentEvent(ogComment, currentText);
-				
+				HistoryPage.changeLabel(eventDate,currentText);
 				dispose();
 				
 			}  
