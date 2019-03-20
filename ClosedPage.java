@@ -1,3 +1,4 @@
+
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -7,7 +8,7 @@ import javax.swing.ScrollPaneConstants;
 
 public class ClosedPage extends MainPage {
 
-		ClosedPage(){
+		ClosedPage(/*ArrayList<taskContainer> cl, ArrayList<taskContainer> inCl*/ ){
 			JFrame closeFrame=new JFrame();
 			JTextArea textArea = new JTextArea(30, 30);
 			textArea.setEditable(false);
@@ -72,3 +73,9 @@ public class ClosedPage extends MainPage {
 
 	}
 }
+
+
+
+
+
+

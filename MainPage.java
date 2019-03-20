@@ -29,7 +29,13 @@ public class MainPage extends JPanel implements ActionListener
 	private ArrayList<Task> eventualTasks = new ArrayList<Task>();
 	private ArrayList<Task> inactiveTasks = new ArrayList<Task>();
 
-
+	private static MainPage singleton;
+	
+	public static MainPage getInstance()
+	{
+		return singleton;
+	}
+	
 	MainPage()
 	{
 		file.addMouseListener(new menuListener());
@@ -38,8 +44,8 @@ public class MainPage extends JPanel implements ActionListener
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
-
-
+		
+		singleton = this;
 		//createGUI();
 	}
 	//creates GUI components for main page
@@ -192,10 +198,10 @@ public class MainPage extends JPanel implements ActionListener
 		private Date date;
 		private String dateString;
 		private contextMenu menu;
-		private Font urgent=new Font(Font.SERIF,Font.BOLD,14);
-		private Font current=new Font(Font.SERIF,Font.PLAIN,14);
-		private Font eventual=new Font(Font.SERIF,Font.ITALIC,14);
-		private Font inactive=new Font(Font.SERIF,Font.ITALIC,14);
+		private Font urgent=new Font(Font.SERIF,Font.BOLD,20);
+		private Font current=new Font(Font.SERIF,Font.PLAIN,20);
+		private Font eventual=new Font(Font.SERIF,Font.ITALIC,20);
+		private Font inactive=new Font(Font.SERIF,Font.ITALIC,20);
 		boolean dragging = false;
 
 		int getIndex()
@@ -219,54 +225,57 @@ public class MainPage extends JPanel implements ActionListener
 			this.add(name);
 			name.setFont(urgent);
 
-			this.addMouseListener(new MouseAdapter()
+			addMouseListener(new MouseAdapter()
 			{
 				//creates menu when right clicking on a task
 				@Override
 				public void mouseClicked(MouseEvent e)
 				{
-					if(e.getButton() == e.BUTTON3)
+					if(e.getButton() == MouseEvent.BUTTON3)
 					{
+
 						menu=new contextMenu();
 						menu.show(e.getComponent(), e.getX(), e.getY());
 					}else if(e.getClickCount()==2){
 						task.edit();
 					}
 					//					setLocation(e.getPoint());
-				};
+				}
 
 				@Override
 				public void mousePressed(MouseEvent e)
 				{
-					if(e.getButton() == e.BUTTON1)
-					{
+					if(e.getButton() == MouseEvent.BUTTON1)
 						dragging = true;
-						clickOffset = e.getPoint();
-					}
+					clickOffset = e.getPoint();
 				}
 
 				@Override
 				public void mouseReleased(MouseEvent e)
 				{
-					if(dragging = true)
+					if(dragging)
 					{
 						boolean h = true;
 						int i = 0;
 						for (i = incompleteContainers.size()-1; i >= 0 && h; i--)
 						{
-							if(getIndex()!= i && incompleteContainers.get(i).getLocationOnScreen().getY() < e.getYOnScreen())
+							if(getIndex()!= i && incompleteContainers.get(i).getLocationOnScreen().getY()< incompleteContainers.get(getIndex()).getLocationOnScreen().getY())
 								h = false;
 						}
 						if(h)
 						{
-//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
+							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
 							//change priority to urgent
 							task.setPriorityLevel("urgent");
+							incompleteTasks.remove(getIndex());
+							incompleteTasks.add(0, task);
 						}
 						else
 						{
-//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
+							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
+							incompleteTasks.remove(getIndex());
+							incompleteTasks.add(i+1, task);
 						}
 						updateGUI();
 					}
@@ -278,14 +287,17 @@ public class MainPage extends JPanel implements ActionListener
 				@Override
 				public void mouseDragged(MouseEvent e) 
 				{
-					Point newP = e.getLocationOnScreen();
-					newP.translate(-(int) (scrollPanel.getLocationOnScreen().getX() + clickOffset.getX()), -(int) (scrollPanel.getLocationOnScreen().getY() + clickOffset.getY()));
-					setLocation(newP);
+					if(dragging)
+					{
+						Point newP = e.getLocationOnScreen();
+						newP.translate(-(int) (scrollPanel.getLocationOnScreen().getX() + clickOffset.getX()), -(int) (scrollPanel.getLocationOnScreen().getY() + clickOffset.getY()));
+						setLocation(newP);
+					}
 				}
 
 				@Override
 				public void mouseMoved(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					// TODO Auto-generated method stu
 
 				}
 
@@ -433,8 +445,7 @@ public class MainPage extends JPanel implements ActionListener
 	}
 
 	public static void main(String[] args) {
-		MainPage page = new MainPage();
-		page.createGUI();
+		new MainPage().createGUI();
 	}
 	//deals with functions in file menu
 	private class fileListener extends MouseAdapter
