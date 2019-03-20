@@ -48,13 +48,13 @@ public class priorityEvent extends Event{
 	public String createSentence() {
 		// TODO Auto-generated method stub
 		
-		String day = Event.convertDay(date.getDate());
+		String day = Event.convertDay(date.getDay());
 		String month = Event.convertMonth(date.getMonth());
 		String output;
 		if(oldDate==null) {
-			output = "The priority level changed from " + oldLevel +" to " + newLevel + " on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear()); 
+			output = "The priority level changed from " + oldLevel +" to " + newLevel + " on " + Event.getDateString(date); 
 		}else {
-			output = "The upgrade date for " + newLevel + " changed from " + oldDate.toString() +" to " + newDate.toString() + " on " + day + " " + (date.getMonth()+1) +"/" + date.getDate()+ "/" + (1900+date.getYear()); 
+			output = "The upgrade date for " + newLevel + " changed from " + oldDate.toString() +" to " + newDate.toString() + " on " + Event.getDateString(date); 
 		}		
 				
 		return output;

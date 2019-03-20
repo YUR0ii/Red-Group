@@ -62,9 +62,12 @@ public class HistoryPage implements MouseListener{
 		frame.setContentPane(contentPane);
 
 		for(JLabel l : labels) {
-//			contentPane.add(l);
-			scroll.add(l);
+			contentPane.add(l);
+//			scroll.add(l);
 		}
+		
+		scroll.revalidate();
+		contentPane.repaint();
 		
 		frame.pack();
 		frame.setVisible(true);

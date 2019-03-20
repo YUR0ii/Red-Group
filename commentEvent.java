@@ -8,7 +8,12 @@ public class commentEvent extends Event{
 		//makes an event when a comment is changed
 		oldComment= oldcomment;
 		newComment = newcomment;
-		sentence=createSentence();
+		int x = 0;
+		sentence=createSentence(x);
+	}
+	commentEvent(String newcomment){
+		newComment = newcomment;
+		sentence = createSentence();
 	}
 	commentEvent(String newcomment, int identifier){
 		//makes an event when a comment is added or removed
@@ -21,7 +26,7 @@ public class commentEvent extends Event{
 		// TODO Auto-generated method stub
 		//makes the string for a change event
 		
-		return "The comment '" + oldComment + "' was changed to '"+  newComment + "' on " + Event.getDateString(date);
+		return "The comment was changed to '"+  newComment + "' on " + Event.getDateString(date);
 	}
 	public String createSentence(int identifier) {
 		// TODO Auto-generated method stub

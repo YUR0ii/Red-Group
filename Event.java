@@ -27,6 +27,10 @@ public abstract class Event implements Serializable{
 	public Date getDate() {
 		return date;
 	}
+	
+	public void setDate(Date dddate) {
+		date = dddate;
+	}
 
 	// Returns the type of event it is
 	// Either the String "Comment" or "Priority"
@@ -109,7 +113,7 @@ public abstract class Event implements Serializable{
 	
 	public static String getDateString(Date date) {
 		String dateString=Event.convertDay(date.getDay())+" "+Event.convertMonth(date.getMonth())
-		+" "+date.getDay()+", "+(1900+date.getYear());
+		+" "+date.getDate()+", "+(1900+date.getYear());
 		return dateString;
 	}
 }
