@@ -1,18 +1,24 @@
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+
 public class HistoryPage implements MouseListener{
 	private ArrayList<Event> events = new ArrayList<Event>(); 
 	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
-	private JScrollPane scroll = new JScrollPane();
 	private JScrollBar scrollBar = new JScrollBar();
-	private JFrame frame;
-	private JPanel contentPane;
-	private JPanel panel;
+	private JFrame frame= new JFrame("History Page");
+	private JPanel contentPane = new JPanel();	
+	private JScrollPane scroll = new JScrollPane(contentPane);
+	private JPanel panel= new JPanel();
+	
+	
+	
 	public HistoryPage(Task task) {
 		events =task.getEvents();
 		for(int i = 0; i<events.size();i++) {
@@ -26,7 +32,7 @@ public class HistoryPage implements MouseListener{
 		return events.get(index);
 	}
 	//adds labels and adds listener to comment events
-	public void add(Event event, JLabel j){
+	public void add(final Event event,final JLabel j){
 		j.setText(event.createSentence());
 		labels.add(j);
 		if(event.getType() == "Comment"){
@@ -34,7 +40,7 @@ public class HistoryPage implements MouseListener{
 				public void mouseClicked(MouseEvent e) {
 					if(e.getClickCount()==2){
 						openComment((commentEvent)event);
-						j.setText(event.getNewComment());
+						
 						
 					}
 
@@ -45,26 +51,28 @@ public class HistoryPage implements MouseListener{
 	}
 	//creates gui
 	public void openHistoryPage() {
-		frame = new JFrame("History Page");
+
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
 
 		scroll = new JScrollPane(contentPane);
-//		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
-//		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
-//		scroll.setBounds(0, 0, 500, 400);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
+		scroll.setBounds(0, 0, 500, 400);
 		scroll.add(scrollBar);
 		scroll.validate();
-		contentPane = new JPanel();
+	
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 //		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
 		contentPane.setPreferredSize(new Dimension(500, 400));
-		contentPane.add(scroll);
-		frame.setContentPane(contentPane);
+	
 
 		for(JLabel l : labels) {
 			contentPane.add(l);
-//			scroll.add(l);
+
 		}
+		
+		panel.add(scroll);
+		frame.setContentPane(panel);
 		
 		scroll.revalidate();
 		contentPane.repaint();
@@ -77,6 +85,15 @@ public class HistoryPage implements MouseListener{
 	public void openComment(commentEvent event){
 		event.editComment();
 	}
+	
+	public void ChangeLabel(Date date, String newComment) {
+		for(Event e : events) {
+			if(e.getDate().equals(date)) {
+				labels.get(events.indexOf(e)).setText(newComment);
+			}
+		}
+	}
+	
 
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -103,7 +120,27 @@ public class HistoryPage implements MouseListener{
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 	}
+	
+	public static void main(String[] args) {
+		
+		Task task = new Task("Test Task");
+		
+		Event event01 = new commentEvent("oldString", "newString");
+		Event event02 = new priorityEvent(new scheduledPriority("Eventual"), new scheduledPriority("Urgent"));
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		
+		HistoryPage history = new HistoryPage(task);
+		
+    }
+	
 }
+
+
+
+
+
+
 
 
 
