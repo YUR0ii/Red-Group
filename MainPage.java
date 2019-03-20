@@ -293,7 +293,7 @@ public class MainPage extends JPanel implements ActionListener
 
 				@Override
 				public void mouseMoved(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					// TODO Auto-generated method stu
 
 				}
 
