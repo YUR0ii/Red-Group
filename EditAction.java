@@ -132,10 +132,11 @@ public class EditAction implements ActionListener {
 		checkBoxAndSpinnerPanel.add(checkBoxPanel);
 		checkBoxAndSpinnerPanel.add(spinnerPanel);
 
-		// create regular JLabels
-		JLabel displayItemName = new JLabel("Edit " + editingTask.getName());
+		// display item name
+		JTextField displayItemName = new JTextField("Edit " + editingTask.getName());
 		Font itemNameFont = new Font("Arial", Font.PLAIN, 18);
 		displayItemName.setFont(itemNameFont);
+		
 		JLabel displayCommentTitle = new JLabel("Comments");
 
 		// create comment area and make scrollable
@@ -170,7 +171,7 @@ public class EditAction implements ActionListener {
 		doneButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				update();
+				update(editingTask);
 				frame.dispose();
 			}
 		});
@@ -315,8 +316,8 @@ public class EditAction implements ActionListener {
 		}
 	}
 	
-	public static void update() {
-		MainPage.getInstance().updateGUI();
+	public static void update(Task t) {
+		MainPage.getInstance().updatePage(t);
 	}
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
