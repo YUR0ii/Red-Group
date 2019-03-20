@@ -1,6 +1,5 @@
-import java.awt.Font;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 
 
 public class Task implements Serializable{
@@ -15,6 +14,12 @@ public class Task implements Serializable{
 		name = toBeName;
 		priority = "urgent";
 		complete = false;
+		scheduledPriority urgent=new scheduledPriority("urgent");
+		scheduledPriority current=new scheduledPriority("current");
+		scheduledPriority eventual=new scheduledPriority("eventual");
+		scheduledPriorities[0]=urgent;
+		scheduledPriorities[1]=current;
+		scheduledPriorities[2]=eventual;
 	}
 
 	public String getName() {
@@ -40,10 +45,29 @@ public class Task implements Serializable{
 		return scheduledPriorities;
 	}
 
+	public scheduledPriority getScheduledPriority(int level) {
+		return scheduledPriorities[level];
+	}
+	
 	public void updateScheduledPriorities(scheduledPriority[] scheduledPriorities) {
 		this.scheduledPriorities = scheduledPriorities;
 	}
 
+	public void updatePriorityDate(Date date, int level) {
+		scheduledPriorities[level].setDate(date);
+	}
+	
+	public String getDateString() {
+		String ds="";
+		Loop: for(scheduledPriority p: scheduledPriorities) {
+			if(p.getActive()) {
+				ds=Event.getDateString(p.getDate());
+				break Loop;
+			}
+		}
+		return ds;
+	}
+	
 	public ArrayList<Event> getEvents() {
 		//returns the event list of the task
 		return eventList;

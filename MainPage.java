@@ -24,6 +24,11 @@ public class MainPage extends JPanel implements ActionListener
 	protected ArrayList<taskContainer> incompleteContainers = new ArrayList<taskContainer>();
 	protected ArrayList<taskContainer> completeContainers = new ArrayList<taskContainer>();
 	private ArrayList<String> dateStrings=new ArrayList<String>();
+	private ArrayList<Task> urgentTasks = new ArrayList<Task>();
+	private ArrayList<Task> currentTasks = new ArrayList<Task>();
+	private ArrayList<Task> eventualTasks = new ArrayList<Task>();
+	private ArrayList<Task> inactiveTasks = new ArrayList<Task>();
+
 
 	MainPage()
 	{
@@ -57,7 +62,7 @@ public class MainPage extends JPanel implements ActionListener
 		scroll.validate();
 		input.addActionListener(this);
 		input.setEditable(true);
-		input.setText("New Task");
+		input.setText("New Action Item");
 		input.setVisible(true);
 		input.setActionCommand("Add a Task");
 		input.setPreferredSize(new Dimension(590, 25));
@@ -72,15 +77,15 @@ public class MainPage extends JPanel implements ActionListener
 		mainFrame.setVisible(true);
 	}
 	//adds functionality to text field for adding tasks
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e)
+	{
 		String eventName = e.getActionCommand();
 		if (eventName.equals("Add a Task")) {
 			taskContainer temp = new taskContainer(new Task(input.getText()));
 			incompleteContainers.add(temp);		
 			incompleteTasks.add(temp.getTask());
 			scrollPanel.add(temp);
-			scrollPanel.validate();
-			scrollPanel.repaint();
+			updateGUI();
 		}
 	}
 
@@ -100,8 +105,6 @@ public class MainPage extends JPanel implements ActionListener
 		}
 		//need a method for reordering the page properly
 		updateGUI();
-		scrollPanel.repaint();
-
 	}
 
 	public boolean checkRemoveDate(String date) {
@@ -137,13 +140,50 @@ public class MainPage extends JPanel implements ActionListener
 
 	public void updateGUI() {
 		scrollPanel.removeAll();
-		for(taskContainer t : incompleteContainers) {
-			if(!(checkAddDate(t)==null)) {
-				scrollPanel.add(new JLabel(checkAddDate(t)));
+		incompleteContainers.clear();
+		urgentTasks.clear();
+		currentTasks.clear();
+		eventualTasks.clear();
+		inactiveTasks.clear();
+		for(Task t: incompleteTasks) {
+			if(t.getPriorityLevel().equals("urgent")) {
+				urgentTasks.add(t);
+			}else if(t.getPriorityLevel().equals("current")) {
+				currentTasks.add(t);
+			}else if(t.getPriorityLevel().equals("eventual")) {
+				eventualTasks.add(t);
+			}else {
+				inactiveTasks.add(t);
 			}
-			scrollPanel.add(t);
 		}
+		for(Task t: urgentTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			scrollPanel.add(temp);
+		}
+		for(Task t: currentTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			scrollPanel.add(temp);
+		}
+		for(Task t: eventualTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			scrollPanel.add(temp);
+		}
+		for(Task t: inactiveTasks) {
+			taskContainer temp=new taskContainer(t);
+			incompleteContainers.add(temp);
+			if(!(checkAddDate(temp)==null)) {
+				scrollPanel.add(new JLabel(checkAddDate(temp)));
+			}
+			scrollPanel.add(temp);
+		}
+		scrollPanel.validate();
+		scroll.validate();
+		scrollPanel.repaint();
 	}
+
 
 	public class taskContainer extends JComponent implements Comparable
 	{
@@ -174,7 +214,7 @@ public class MainPage extends JPanel implements ActionListener
 			this.task = task;
 			name=new JLabel(task.getName());
 			date=Calendar.getInstance().getTime();
-			dateString=getDateString();
+			dateString=task.getDateString();
 			this.setLayout(new FlowLayout());
 			this.add(name);
 			name.setFont(urgent);
@@ -218,17 +258,17 @@ public class MainPage extends JPanel implements ActionListener
 								h = false;
 						}
 						if(h)
-//							System.out.println("move " + incompleteContainers.get(getIndex()).getName() + " to top of list");
 						{
+//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
 							//change priority to urgent
 							task.setPriorityLevel("urgent");
 						}
 						else
-//							System.out.println("move " + incompleteContainers.get(getIndex()).getName() + " after " + incompleteContainers.get(i+1).getName());
 						{
+//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
 						}
-						
+						updateGUI();
 					}
 				}
 			});
@@ -300,8 +340,7 @@ public class MainPage extends JPanel implements ActionListener
 						scrollPanel.remove(incompleteContainers.get(index));
 						completeContainers.add(incompleteContainers.get(index));
 						incompleteContainers.remove(index);
-						scrollPanel.validate();
-						scrollPanel.repaint();
+						updateGUI();
 					}
 				});
 				//creates an action to edit a task
@@ -344,8 +383,7 @@ public class MainPage extends JPanel implements ActionListener
 								incompleteTasks.remove(task);
 								scrollPanel.remove(incompleteContainers.get(index));
 								incompleteContainers.remove(index);
-								scrollPanel.validate();
-								scrollPanel.repaint();
+								updateGUI();
 								confirm.setVisible(false);
 							}
 

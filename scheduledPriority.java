@@ -5,6 +5,7 @@ public class scheduledPriority {
 	
 	String level;
 	Date date = new Date();
+	boolean active=false;
 	
 	scheduledPriority(String Level){
 		level=Level;
@@ -36,4 +37,11 @@ public class scheduledPriority {
 		Level = level;
 	}
 	
+	public boolean getActive() {
+		return active;
+	}
+	
+	public void setActive(boolean boo) {
+		active=boo;
+	}
 }
