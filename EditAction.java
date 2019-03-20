@@ -133,9 +133,13 @@ public class EditAction implements ActionListener {
 		checkBoxAndSpinnerPanel.add(spinnerPanel);
 
 		// display item name
-		JTextField displayItemName = new JTextField("Edit " + editingTask.getName());
-		Font itemNameFont = new Font("Arial", Font.PLAIN, 18);
+		JTextField displayItemName = new JTextField(editingTask.getName());
+		Font itemNameFont = new Font("Arial", Font.PLAIN, 16);
 		displayItemName.setFont(itemNameFont);
+		displayItemName.setSize(30, 400);
+		displayItemName.setActionListener(ActionListener a) {
+			
+		}
 		
 		JLabel displayCommentTitle = new JLabel("Comments");
 
