@@ -170,6 +170,7 @@ public class EditAction implements ActionListener {
 		doneButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				update();
 				frame.dispose();
 			}
 		});
@@ -279,7 +280,7 @@ public class EditAction implements ActionListener {
 		public String getText() {
 			return currentText;
 		}
-
+		
 		private void initiateComponents() {
 			textArea.addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {
@@ -313,7 +314,10 @@ public class EditAction implements ActionListener {
 			return recentEvent;
 		}
 	}
-
+	
+	public static void update() {
+		MainPage.getInstance().updateGUI();
+	}
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");
 		testTask.setComment(
