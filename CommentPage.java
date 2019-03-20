@@ -9,7 +9,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
-import sun.util.calendar.LocalGregorianCalendar.Date;
+import java.util.Date;
 
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
@@ -101,7 +101,7 @@ public class CommentPage extends JFrame {
 				
 				currentText = textArea.getText();
 				recentEvent = new commentEvent(ogComment, currentText);
-				HistoryPage.changeLabel(eventDate,currentText);
+				HistoryPage.ChangeLabel(eventDate,currentText);
 				dispose();
 				
 			}  
