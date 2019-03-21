@@ -34,8 +34,7 @@ public class CommentPage extends JFrame {
 	private Event recentEvent;
 	private String ogComment;
 	private Date eventDate;
-	CommentPage(String CT, Date date){
-		eventDate = date;
+	CommentPage(String CT){
 		ogComment = CT;
 		currentText = CT;
 		setLocation(500,300);
