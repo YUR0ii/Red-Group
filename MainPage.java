@@ -279,11 +279,12 @@ public class MainPage extends JPanel implements ActionListener
 						{
 							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
+							int index = getIndex();
 							incompleteTasks.add(i+2, task);
-							if(i+1 > getIndex())
-								incompleteTasks.remove(getIndex());
+							if(i+1 > index)
+								incompleteTasks.remove(index);
 							else
-								incompleteTasks.remove(getIndex()+1);
+								incompleteTasks.remove(index+1);
 
 						}
 						updatePage(task);
