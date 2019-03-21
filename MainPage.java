@@ -269,7 +269,7 @@ public class MainPage extends JPanel implements ActionListener
 						}
 						if(h)
 						{
-							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
+							//System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
 							//change priority to urgent
 							task.setPriorityLevel("urgent");
 							incompleteTasks.remove(getIndex());
@@ -277,7 +277,7 @@ public class MainPage extends JPanel implements ActionListener
 						}
 						else
 						{
-							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
+							//System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
 							int index = getIndex();
 							incompleteTasks.add(i+2, task);
