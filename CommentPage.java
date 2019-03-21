@@ -34,8 +34,7 @@ public class CommentPage extends JFrame {
 	private Event recentEvent;
 	private String ogComment;
 	private Date eventDate;
-	CommentPage(String CT, Date date){
-		eventDate = date;
+	CommentPage(String CT){
 		ogComment = CT;
 		currentText = CT;
 		setLocation(500,300);
@@ -73,6 +72,51 @@ public class CommentPage extends JFrame {
 		pack();
 		initiateComponents();
 		setVisible(true);
+
+	}
+	
+	CommentPage(String CT, Date date, HistoryPage history){
+		eventDate = date;
+		
+		ogComment = CT;
+		currentText = CT;
+		setLocation(500,300);
+		sp = new JSplitPane();
+		topPanel = new JPanel();         
+		bottomPanel = new JPanel();      
+		textArea = new JTextArea(); 
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setText(currentText);
+		scroll = new JScrollPane(textArea);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		title = new JLabel("Edit Comment");
+		topPanel.add(title);
+		inputPanel = new JPanel();
+		commit = new JButton("Commit");
+		commit.setPreferredSize(new Dimension(199,25));
+		delete = new JButton("Delete");
+		delete.setPreferredSize(new Dimension(199,25));
+		setPreferredSize(new Dimension(400, 400)); 
+		getContentPane().add(sp); 
+		sp.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		sp.setTopComponent(topPanel);
+		sp.setBottomComponent(bottomPanel);
+		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
+		bottomPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		bottomPanel.add(scroll);
+		bottomPanel.add(inputPanel);
+		inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 75));
+		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
+		inputPanel.add(commit);
+		inputPanel.add(delete);
+
+		pack();
+		initiateComponents();
+		setVisible(true);
+		
+		
 
 	}
 	
