@@ -90,7 +90,9 @@ public class HistoryPage implements MouseListener{
 	public void ChangeLabel(Date eventDate, String newComment) {
 		for(Event e : events) {
 			if(e.getDate().equals(eventDate)) {
-				labels.get(events.indexOf(e)).setText(newComment);
+				e.setComment(newComment);
+				labels.get(events.indexOf(e)).setText(e.createSentence());;
+//				labels.get(events.indexOf(e)).setText(newComment);
 			}
 		}
 	}

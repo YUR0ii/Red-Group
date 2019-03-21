@@ -69,15 +69,21 @@ public class priorityEvent extends Event{
 	public String getOldComment() {
 		// TODO Auto-generated method stub
 		
-		System.out.println("Ya cant get comments from priority events dum dum");
+//		System.out.println("Ya cant get comments from priority events dum dum");
 		return null;
 	}
 
 	@Override
 	public String getNewComment() {
 		// TODO Auto-generated method stub
-		System.out.println("Ya cant get comments from priority events dum dum");
+//		System.out.println("Ya cant get comments from priority events dum dum");
 		return null;
+	}
+
+	@Override
+	public void setComment(String newcomment) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -25,14 +25,15 @@ public class commentEvent extends Event{
 	public String createSentence() {
 		// TODO Auto-generated method stub
 		//makes the string for a change event
-		
-		return "The comment was changed to '"+  newComment + "' on " + Event.getDateString(date);
+		sentence = "The comment was changed to '"+  newComment + "' on " + Event.getDateString(date);
+		return sentence;
 	}
 	public String createSentence(int identifier) {
 		// TODO Auto-generated method stub
 		//makes the string for a remove event
 		
-		return "The comment '"+newComment+"' was deleted on " + Event.getDateString(date);		
+		sentence = "The comment '"+newComment+"' was deleted on " + Event.getDateString(date);
+		return sentence;		
 	}
 
 	@Override
@@ -60,5 +61,6 @@ public class commentEvent extends Event{
 	
 	public void setComment(String newcomment) {
 		newComment = newcomment;
+		createSentence();
 	}
 }
