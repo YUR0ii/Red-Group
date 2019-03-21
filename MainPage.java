@@ -30,12 +30,12 @@ public class MainPage extends JPanel implements ActionListener
 	private ArrayList<Task> inactiveTasks = new ArrayList<Task>();
 
 	private static MainPage singleton;
-	
+
 	public static MainPage getInstance()
 	{
 		return singleton;
 	}
-	
+
 	MainPage()
 	{
 		file.addMouseListener(new menuListener());
@@ -219,7 +219,7 @@ public class MainPage extends JPanel implements ActionListener
 		public JLabel getLabel() {
 			return name;
 		}
-		
+
 		taskContainer(Task task)
 		{
 			this.task = task;
@@ -279,8 +279,12 @@ public class MainPage extends JPanel implements ActionListener
 						{
 							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
-							incompleteTasks.remove(getIndex());
-							incompleteTasks.add(i+1, task);
+							incompleteTasks.add(i+2, task);
+							if(i+1 > getIndex())
+								incompleteTasks.remove(getIndex());
+							else
+								incompleteTasks.remove(getIndex()+1);
+
 						}
 						updatePage(task);
 					}
