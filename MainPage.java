@@ -44,7 +44,16 @@ public class MainPage extends JPanel implements ActionListener
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
-		
+		for(Task t: incompleteTasks) {
+			for(scheduledPriority p: t.getScheduledPriorities()) {
+				if(p.getActive()) {
+					String d=Event.getDateString(p.getDate());
+					if(d.equals(Event.getDateString(Calendar.getInstance().getTime()))) {
+						t.setPriorityLevel(p.getLevel());
+					}
+				}
+			}
+		}
 		singleton = this;
 		//createGUI();
 	}
@@ -102,14 +111,6 @@ public class MainPage extends JPanel implements ActionListener
 		int index=incompleteTasks.indexOf(editedTask);
 		taskContainer temp=incompleteContainers.get(index);
 		temp.update();
-		if((checkRemoveDate(temp.getDateString()))) {
-			int i=dateStrings.indexOf(temp.getDateString());
-			dateStrings.remove(i);		
-		}
-		if((checkAddDate(temp.getDateString()))) {
-			dateStrings.add(temp.getDateString());
-		}
-		//need a method for reordering the page properly
 		updateGUI();
 	}
 
@@ -215,6 +216,10 @@ public class MainPage extends JPanel implements ActionListener
 			return task.getName();
 		}
 
+		public JLabel getLabel() {
+			return name;
+		}
+		
 		taskContainer(Task task)
 		{
 			this.task = task;
@@ -223,7 +228,7 @@ public class MainPage extends JPanel implements ActionListener
 			dateString=task.getDateString();
 			this.setLayout(new FlowLayout());
 			this.add(name);
-			name.setFont(urgent);
+			update();
 
 			addMouseListener(new MouseAdapter()
 			{
@@ -277,7 +282,7 @@ public class MainPage extends JPanel implements ActionListener
 							incompleteTasks.remove(getIndex());
 							incompleteTasks.add(i+1, task);
 						}
-						updateGUI();
+						updatePage(task);
 					}
 				}
 			});
@@ -297,7 +302,7 @@ public class MainPage extends JPanel implements ActionListener
 
 				@Override
 				public void mouseMoved(MouseEvent arg0) {
-					// TODO Auto-generated method stu
+					// TODO Auto-generated method stub
 
 				}
 
@@ -313,7 +318,6 @@ public class MainPage extends JPanel implements ActionListener
 			task=nTask;
 		}
 
-
 		public Date getDate() {
 			return date;
 		}
@@ -324,12 +328,16 @@ public class MainPage extends JPanel implements ActionListener
 			//changes fonts depending on the priority
 			if(task.getPriorityLevel().equals("urgent")){
 				name.setFont(urgent);
+				name.setForeground(Color.red);
 			}else if(task.getPriorityLevel().equals("current")){
 				name.setFont(current);
+				name.setForeground(Color.orange);
 			}else if(task.getPriorityLevel().equals("eventual")){
 				name.setFont(eventual);
+				name.setForeground(Color.blue);
 			}else {
 				name.setFont(inactive);
+				name.setForeground(Color.gray);
 			}
 		}
 		class contextMenu extends JPopupMenu

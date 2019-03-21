@@ -49,28 +49,28 @@ public class EditAction implements ActionListener {
 		button1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editingTask.setPriorityLevel("Urgent");
+				editingTask.setPriorityLevel("urgent");
 			}
 		});
 
 		button2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editingTask.setPriorityLevel("Current");
+				editingTask.setPriorityLevel("current");
 			}
 		});
 
 		button3.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editingTask.setPriorityLevel("Eventual");
+				editingTask.setPriorityLevel("eventual");
 			}
 		});
 
 		button4.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				editingTask.setPriorityLevel("Inactive");
+				editingTask.setPriorityLevel("inactive");
 			}
 		});
 
@@ -137,9 +137,11 @@ public class EditAction implements ActionListener {
 		Font itemNameFont = new Font("Arial", Font.PLAIN, 16);
 		displayItemName.setFont(itemNameFont);
 		displayItemName.setSize(30, 400);
-		displayItemName.setActionListener(ActionListener a) {
-			
-		}
+		displayItemName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				editingTask.setName(displayItemName.getText());
+			}
+		});
 		
 		JLabel displayCommentTitle = new JLabel("Comments");
 
