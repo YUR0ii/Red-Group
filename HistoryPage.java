@@ -16,10 +16,11 @@ public class HistoryPage implements MouseListener{
 	private JPanel contentPane = new JPanel();	
 	private JScrollPane scroll = new JScrollPane(contentPane);
 	private JPanel panel= new JPanel();
-	
+	private HistoryPage thisHistory;
 	
 	
 	public HistoryPage(Task task) {
+		thisHistory = this;
 		events =task.getEvents();
 		for(int i = 0; i<events.size();i++) {
 			add(getEvent(i),new JLabel());
@@ -83,7 +84,7 @@ public class HistoryPage implements MouseListener{
 	}
 	// opens the comment page
 	public void openComment(commentEvent event){
-		event.editComment();
+		event.editComment(thisHistory);
 	}
 	
 	public void ChangeLabel(Date eventDate, String newComment) {

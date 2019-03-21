@@ -53,8 +53,8 @@ public class commentEvent extends Event{
 		return newComment;
 	}
 
-	public void editComment() {
+	public void editComment(HistoryPage h) {
 		//creates the comment page when a comment is double clicked
-		CommentPage page=new CommentPage(newComment,getDate());
+		CommentPage page=new CommentPage(newComment,getDate(),h);
 	}
 }
