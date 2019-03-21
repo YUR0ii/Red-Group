@@ -33,7 +33,9 @@ public class CommentPage extends JFrame {
 	private JLabel title;
 	private Event recentEvent;
 	private String ogComment;
+	//eventDate and history is only used to deal with HistoryPage commentEvent edits
 	private Date eventDate;
+	private HistoryPage history;
 	CommentPage(String CT){
 		ogComment = CT;
 		currentText = CT;
@@ -75,8 +77,9 @@ public class CommentPage extends JFrame {
 
 	}
 	
-	CommentPage(String CT, Date date, HistoryPage history){
+	CommentPage(String CT, Date date, HistoryPage tempHistory){
 		eventDate = date;
+		history = tempHistory;
 		
 		ogComment = CT;
 		currentText = CT;
@@ -145,7 +148,7 @@ public class CommentPage extends JFrame {
 				
 				currentText = textArea.getText();
 				recentEvent = new commentEvent(ogComment, currentText);
-				HistoryPage.ChangeLabel(eventDate,currentText);
+				history.ChangeLabel(eventDate,currentText);
 				dispose();
 				
 			}  
