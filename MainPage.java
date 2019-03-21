@@ -238,7 +238,6 @@ public class MainPage extends JPanel implements ActionListener
 				{
 					if(e.getButton() == MouseEvent.BUTTON3)
 					{
-
 						menu=new contextMenu();
 						menu.show(e.getComponent(), e.getX(), e.getY());
 					}else if(e.getClickCount()==2){
@@ -269,7 +268,7 @@ public class MainPage extends JPanel implements ActionListener
 						}
 						if(h)
 						{
-							//System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
+							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
 							//change priority to urgent
 							task.setPriorityLevel("urgent");
 							incompleteTasks.remove(getIndex());
@@ -278,6 +277,7 @@ public class MainPage extends JPanel implements ActionListener
 						else
 						{
 							//System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
+							//above higher change, below lower change
 							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
 							int index = getIndex();
 							incompleteTasks.add(i+2, task);
