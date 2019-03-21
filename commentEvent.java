@@ -57,4 +57,8 @@ public class commentEvent extends Event{
 		//creates the comment page when a comment is double clicked
 		CommentPage page=new CommentPage(newComment,getDate(),h);
 	}
+	
+	public void setComment(String newcomment) {
+		newComment = newcomment;
+	}
 }

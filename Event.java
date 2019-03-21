@@ -116,4 +116,6 @@ public abstract class Event implements Serializable{
 		+" "+date.getDate()+", "+(1900+date.getYear());
 		return dateString;
 	}
+	
+	public abstract void setComment(String newcomment);
 }
