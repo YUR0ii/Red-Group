@@ -181,7 +181,7 @@ public class EditAction implements ActionListener {
 		commentArea.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CommentPage c = new CommentPage(editingTask);
+				getInstance(editingTask);
 			}
 		});
 
@@ -249,6 +249,19 @@ public class EditAction implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+	}
+	
+	private final int instLim = 1;
+	private int count = 0;
+	// limit instances of commentpage
+	private CommentPage getInstance(Task t) {
+		if (count < instLim) {
+			CommentPage c = new CommentPage(t);
+			count++;
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	class CommentPage extends JFrame {
