@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.util.Date;
 import javax.swing.*;
 
+//the date scrolls all change at the same time, can't change only 1
+
 public class EditAction implements ActionListener {
 	Task editingTask;
 	JFrame frame = new JFrame();
@@ -22,11 +24,20 @@ public class EditAction implements ActionListener {
 		// create and add radio buttons
 		// has to be individual buttons or else can't set action listener
 		JPanel radioButtonPanel = new JPanel(new FlowLayout());
+		radioButtonPanel.setBackground(new Color(247, 232, 210)); 
 		ButtonGroup group = new ButtonGroup();
 		JRadioButton button1 = new JRadioButton("Urgent");
+		button1.setForeground(Color.red);
+		button1.setBackground(new Color(247, 232, 210));
 		JRadioButton button2 = new JRadioButton("Current");
+		button2.setForeground(new Color(191, 121, 1));
+		button2.setBackground(new Color(247, 232, 210));
 		JRadioButton button3 = new JRadioButton("Eventual");
+		button3.setForeground(Color.blue);
+		button3.setBackground(new Color(247, 232, 210));
 		JRadioButton button4 = new JRadioButton("Inactive");
+		button4.setForeground(new Color(127, 126, 123));
+		button4.setBackground(new Color(247, 232, 210));
 		if (editingTask.getPriorityLevel().equals("urgent")) {
 			button1.setSelected(true);
 		} else if (editingTask.getPriorityLevel().equals("current")) {
@@ -77,9 +88,23 @@ public class EditAction implements ActionListener {
 		// create and add checkboxes
 		JPanel checkBoxPanel = new JPanel();
 		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
+		checkBoxPanel.setBackground(new Color(247, 232, 210)); 
 		JCheckBox urgentBox = new JCheckBox("Urgent");
+		urgentBox.setForeground(Color.red);
+		urgentBox.setBackground(new Color(247, 232, 210));
 		JCheckBox currentBox = new JCheckBox("Current");
+		currentBox.setForeground(new Color(191, 121, 1));
+		currentBox.setBackground(new Color(247, 232, 210));
 		JCheckBox eventualBox = new JCheckBox("Eventual");
+		eventualBox.setForeground(Color.blue);
+		eventualBox.setBackground(new Color(247, 232, 210));
+		if(editingTask.getScheduledPriority(0).getActive()) {
+			urgentBox.setSelected(true);
+		}else if(editingTask.getScheduledPriority(1).getActive()) {
+			currentBox.setSelected(true);
+		}else if(editingTask.getScheduledPriority(2).getActive()) {
+			eventualBox.setSelected(true);
+		}
 		checkBoxPanel.add(urgentBox);
 		checkBoxPanel.add(currentBox);
 		checkBoxPanel.add(eventualBox);
@@ -129,6 +154,7 @@ public class EditAction implements ActionListener {
 
 		// lazy coding
 		JPanel checkBoxAndSpinnerPanel = new JPanel(new FlowLayout());
+		checkBoxAndSpinnerPanel.setBackground(new Color(247, 232, 210)); 
 		checkBoxAndSpinnerPanel.add(checkBoxPanel);
 		checkBoxAndSpinnerPanel.add(spinnerPanel);
 
@@ -136,13 +162,12 @@ public class EditAction implements ActionListener {
 		JTextField displayItemName = new JTextField(editingTask.getName());
 		Font itemNameFont = new Font("Arial", Font.PLAIN, 16);
 		displayItemName.setFont(itemNameFont);
-		displayItemName.setSize(30, 400);
+		displayItemName.setHorizontalAlignment(SwingConstants.CENTER);
 		displayItemName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				editingTask.setName(displayItemName.getText());
 			}
 		});
-		
 		JLabel displayCommentTitle = new JLabel("Comments");
 
 		// create comment area and make scrollable
@@ -195,6 +220,7 @@ public class EditAction implements ActionListener {
 
 		// add buttons to a panel
 		JPanel buttonPanel = new JPanel();
+		buttonPanel.setBackground(new Color(247, 232, 210));
 		buttonPanel.add(historyButton);
 		buttonPanel.add(doneButton);
 		buttonPanel.add(printButton);
@@ -207,6 +233,7 @@ public class EditAction implements ActionListener {
 		frame.getContentPane().add(checkBoxAndSpinnerPanel);
 		frame.getContentPane().add(displayCommentTitle);
 		displayCommentTitle.setAlignmentX((float) 0.5);
+		displayCommentTitle.setBackground(new Color(247, 232, 210));
 		frame.getContentPane().add(scrollPane);
 		scrollPane.setAlignmentX((float) 0.5);
 		frame.getContentPane().add(buttonPanel);
@@ -214,7 +241,7 @@ public class EditAction implements ActionListener {
 	}
 
 	public void updateComment(String s) {
-		// update textarea
+		// update text area
 		commentArea.setText(s);
 
 		// update frame
@@ -247,7 +274,7 @@ public class EditAction implements ActionListener {
 			task = t;
 			ogComment = task.getComment();
 			currentText = task.getComment();
-			setLocation(500, 300);
+			setLocation(400, 200);
 			sp = new JSplitPane();
 			topPanel = new JPanel();
 			bottomPanel = new JPanel();
@@ -270,6 +297,7 @@ public class EditAction implements ActionListener {
 			sp.setTopComponent(topPanel);
 			sp.setBottomComponent(bottomPanel);
 			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+			topPanel.setBackground(new Color(247, 232, 210)); 
 			bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 			bottomPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			bottomPanel.add(scroll);

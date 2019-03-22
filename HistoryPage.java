@@ -64,7 +64,8 @@ public class HistoryPage implements MouseListener{
 	
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 //		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
-		contentPane.setPreferredSize(new Dimension(500, 400));
+		contentPane.setPreferredSize(new Dimension(500, 400));	
+		contentPane.setBackground(new Color(247, 232, 210));
 	
 
 		for(JLabel l : labels) {
@@ -74,6 +75,7 @@ public class HistoryPage implements MouseListener{
 		
 		panel.add(scroll);
 		frame.setContentPane(panel);
+		panel.setBackground(new Color(247, 232, 210));
 		
 		scroll.revalidate();
 		contentPane.repaint();

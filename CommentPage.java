@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import java.util.Date;
-
+import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -39,10 +39,10 @@ public class CommentPage extends JFrame {
 	CommentPage(String CT){
 		ogComment = CT;
 		currentText = CT;
-		setLocation(500,300);
+		setLocation(400,200);
 		sp = new JSplitPane();
 		topPanel = new JPanel();         
-		bottomPanel = new JPanel();      
+		bottomPanel = new JPanel();     
 		textArea = new JTextArea(); 
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
@@ -62,6 +62,7 @@ public class CommentPage extends JFrame {
 		sp.setTopComponent(topPanel);
 		sp.setBottomComponent(bottomPanel);
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+		topPanel.setBackground(new Color(247, 232, 210)); 
 		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 		bottomPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		bottomPanel.add(scroll);
