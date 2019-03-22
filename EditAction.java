@@ -185,7 +185,7 @@ public class EditAction implements ActionListener {
 			}
 		});
 
-		// history, done, print buttons
+		// history, done, print buttons 
 		JButton historyButton = new JButton("History");
 		historyButton.addActionListener(new ActionListener() {
 			@Override
