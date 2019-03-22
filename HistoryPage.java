@@ -22,7 +22,7 @@ public class HistoryPage implements MouseListener{
 	public HistoryPage(Task task) {
 		thisHistory = this;
 		events =task.getEvents();
-		for(int i = 0; i<events.size();i++) {
+		for(int i = events.size()-1; i>-1;i--) {
 			add(getEvent(i),new JLabel());
 		}
 		openHistoryPage();
@@ -134,19 +134,41 @@ public class HistoryPage implements MouseListener{
 		Event event02 = new priorityEvent(new scheduledPriority("Eventual"), new scheduledPriority("Urgent"));
 		task.addEventToHistory(event01);
 		task.addEventToHistory(event02);
-		
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
+		task.addEventToHistory(event01);
+		task.addEventToHistory(event02);
 		HistoryPage history = new HistoryPage(task);
 		
-    }
-	
+    }	
 }
-
-
-
-
-
-
-
-
-
-

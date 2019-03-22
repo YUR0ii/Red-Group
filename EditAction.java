@@ -59,6 +59,7 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				editingTask.setPriorityLevel("urgent");
+				update(editingTask);
 			}
 		});
 
@@ -66,6 +67,7 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				editingTask.setPriorityLevel("current");
+				update(editingTask);
 			}
 		});
 
@@ -73,6 +75,7 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				editingTask.setPriorityLevel("eventual");
+				update(editingTask);
 			}
 		});
 
@@ -80,6 +83,7 @@ public class EditAction implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				editingTask.setPriorityLevel("inactive");
+				update(editingTask);
 			}
 		});
 
@@ -126,6 +130,7 @@ public class EditAction implements ActionListener {
 					editingTask.updatePriorityDate(date, 0);
 				}
 				editingTask.getScheduledPriority(0).setActive(urgentBox.isSelected());
+				update(editingTask);
 			}
 		});
 		currentBox.addActionListener(new ActionListener() {
@@ -136,6 +141,7 @@ public class EditAction implements ActionListener {
 					editingTask.updatePriorityDate(date, 1);
 				}
 				editingTask.getScheduledPriority(1).setActive(currentBox.isSelected());
+				update(editingTask);
 			}
 		});
 		eventualBox.addActionListener(new ActionListener() {
@@ -146,6 +152,7 @@ public class EditAction implements ActionListener {
 					editingTask.updatePriorityDate(date, 2);
 				}
 				editingTask.getScheduledPriority(2).setActive(eventualBox.isSelected());
+				update(editingTask);
 			}
 		});
 
@@ -163,6 +170,7 @@ public class EditAction implements ActionListener {
 		displayItemName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				editingTask.setName(displayItemName.getText());
+				update(editingTask);
 			}
 		});
 		JLabel displayCommentTitle = new JLabel("Comments");

@@ -1,7 +1,6 @@
 import java.io.Serializable;
 import java.util.*;
 
-
 public class Task implements Serializable{
 	private String name=null;
 	private String priority;
