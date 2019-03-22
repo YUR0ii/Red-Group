@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.util.Date;
 import javax.swing.*;
 
-//the date scrolls all change at the same time, can't change only 1
-
 public class EditAction implements ActionListener {
 	Task editingTask;
 	JFrame frame = new JFrame();
@@ -112,10 +110,9 @@ public class EditAction implements ActionListener {
 		// create and add JSpinners (date selection)
 		JPanel spinnerPanel = new JPanel();
 		spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.Y_AXIS));
-		SpinnerDateModel model = new SpinnerDateModel();
-		JSpinner urgentSpinner = new JSpinner(model);
-		JSpinner currentSpinner = new JSpinner(model);
-		JSpinner eventualSpinner = new JSpinner(model);
+		JSpinner urgentSpinner = new JSpinner(new SpinnerDateModel());
+		JSpinner currentSpinner = new JSpinner(new SpinnerDateModel());
+		JSpinner eventualSpinner = new JSpinner(new SpinnerDateModel());
 		spinnerPanel.add(urgentSpinner);
 		spinnerPanel.add(currentSpinner);
 		spinnerPanel.add(eventualSpinner);
@@ -184,7 +181,7 @@ public class EditAction implements ActionListener {
 		commentArea.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CommentPage c = new CommentPage(editingTask);
+				getInstance(editingTask);
 			}
 		});
 
@@ -252,6 +249,19 @@ public class EditAction implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+	}
+	
+	private final int instLim = 1;
+	private int count = 0;
+	// limit instances of commentpage
+	private CommentPage getInstance(Task t) {
+		if (count < instLim) {
+			CommentPage c = new CommentPage(t);
+			count++;
+			return c;
+		} else {
+			return null;
+		}
 	}
 
 	class CommentPage extends JFrame {

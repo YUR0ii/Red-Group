@@ -8,32 +8,32 @@ import javax.swing.ScrollPaneConstants;
 
 public class ClosedPage extends MainPage {
 
-		ClosedPage(/*ArrayList<taskContainer> cl, ArrayList<taskContainer> inCl*/ ){
+		ClosedPage(ArrayList<taskContainer> cl, ArrayList<taskContainer> inCl ){
 			JFrame closeFrame=new JFrame();
 			JTextArea textArea = new JTextArea(30, 30);
 			textArea.setEditable(false);
 
-			if(completeContainers.size() > 0){
+			if(cl.size() > 0){
 				textArea.append("Completed Tasks\n");
-		        for (int i = 0; i<completeContainers.size(); i++) {
-		        	textArea.append("<"+completeContainers.get(i).getTask().getName()+">\n");
+		        for (int i = 0; i<cl.size(); i++) {
+		        	textArea.append("<"+cl.get(i).getTask().getName()+">\n");
 		       }
 			}
-			if(incompleteContainers.size() > 0){
+			if(inCl.size() > 0){
 				ArrayList<taskContainer> inactive = new ArrayList<taskContainer>();
 				ArrayList<taskContainer> current = new ArrayList<taskContainer>();
 				ArrayList<taskContainer> eventual = new ArrayList<taskContainer>();
 				ArrayList<taskContainer> urgent = new ArrayList<taskContainer>();
 
-				for (int i = 0; i<incompleteContainers.size(); i++) {
-					if("inactive".equals(incompleteContainers.get(i).getTask().getPriorityLevel() == "inactive"))
-						inactive.add(incompleteContainers.get(i));
-					else if("current".equals(incompleteContainers.get(i).getTask().getPriorityLevel()))
-						current.add(incompleteContainers.get(i));
-					else if("eventual".equalsIgnoreCase(incompleteContainers.get(i).getTask().getPriorityLevel()))
-						eventual.add(incompleteContainers.get(i));
-					else if( "urgent".equalsIgnoreCase(incompleteContainers.get(i).getTask().getPriorityLevel()))
-						urgent.add(incompleteContainers.get(i));
+				for (int i = 0; i<inCl.size(); i++) {
+					if("inactive".equals(inCl.get(i).getTask().getPriorityLevel() == "inactive"))
+						inactive.add(inCl.get(i));
+					else if("current".equals(inCl.get(i).getTask().getPriorityLevel()))
+						current.add(inCl.get(i));
+					else if("eventual".equalsIgnoreCase(inCl.get(i).getTask().getPriorityLevel()))
+						eventual.add(inCl.get(i));
+					else if( "urgent".equalsIgnoreCase(inCl.get(i).getTask().getPriorityLevel()))
+						urgent.add(inCl.get(i));
 
 				}
 				if(current.size() > 0){
@@ -73,6 +73,8 @@ public class ClosedPage extends MainPage {
 
 	}
 }
+
+
 
 
 
