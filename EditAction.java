@@ -370,6 +370,9 @@ public class EditAction implements ActionListener {
 	
 	public static void update(Task t) {
 		MainPage.getInstance().updatePage(t);
+		if(t.getComplete()) {
+			MainPage.getClosedInstance().refreshGUI();			
+		}
 	}
 	public static void main(String[] args) {
 		Task testTask = new Task("testing");

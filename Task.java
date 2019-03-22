@@ -96,10 +96,6 @@ public class Task implements Serializable{
 		comment="new comment";
 	}
 	
-	public void delete() {
-		// deletes the task
-	}
-	
 	public void edit() {
 		//opens the edit action page
 		EditAction edit=new EditAction(this);

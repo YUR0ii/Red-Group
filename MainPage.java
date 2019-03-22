@@ -3,7 +3,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-//sometimes, if a task is dragged onto another task, the other tasks of that priority become the task that was dragged in
+//sometimes, or if a task is dragged onto another task, the other tasks of that priority become the task that was dragged in
 //also, does not make separate dates properly, only one
 
 public class MainPage extends JPanel implements ActionListener
@@ -11,26 +11,25 @@ public class MainPage extends JPanel implements ActionListener
 	private JFrame mainFrame = new JFrame();
 	private JPanel scrollPanel = new JPanel();
 	private JScrollPane scroll = new JScrollPane(scrollPanel);
-	private JScrollBar scrollBar = new JScrollBar();
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu file = new JMenu("File");
 	private JPopupMenu fileMenu = new JPopupMenu();
 	private JMenuItem save = new JMenuItem("Save a backup");
 	private JMenuItem restore = new JMenuItem("Restore a backup");
 	private JMenuItem print = new JMenuItem("Print");
-	private JMenuItem closed = new JMenuItem("Closed");
+	private JMenuItem closed = new JMenuItem("Closed Action Items");
 	private JMenuItem quit = new JMenuItem("Quit");
 	private JTextField input = new JTextField();
 	private Font dateFont=new Font(Font.SERIF,Font.PLAIN,16);
-	private ArrayList<Task> incompleteTasks = new ArrayList<Task>();// these 2 lists are used to access the containers
-	private ArrayList<Task> completeTasks = new ArrayList<Task>();
+	protected ArrayList<Task> incompleteTasks = new ArrayList<Task>();// these 2 lists are used to access the containers
+	protected ArrayList<Task> completeTasks = new ArrayList<Task>();
 	protected ArrayList<taskContainer> incompleteContainers = new ArrayList<taskContainer>();
-	protected ArrayList<taskContainer> completeContainers = new ArrayList<taskContainer>();
 	private ArrayList<String> dateStrings=new ArrayList<String>();
-	private ArrayList<Task> urgentTasks = new ArrayList<Task>();
-	private ArrayList<Task> currentTasks = new ArrayList<Task>();
-	private ArrayList<Task> eventualTasks = new ArrayList<Task>();
-	private ArrayList<Task> inactiveTasks = new ArrayList<Task>();
+	protected ArrayList<Task> urgentTasks = new ArrayList<Task>();
+	protected ArrayList<Task> currentTasks = new ArrayList<Task>();
+	protected ArrayList<Task> eventualTasks = new ArrayList<Task>();
+	protected ArrayList<Task> inactiveTasks = new ArrayList<Task>();
+	private static ClosedPage completePage;
 
 	private static MainPage singleton;
 
@@ -59,7 +58,6 @@ public class MainPage extends JPanel implements ActionListener
 			}
 		}
 		singleton = this;
-		//createGUI();
 	}
 	//creates GUI components for main page
 	public void createGUI() {
@@ -76,21 +74,20 @@ public class MainPage extends JPanel implements ActionListener
 		fileMenu.add(print);
 		this.add(scroll);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scroll.setPreferredSize(new Dimension(600, 500));
-		scroll.add(scrollBar);
+		scroll.setPreferredSize(new Dimension(600, 360));
 		scroll.validate();
 		input.addActionListener(this);
 		input.setEditable(true);
 		input.setText("New Action Item");
 		input.setVisible(true);
 		input.setActionCommand("Add a Task");
-		input.setPreferredSize(new Dimension(590, 30));
+		input.setPreferredSize(new Dimension(590, 25));
 		scrollPanel.setLayout(new BoxLayout(scrollPanel, BoxLayout.PAGE_AXIS));
 		scrollPanel.setBackground(new Color(247, 232, 210));
 		scrollPanel.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
-		this.setPreferredSize(new Dimension(600, 550));
+		this.setPreferredSize(new Dimension(600, 400));
 		this.add(input);
-		mainFrame.setLocation(300, 50);
+		mainFrame.setLocation(250, 100);
 		mainFrame.pack();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
@@ -113,18 +110,16 @@ public class MainPage extends JPanel implements ActionListener
 
 	public void updatePage(Task editedTask) {
 		for(taskContainer t: incompleteContainers) {
-			if(t.getTask().equals(editedTask)) {
-				t.update();
-			}
+			t.update();
 		}
-		updateGUI();
+		
 		incompleteTasks.clear();
 		for(taskContainer t : incompleteContainers)
 		{
 			incompleteTasks.add(t.getTask());
 		}
-	}
-
+		updateGUI();
+	}	
 	public boolean checkAddDate(taskContainer t) {
 		for(String s : dateStrings) {
 			if((t.getDateString().equals(s))) {
@@ -196,22 +191,8 @@ public class MainPage extends JPanel implements ActionListener
 		private Font current=new Font(Font.SERIF,Font.PLAIN,20);
 		private Font eventual=new Font(Font.SERIF,Font.ITALIC,20);
 		private Font inactive=new Font(Font.SERIF,Font.ITALIC,20);
-		boolean dragging = false;
-
-		int getIndex()
-		{
-			return incompleteContainers.indexOf(this);
-		}
-		Point clickOffset = new Point(0,0);
-
-		public String getName()
-		{
-			return task.getName();
-		}
-
-		public JLabel getLabel() {
-			return name;
-		}
+		private boolean dragging = false;
+		private Point clickOffset = new Point(0,0);
 
 		taskContainer(Task task)
 		{
@@ -270,7 +251,6 @@ public class MainPage extends JPanel implements ActionListener
 						{
 							//System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							//above higher change, below lower change
-							
 							int index = getIndex();
 							incompleteTasks.add(i+2, task);
 							if(i+1 > index)
@@ -282,6 +262,7 @@ public class MainPage extends JPanel implements ActionListener
 							{
 								task.setPriorityLevel(incompleteContainers.get(i+2).task.getPriorityLevel());
 								incompleteTasks.remove(index+1);
+
 							}
 						}
 						updatePage(task);
@@ -311,7 +292,22 @@ public class MainPage extends JPanel implements ActionListener
 			});
 			this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		}
+		
+		public int getIndex()
+		{
+			//only for incomplete
+			return incompleteContainers.indexOf(this);
+		}
 
+		public String getName()
+		{
+			return task.getName();
+		}
+
+		public JLabel getLabel() {
+			return name;
+		}
+		
 		public Task getTask() {
 			return task;
 		}
@@ -351,7 +347,6 @@ public class MainPage extends JPanel implements ActionListener
 			contextMenu()
 			{
 				//creates an action to complete a task
-				//Action complete = new AbstractAction()
 				JMenuItem complete = new JMenuItem("Mark as Complete");
 				complete.addActionListener(new ActionListener()
 				{
@@ -363,9 +358,6 @@ public class MainPage extends JPanel implements ActionListener
 						completeTasks.add(task);
 						int index=incompleteTasks.indexOf(task);
 						incompleteTasks.remove(index);
-						scrollPanel.remove(incompleteContainers.get(index));
-						completeContainers.add(incompleteContainers.get(index));
-						incompleteContainers.remove(index);
 						updateGUI();
 					}
 				});
@@ -404,11 +396,16 @@ public class MainPage extends JPanel implements ActionListener
 							@Override
 							public void actionPerformed(ActionEvent e)
 							{
-								task.delete();
 								int index=incompleteTasks.indexOf(task);
 								incompleteTasks.remove(task);
-								scrollPanel.remove(incompleteContainers.get(index));
-								incompleteContainers.remove(index);
+								if(task.getComplete()) {
+									completeTasks.remove(task);
+									completePage.setClosedTasks();
+									completePage.refreshGUI();
+								}else {
+									scrollPanel.remove(incompleteContainers.get(index));
+									incompleteContainers.remove(index);									
+								}
 								updateGUI();
 								confirm.setVisible(false);
 							}
@@ -439,6 +436,10 @@ public class MainPage extends JPanel implements ActionListener
 		}
 	}
 
+	public static ClosedPage getClosedInstance() {
+		return completePage;
+	}
+	
 	public static void main(String[] args) {
 		new MainPage().createGUI();
 	}
@@ -479,11 +480,10 @@ public class MainPage extends JPanel implements ActionListener
 			if (e.getComponent().equals(quit)) {
 				mainFrame.dispose();
 			} else if (e.getComponent().equals(closed)) {
-				ClosedPage complete = new ClosedPage(completeContainers, incompleteContainers);
+				completePage = new ClosedPage(completeTasks);
 			} else if (e.getComponent().equals(file)) {
 				fileMenu.show(e.getComponent(), e.getX(), e.getY());
 			}
 		}
 	}
-
 }
