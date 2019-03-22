@@ -118,6 +118,11 @@ public class MainPage extends JPanel implements ActionListener
 			}
 		}
 		updateGUI();
+		incompleteTasks.clear();
+		for(taskContainer t : incompleteContainers)
+		{
+			incompleteTasks.add(t.getTask());
+		}
 	}
 
 	public boolean checkAddDate(taskContainer t) {
@@ -180,7 +185,7 @@ public class MainPage extends JPanel implements ActionListener
 		scrollPanel.repaint();
 	}
 
-	public class taskContainer extends JComponent implements Comparable
+	public class taskContainer extends JComponent
 	{
 		private Task task;
 		private JLabel name;
@@ -257,7 +262,7 @@ public class MainPage extends JPanel implements ActionListener
 						{
 							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
 							//change priority to urgent
-							task.setPriorityLevel("urgent");
+							task.setPriorityLevel(incompleteContainers.get(0).getTask().getPriorityLevel());
 							incompleteTasks.remove(getIndex());
 							incompleteTasks.add(0, task);
 						}
@@ -265,14 +270,19 @@ public class MainPage extends JPanel implements ActionListener
 						{
 							//System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " priority of " + incompleteContainers.get(i+1).getName());
 							//above higher change, below lower change
-							task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
+							
 							int index = getIndex();
 							incompleteTasks.add(i+2, task);
 							if(i+1 > index)
+							{
+								task.setPriorityLevel(incompleteContainers.get(i+1).task.getPriorityLevel());
 								incompleteTasks.remove(index);
+							}
 							else
+							{
+								task.setPriorityLevel(incompleteContainers.get(i+2).task.getPriorityLevel());
 								incompleteTasks.remove(index+1);
-
+							}
 						}
 						updatePage(task);
 					}
@@ -427,25 +437,6 @@ public class MainPage extends JPanel implements ActionListener
 
 			}
 		}
-
-
-		@Override
-		public int compareTo(Object o)
-		{
-			return 0;
-		}
-
-		public int compareTo(taskContainer t)
-		{
-			if(task.getPriorityLevel().equals(t.task.getPriorityLevel()))
-			{
-				return task.getName().compareToIgnoreCase(t.task.getName());
-			}
-			else
-			{
-				//			return Integer.compare(task.getPriorityLevel(), t.task.getPriorityLevel());
-			}
-		}
 	}
 
 	public static void main(String[] args) {
@@ -488,7 +479,7 @@ public class MainPage extends JPanel implements ActionListener
 			if (e.getComponent().equals(quit)) {
 				mainFrame.dispose();
 			} else if (e.getComponent().equals(closed)) {
-				ClosedPage complete = new ClosedPage();
+				ClosedPage complete = new ClosedPage(completeContainers, incompleteContainers);
 			} else if (e.getComponent().equals(file)) {
 				fileMenu.show(e.getComponent(), e.getX(), e.getY());
 			}
