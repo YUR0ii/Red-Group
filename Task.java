@@ -5,7 +5,7 @@ import java.util.*;
 public class Task implements Serializable{
 	private String name=null;
 	private String priority;
-	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3]; // look at the constructor for this, make 3 new Priorities in brackets
+	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3];
 	private ArrayList<Event> eventList = new ArrayList<Event>();
 	private String comment="new comment";
 	private boolean complete;
@@ -58,7 +58,7 @@ public class Task implements Serializable{
 	}
 	
 	public String getDateString() {
-		String ds="";
+		String ds=Event.getDateString(Calendar.getInstance().getTime());
 		Loop: for(scheduledPriority p: scheduledPriorities) {
 			if(p.getActive()) {
 				ds=Event.getDateString(p.getDate());
