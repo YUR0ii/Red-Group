@@ -207,6 +207,7 @@ public class EditAction implements ActionListener {
 		doneButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				editingTask.setName(displayItemName.getText());
 				update(editingTask);
 				frame.dispose();
 			}
@@ -262,7 +263,7 @@ public class EditAction implements ActionListener {
 	private final int instLim = 1;
 	private int count = 0;
 	// limit instances of commentpage
-	private CommentPage getInstance(Task t) {
+	public CommentPage getInstance(Task t) {
 		if (count < instLim) {
 			CommentPage c = new CommentPage(t);
 			count++;
@@ -351,6 +352,7 @@ public class EditAction implements ActionListener {
 					recentEvent = new commentEvent(ogComment, currentText);
 					task.setComment(currentText);
 					updateComment(currentText);
+					
 					dispose();
 				}
 			});
