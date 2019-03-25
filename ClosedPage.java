@@ -51,7 +51,6 @@ public class ClosedPage extends MainPage{
 		panel.removeAll();
 		closedContainers.clear();
 		for(Task t: closedTasks) {
-			System.out.println("testee");
 			closedTaskContainer temp=new closedTaskContainer(t);
 			closedContainers.add(temp);
 		}

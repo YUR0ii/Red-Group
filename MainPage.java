@@ -57,6 +57,15 @@ public class MainPage extends JPanel implements ActionListener
 				}
 			}
 		}
+		//loads the backup
+		try {
+			int lastList = Backup.getBackups().size() - 1;
+			incompleteTasks = Backup.restoreTasks(lastList).get(0);
+			completeTasks = Backup.restoreTasks(lastList).get(1);
+			updateGUI();
+		} catch (IndexOutOfBoundsException ex) {
+			
+		}
 		singleton = this;
 	}
 	//creates GUI components for main page
@@ -448,24 +457,16 @@ public class MainPage extends JPanel implements ActionListener
 	{
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
-				Backup.saveList(mainFrame, incompleteTasks);
-				Backup.saveList(mainFrame, completeTasks);
+				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
 			} else if (e.getComponent().equals(restore)) {
 				try {
-					int lastList=Backup.getBackups().size()-1;
-					incompleteTasks=Backup.restoreList(lastList);
+					int lastList = Backup.getBackups().size() - 1;
+					incompleteTasks = Backup.restoreTasks(lastList).get(0);
+					completeTasks = Backup.restoreTasks(lastList).get(1);
 					updateGUI();
-				}catch (IndexOutOfBoundsException ex){
+				} catch (IndexOutOfBoundsException ex) {
 					
 				}
-				//may not be right
-				/*try {
-					int lastList=Backup.getBackups().size()-1;
-					completeTasks=Backup.restoreList(lastList);
-					updateGUI();
-				}catch (IndexOutOfBoundsException ex){
-					
-				}*/
 			} else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
 				printer.printComponent(mainFrame);

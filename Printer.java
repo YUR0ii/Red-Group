@@ -1,5 +1,5 @@
- 
-import java.awt.Component;
+ import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.print.PageFormat;
@@ -9,7 +9,7 @@ import java.awt.print.PrinterJob;
 
 public class Printer implements Printable {
 
-	public static final int INCH = 72;
+	private static final int INCH = 72;
 
 	private Component component;
 
@@ -35,18 +35,23 @@ public class Printer implements Printable {
 		}
 
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.translate(getCenteredX(pf), INCH);
-		component.printAll(g);
+		Dimension imageableArea = new Dimension((int) pf.getWidth() - (2 * INCH), (int) pf.getHeight() - (2 * INCH));
+		double widthRatio = imageableArea.getWidth() / component.getWidth();
+		double heightRatio = imageableArea.getHeight() / component.getHeight();
+		// If the component fits within the imageable area
+		if (widthRatio > 1 && heightRatio > 1) {
+			g2d.translate(getCenteredX(pf, 1.0), INCH);
+		} else {
+			double scale = Math.min(widthRatio, heightRatio);
+			g2d.translate(getCenteredX(pf, scale), INCH);
+			g2d.scale(scale, scale);
+		}
 
+		component.printAll(g2d);
 		return PAGE_EXISTS;
 	}
 
-	private int getCenteredX(PageFormat pf) {
-		return (int) ((pf.getWidth() / 2) - (component.getSize().getWidth() / 2));
+	private int getCenteredX(PageFormat pf, double scale) {
+		return (int) ((pf.getWidth() / 2.0) - (component.getSize().getWidth() * scale / 2.0));
 	}
-
-	private int getCenteredY(PageFormat pf) {
-		return (int) ((pf.getHeight() / 2) - (component.getSize().getHeight() / 2));
-	}
-
 }

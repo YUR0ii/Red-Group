@@ -11,7 +11,7 @@ import javax.swing.JFileChooser;
 
 public class Backup {
 
-	public static final File propertiesFile = new File("Z:\\Properties.ser");
+	private static final File propertiesFile = new File("Z:\\Properties.ser");
 
 	private static JFileChooser fileChooser = new JFileChooser();
 
@@ -19,22 +19,25 @@ public class Backup {
 		createPropertiesFile();
 	}
 
-	public static ArrayList<Task> restoreList(int index) {
+	public static ArrayList<ArrayList<Task>> restoreTasks(int index) {
 		createPropertiesFile();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(Backup.propertiesFile);
+		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
 		String path = properties.get(index);
 
-		ArrayList<Task> list = (ArrayList<Task>) deserializeObject(new File(path));
-		return list;
+		ArrayList<ArrayList<Task>> tasks = (ArrayList<ArrayList<Task>>) deserializeObject(new File(path), true);
+		return tasks;
 	}
 
-	public static void saveList(Component parent, ArrayList<Task> list) {
+	public static void saveTasks(Component parent, ArrayList<Task> incompleteTasks, ArrayList<Task> completeTasks) {
 		int returnValue = fileChooser.showSaveDialog(parent);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			serializeObject(list, file);
+			ArrayList<ArrayList<Task>> tasks = new ArrayList<ArrayList<Task>>();
+			tasks.add(incompleteTasks);
+			tasks.add(completeTasks);
+			serializeObject(tasks, file);
 			// Append properties only if it is unique to prevent duplicates
-			if (!exists(file)) {
+			if (!fileExists(file)) {
 				appendProperties(file);
 			}
 		}
@@ -54,22 +57,22 @@ public class Backup {
 
 	public static ArrayList<String> getBackups() {
 		refreshProperties();
-		ArrayList<String> filePaths = (ArrayList<String>) deserializeObject(Backup.propertiesFile);
+		ArrayList<String> filePaths = (ArrayList<String>) deserializeObject(propertiesFile, false);
 
 		return filePaths;
 	}
 
 	private static void appendProperties(File file) {
 		refreshProperties();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(Backup.propertiesFile);
+		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
 		properties.add(file.getPath());
 
-		serializeObject(properties, Backup.propertiesFile);
+		serializeObject(properties, propertiesFile);
 	}
 
-	private static boolean exists(File file) {
+	private static boolean fileExists(File file) {
 		refreshProperties();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(Backup.propertiesFile);
+		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
 		if (properties.contains(file.getPath())) {
 			return true;
 		} else {
@@ -81,7 +84,7 @@ public class Backup {
 	// Removes any file path whose file no longer exists
 	public static void refreshProperties() {
 		createPropertiesFile();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(Backup.propertiesFile);
+		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
 		ArrayList<Integer> indicesToRemove = new ArrayList<Integer>();
 
 		// Get the indices of nonexistent files
@@ -98,7 +101,7 @@ public class Backup {
 			numRemoves += 1;
 		}
 
-		serializeObject(properties, Backup.propertiesFile);
+		serializeObject(properties, propertiesFile);
 	}
 
 	// Creates a new properties file if such a file doesn't exist at
@@ -108,7 +111,7 @@ public class Backup {
 			try {
 				propertiesFile.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 	}
@@ -123,11 +126,11 @@ public class Backup {
 		} catch (IOException e) {
 			// Can't find file to write to
 			// Or error in writing to file
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
-	private static ArrayList deserializeObject(File file) {
+	private static ArrayList deserializeObject(File file, boolean restoringTasks) {
 		ArrayList deserialized;
 
 		try {
@@ -139,9 +142,12 @@ public class Backup {
 		} catch (IOException | ClassNotFoundException e) {
 			// Returns empty array is cannot find file or file is empty
 			deserialized = new ArrayList();
+			if (restoringTasks) {
+				deserialized.add(new ArrayList<Task>());
+				deserialized.add(new ArrayList<Task>());
+			}
 		}
 
 		return deserialized;
 	}
-
 }
