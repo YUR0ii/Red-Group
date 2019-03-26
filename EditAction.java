@@ -155,6 +155,74 @@ public class EditAction implements ActionListener {
 				update(editingTask);
 			}
 		});
+		
+		// add key listeners to jspinners
+		urgentSpinner.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					Date date = (Date) currentSpinner.getValue();
+					editingTask.updatePriorityDate(date, 0);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		currentSpinner.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					Date date = (Date) currentSpinner.getValue();
+					editingTask.updatePriorityDate(date, 1);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		eventualSpinner.addKeyListener(new KeyListener() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					Date date = (Date) currentSpinner.getValue();
+					editingTask.updatePriorityDate(date, 2);
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 
 		// lazy coding
 		JPanel checkBoxAndSpinnerPanel = new JPanel(new FlowLayout());
