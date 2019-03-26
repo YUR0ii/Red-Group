@@ -1,11 +1,12 @@
+import java.util.ArrayList;
 import java.util.Date;
 
 public class priorityEvent extends Event{
 	
-	String oldLevel;
-	String newLevel;
-	Date oldDate;
-	Date newDate;
+	private String oldLevel;
+	private String newLevel;
+	private Date oldDate;
+	private Date newDate;
 	
 	//takes levels as strings and sets the internal level variables
 	priorityEvent(String OldLevel, String NewLevel){
@@ -45,21 +46,49 @@ public class priorityEvent extends Event{
 	
 	@Override
 	//Still working here
-	public String createSentence() {
+	public ArrayList<String> createSentence() {
 		// TODO Auto-generated method stub
 		
 		String day = Event.convertDay(date.getDay());
 		String month = Event.convertMonth(date.getMonth());
-		String output;
 		if(oldDate==null) {
-			output = "The priority level changed from " + oldLevel +" to " + newLevel + " on " + Event.getDateString(date); 
+			firstFiller="The priority level changed from ";
+			secondFiller=" to ";
+			sentence.add(firstFiller);
+			sentence.add(oldLevel);
+			sentence.add(secondFiller);
+			sentence.add(newLevel);
 		}else {
-			output = "The upgrade date for " + newLevel + " changed from " + oldDate.toString() +" to " + newDate.toString() + " on " + Event.getDateString(date); 
-		}		
-				
-		return output;
+			firstFiller="The upgrade date for ";
+			secondFiller=" changed from ";
+			sentence.add(firstFiller);
+			sentence.add(oldDate.toString());
+			sentence.add(secondFiller);
+			sentence.add(newDate.toString());
+			sentence.add(" to ");
+		}
+		sentence.add(on);
+		sentence.add(Event.getDateString(date));
+		for(String s: sentence) {
+			System.out.print(s);
+		}
+		return sentence;
 	}
-
+	
+	public int getStringType(int index) {
+		String temp=sentence.get(index);
+		if(temp.equals(oldLevel)) {
+			return 1;
+		}else if(temp.equals(newLevel)) {
+			return 1;
+		}
+		if(temp.equals(oldDate)) {
+			return 2;
+		}else if(temp.equals(newDate)) {
+			return 2;
+		}
+		return 0;
+	}
 	@Override
 	public String getType() {
 		// TODO Auto-generated method stub

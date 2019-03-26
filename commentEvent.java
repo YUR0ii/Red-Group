@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class commentEvent extends Event{
 	//i added differentiation between adding, removing, and changing a comment
@@ -22,20 +23,38 @@ public class commentEvent extends Event{
 	}
 	
 	@Override
-	public String createSentence() {
+	public ArrayList<String> createSentence() {
 		// TODO Auto-generated method stub
 		//makes the string for a change event
-		sentence = "The comment was changed to '"+  newComment + "' on " + Event.getDateString(date);
+		firstFiller= "The commment was changed to ";
+		sentence.add(firstFiller);
+		sentence.add(newComment);
+		sentence.add(on);
+		sentence.add(Event.getDateString(date));
 		return sentence;
 	}
-	public String createSentence(int identifier) {
+	public ArrayList<String> createSentence(int identifier) {
 		// TODO Auto-generated method stub
 		//makes the string for a remove event
-		
-		sentence = "The comment '"+newComment+"' was deleted on " + Event.getDateString(date);
+		firstFiller= "The commment ";
+		secondFiller= " was deleted"+on;
+		sentence.add(firstFiller);
+		sentence.add(oldComment);
+		sentence.add(secondFiller);
+		sentence.add(Event.getDateString(date));
 		return sentence;		
 	}
 
+	public int getStringType(int index) {
+		String temp=sentence.get(index);
+		if(temp.equals(oldComment)) {
+			return 1;
+		}else if(temp.equals(newComment)) {
+			return 1;
+		}
+		return 0;
+	}
+	
 	@Override
 	public String getType() {
 		// TODO Auto-generated method stub

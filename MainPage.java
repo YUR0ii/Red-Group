@@ -3,14 +3,11 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-//also, does not make separate dates properly, only one
-
 public class MainPage extends JPanel implements ActionListener
 {
 	private JFrame mainFrame = new JFrame();
 	private JPanel scrollPanel = new JPanel();
 	private JScrollPane scroll = new JScrollPane(scrollPanel);
-	private JScrollBar scrollBar = new JScrollBar();
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenu file = new JMenu("File");
 	private JPopupMenu fileMenu = new JPopupMenu();
@@ -62,7 +59,6 @@ public class MainPage extends JPanel implements ActionListener
 			}
 		}
 		singleton = this;
-		//createGUI();
 	}
 	//creates GUI components for main page
 	public void createGUI() {
@@ -80,7 +76,6 @@ public class MainPage extends JPanel implements ActionListener
 		this.add(scroll);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setPreferredSize(new Dimension(600, 500));
-		scroll.add(scrollBar);
 		scroll.validate();
 		input.addActionListener(this);
 		input.setEditable(true);
@@ -211,7 +206,6 @@ public class MainPage extends JPanel implements ActionListener
 			this.task = task;
 			name=new JLabel(task.getName());
 			date=Calendar.getInstance().getTime();
-			this.setLayout(new FlowLayout());
 			this.add(name);
 			update();
 

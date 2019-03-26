@@ -4,7 +4,10 @@ import java.util.*;
 
 public abstract class Event implements Serializable{
 	protected Date date;
-	protected String sentence;
+	protected String firstFiller;
+	protected String secondFiller;
+	protected String on=" on ";
+	protected ArrayList<String> sentence=new ArrayList<String>();
 	
 	Event(){
 		//Should be called to set the date
@@ -17,10 +20,12 @@ public abstract class Event implements Serializable{
 	// Creates the sentence to be stores until retrieved
 	// priority and comment events use given priorities and comments
 	// respectively to create these sentences
-	public abstract String createSentence();
+	public abstract ArrayList<String> createSentence();
+	
+	public abstract int getStringType(int index);
 
 	// another way to get the sentence
-	public String getSentence() {
+	public ArrayList getSentence() {
 		return sentence;
 	}
 

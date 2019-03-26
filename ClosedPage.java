@@ -23,6 +23,7 @@ public class ClosedPage extends MainPage{
 		this.add(scroll);
 		this.setBackground(new Color(247, 232, 210));
 	    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
 	    scroll.setPreferredSize(new Dimension(440,410));
 	    scroll.validate();
 	    

@@ -10,8 +10,7 @@ import java.awt.event.MouseListener;
 
 public class HistoryPage implements MouseListener{
 	private ArrayList<Event> events = new ArrayList<Event>(); 
-	private ArrayList<JLabel> labels = new ArrayList<JLabel>();
-	private JScrollBar scrollBar = new JScrollBar();
+	private ArrayList<sentenceContainer> allLabels=new ArrayList<sentenceContainer>();
 	private JFrame frame= new JFrame("History Page");
 	private JPanel contentPane = new JPanel();	
 	private JScrollPane scroll = new JScrollPane(contentPane);
@@ -23,7 +22,7 @@ public class HistoryPage implements MouseListener{
 		thisHistory = this;
 		events =task.getEvents();
 		for(int i = events.size()-1; i>-1;i--) {
-			add(getEvent(i),new JLabel());
+			add(getEvent(i));
 		}
 		openHistoryPage();
 
@@ -33,22 +32,11 @@ public class HistoryPage implements MouseListener{
 		return events.get(index);
 	}
 	//adds labels and adds listener to comment events
-	public void add(final Event event,final JLabel j){
-		j.setText(event.createSentence());
-		labels.add(j);
-		if(event.getType() == "Comment"){
-			j.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					if(e.getClickCount()==2){
-						openComment((commentEvent)event);
-						
-						
-					}
-
-				}
-			});
-		}
-
+	public void add(final Event event){
+		ArrayList<String> set=event.createSentence();
+		sentenceContainer container=new sentenceContainer(set,event);		
+		
+		allLabels.add(container);
 	}
 	//creates gui
 	public void openHistoryPage() {
@@ -56,10 +44,9 @@ public class HistoryPage implements MouseListener{
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
 
 		scroll = new JScrollPane(contentPane);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS );
-		scroll.setBounds(0, 0, 500, 400);
-		scroll.add(scrollBar);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setPreferredSize(new Dimension(500, 400));
 		scroll.validate();
 	
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
@@ -68,9 +55,8 @@ public class HistoryPage implements MouseListener{
 		contentPane.setBackground(new Color(247, 232, 210));
 	
 
-		for(JLabel l : labels) {
-			contentPane.add(l);
-
+		for(sentenceContainer a : allLabels) {
+			contentPane.add(a);
 		}
 		
 		panel.add(scroll);
@@ -93,7 +79,7 @@ public class HistoryPage implements MouseListener{
 		for(Event e : events) {
 			if(e.getDate().equals(eventDate)) {
 				e.setComment(newComment);
-				labels.get(events.indexOf(e)).setText(e.createSentence());;
+				labels.get(events.indexOf(e)).setText(e.createSentence());
 //				labels.get(events.indexOf(e)).setText(newComment);
 			}
 		}
@@ -124,6 +110,64 @@ public class HistoryPage implements MouseListener{
 	}
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
+	}
+	
+	public class sentenceContainer extends JComponent{
+		private ArrayList<String> sentence;
+		private ArrayList<JLabel> labelset=new ArrayList<JLabel>();
+		sentenceContainer(ArrayList<String> sen, Event ev){
+			sentence=sen;
+			for(String s: sentence) {
+				labelset.add(new JLabel(s));
+			}
+			if(ev.getType() == "Comment"){
+				for(int i=0;i<labelset.size();i++) {
+					if(ev.getStringType(i)==1) {
+						labelset.get(i).setForeground(new Color(127, 126, 123));
+						labelset.get(i).setFont(new Font(Font.SERIF,Font.ITALIC,14));
+					}else {
+						labelset.get(i).setFont(new Font(Font.SERIF,Font.PLAIN,14));
+					}
+				}
+				this.addMouseListener(new MouseAdapter() {
+					public void mouseClicked(MouseEvent e) {
+						if(e.getClickCount()==2){
+							openComment((commentEvent)ev);
+							
+						}
+
+					}
+				});
+			}else {
+				for(int i=0;i<labelset.size();i++) {
+					System.out.println(i+" "+ev.getStringType(i));
+					if(ev.getStringType(i)==1) {
+						if(sentence.get(i).equals("Urgent")) {
+							labelset.get(i).setForeground(Color.red);
+							labelset.get(i).setFont(new Font(Font.SERIF,Font.BOLD,14));
+						}else if(sentence.get(i).equals("Current")) {
+							labelset.get(i).setForeground(new Color(191, 121, 1));
+							labelset.get(i).setFont(new Font(Font.SERIF,Font.PLAIN,14));
+						}else if(sentence.get(i).equals("Eventual")) {
+							labelset.get(i).setForeground(Color.blue);
+							labelset.get(i).setFont(new Font(Font.SERIF,Font.ITALIC,14));
+						}else{
+							labelset.get(i).setForeground(new Color(127, 126, 123));
+							labelset.get(i).setFont(new Font(Font.SERIF,Font.ITALIC,14));
+						}
+					}else if(ev.getStringType(i)==2) {
+						labelset.get(i).setForeground(new Color(127, 126, 123));
+						labelset.get(i).setFont(new Font(Font.SERIF,Font.PLAIN,14));
+					}else {
+						labelset.get(i).setFont(new Font(Font.SERIF,Font.PLAIN,14));
+					}
+				}
+			}
+			this.setLayout(new FlowLayout());
+			for(JLabel l: labelset) {
+				this.add(l);
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
