@@ -27,14 +27,14 @@ public class MainPage extends JPanel implements ActionListener
 	protected ArrayList<taskContainer> incompleteContainers = new ArrayList<taskContainer>();
 	protected ArrayList<taskContainer> completeContainers = new ArrayList<taskContainer>();
 	private ArrayList<String> dateStrings=new ArrayList<String>();
-	
+
 	private static ClosedPage completePage;
-	
+
 	public static ClosedPage getClosedInstance()
 	{
 		return completePage;
 	}
-	
+
 	private static MainPage singleton;
 
 	public static MainPage getInstance()
@@ -44,6 +44,7 @@ public class MainPage extends JPanel implements ActionListener
 
 	MainPage()
 	{
+		restoreTasks();
 		//adds listeners
 		file.addMouseListener(new menuListener());
 		closed.addMouseListener(new menuListener());
@@ -126,38 +127,52 @@ public class MainPage extends JPanel implements ActionListener
 		{
 			incompleteTasks.add(t.getTask());
 		}
-	}
 
-	public boolean checkAddDate(taskContainer t) {
-		for(String s : dateStrings) {
-			if((t.getDateString().equals(s))) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	public void updateGUI() {
 		scrollPanel.removeAll();
 		incompleteContainers.clear();
 		dateStrings.clear();
+		ArrayList[] tasks = {new ArrayList<Task>(), new ArrayList<Task>(), new ArrayList<Task>(), new ArrayList<Task>()};
 		for(Task t: incompleteTasks)
 		{
-			taskContainer temp = new taskContainer(t);
-			incompleteContainers.add(temp);
-
-			if(t.getPriorityLevel().equals("inactive"))
+			switch(t.getPriorityLevel())
 			{
-				if(checkAddDate(temp)) {
-					dateStrings.add(temp.getDateString());
-					JLabel tempL=new JLabel(temp.getDateString());
-					tempL.setFont(dateFont);
-					scrollPanel.add(tempL);
-				}
+			case "urgent":
+				tasks[0].add(t);
+				break;
+			case "current":
+				tasks[1].add(t);
+				break;
+			case "eventual":
+				tasks[2].add(t);
+				break;
+			default:
+				tasks[3].add(t);
+				break;
 			}
-
-			scrollPanel.add(temp);
 		}
+		
+		for(int i = 0; i < 3; i++)
+			for(Task tt : (ArrayList<Task>) tasks[i])
+				incompleteContainers.add(new taskContainer(tt));
+		
+		tasks[3].sort(null);
+		
+		for(Task t : (ArrayList<Task>) tasks[3])
+		{
+			dateStrings.add(t.getDateString());
+			JLabel tempL=new JLabel(t.getDateString());
+			tempL.setFont(dateFont);
+			scrollPanel.add(tempL);
+			
+			incompleteContainers.add(new taskContainer(t));
+		}
+		
+		for(taskContainer t : incompleteContainers)
+			scrollPanel.add(t);
+		
 
 		scrollPanel.validate();
 		scroll.validate();
@@ -239,7 +254,7 @@ public class MainPage extends JPanel implements ActionListener
 						}
 						if(h)
 						{
-//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
+							//							System.out.println("give " + incompleteContainers.get(getIndex()).getName() + " urgent priority");
 							//change priority to urgent
 							task.setPriorityLevel(incompleteContainers.get(0).getTask().getPriorityLevel());
 							incompleteTasks.remove(getIndex());
@@ -426,19 +441,28 @@ public class MainPage extends JPanel implements ActionListener
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
 				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
-			} else if (e.getComponent().equals(restore)) {
-				try {
-					int lastList = Backup.getBackups().size() - 1;
-					incompleteTasks = Backup.restoreTasks(lastList).get(0);
-					completeTasks = Backup.restoreTasks(lastList).get(1);
-					updateGUI();
-				} catch (IndexOutOfBoundsException ex) {}
+			} else if (e.getComponent().equals(restore))
+			{
+				restoreTasks();
 			} else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
 				printer.printComponent(mainFrame);
 			}
 			fileMenu.setVisible(false);
 		}
+	}
+
+	private void restoreTasks()
+	{
+		try {
+			int lastList = Backup.getBackups().size() - 1;
+			incompleteTasks = Backup.restoreTasks(lastList).get(0);
+			completeTasks = Backup.restoreTasks(lastList).get(1);
+			updateGUI();
+		} catch (IndexOutOfBoundsException ex) {
+
+		}
+
 	}
 
 	//deals with functions in menu bar
