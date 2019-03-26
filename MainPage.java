@@ -65,14 +65,24 @@ public class MainPage extends JPanel implements ActionListener
 		mainFrame.setJMenuBar(menuBar);
 		mainFrame.setContentPane(this);
 		mainFrame.setBackground(new Color(247, 232, 210));
+		mainFrame.setTitle("To Do List");
 		menuBar.add(file);
 		menuBar.add(closed);
 		menuBar.add(quit);
+		menuBar.setBackground(new Color(189, 209, 237));
+		menuBar.setPreferredSize(new Dimension(600, 40));
+		closed.setBackground(new Color(189, 209, 237));
+		quit.setBackground(new Color(189, 209, 237));
 		file.add(fileMenu);
 		file.setPreferredSize(new Dimension(200, 20));
+		file.setBackground(new Color(173, 204, 247));
 		fileMenu.add(save);
 		fileMenu.add(restore);
 		fileMenu.add(print);
+		fileMenu.setBackground(new Color(173, 204, 247));
+		restore.setBackground(new Color(205, 221, 242));
+		save.setBackground(new Color(205, 221, 242));
+		print.setBackground(new Color(205, 221, 242));
 		this.add(scroll);
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setPreferredSize(new Dimension(600, 500));
@@ -125,6 +135,7 @@ public class MainPage extends JPanel implements ActionListener
 	}
 
 	public void updateGUI() {
+		//still adds the date before all of the tasks, not just the inactive ones
 		scrollPanel.removeAll();
 		incompleteContainers.clear();
 		dateStrings.clear();
@@ -156,11 +167,13 @@ public class MainPage extends JPanel implements ActionListener
 		
 		for(Task t : (ArrayList<Task>) tasks[3])
 		{
-			dateStrings.add(t.getDateString());
-			JLabel tempL=new JLabel(t.getDateString());
-			tempL.setFont(dateFont);
-			scrollPanel.add(tempL);
-			
+			System.out.println(t.getDateString());
+			if(!(t.getDateString()==null)) {
+				dateStrings.add(t.getDateString());
+				JLabel tempL=new JLabel(t.getDateString());
+				tempL.setFont(dateFont);
+				scrollPanel.add(tempL);
+			}			
 			incompleteContainers.add(new taskContainer(t));
 		}
 		
@@ -431,6 +444,7 @@ public class MainPage extends JPanel implements ActionListener
 	//deals with functions in file menu
 	private class fileListener extends MouseAdapter
 	{
+		//need it to close when clicked on something else
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
 				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
@@ -462,6 +476,7 @@ public class MainPage extends JPanel implements ActionListener
 	private class menuListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(quit)) {
+				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
 				mainFrame.dispose();
 			} else if (e.getComponent().equals(closed)) {
 				ClosedPage complete = new ClosedPage(completeTasks);

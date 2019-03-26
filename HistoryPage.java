@@ -19,6 +19,7 @@ public class HistoryPage implements MouseListener{
 	
 	
 	public HistoryPage(Task task) {
+		allLabels.clear();
 		thisHistory = this;
 		events =task.getEvents();
 		for(int i = events.size()-1; i>-1;i--) {
@@ -41,7 +42,8 @@ public class HistoryPage implements MouseListener{
 	//creates gui
 	public void openHistoryPage() {
 
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setTitle("History");
 
 		scroll = new JScrollPane(contentPane);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -50,7 +52,7 @@ public class HistoryPage implements MouseListener{
 		scroll.validate();
 	
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-//		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 50, 5, 50));
+		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 		contentPane.setPreferredSize(new Dimension(500, 400));	
 		contentPane.setBackground(new Color(247, 232, 210));
 	
@@ -73,16 +75,6 @@ public class HistoryPage implements MouseListener{
 	// opens the comment page
 	public void openComment(commentEvent event){
 		event.editComment(thisHistory);
-	}
-	
-	public void ChangeLabel(Date eventDate, String newComment) {
-		for(Event e : events) {
-			if(e.getDate().equals(eventDate)) {
-				e.setComment(newComment);
-				labels.get(events.indexOf(e)).setText(e.createSentence());
-//				labels.get(events.indexOf(e)).setText(newComment);
-			}
-		}
 	}
 	
 
@@ -140,15 +132,14 @@ public class HistoryPage implements MouseListener{
 				});
 			}else {
 				for(int i=0;i<labelset.size();i++) {
-					System.out.println(i+" "+ev.getStringType(i));
 					if(ev.getStringType(i)==1) {
-						if(sentence.get(i).equals("Urgent")) {
+						if(sentence.get(i).equals("urgent")) {
 							labelset.get(i).setForeground(Color.red);
 							labelset.get(i).setFont(new Font(Font.SERIF,Font.BOLD,14));
-						}else if(sentence.get(i).equals("Current")) {
+						}else if(sentence.get(i).equals("current")) {
 							labelset.get(i).setForeground(new Color(191, 121, 1));
 							labelset.get(i).setFont(new Font(Font.SERIF,Font.PLAIN,14));
-						}else if(sentence.get(i).equals("Eventual")) {
+						}else if(sentence.get(i).equals("eventual")) {
 							labelset.get(i).setForeground(Color.blue);
 							labelset.get(i).setFont(new Font(Font.SERIF,Font.ITALIC,14));
 						}else{
@@ -175,7 +166,7 @@ public class HistoryPage implements MouseListener{
 		Task task = new Task("Test Task");
 		
 		Event event01 = new commentEvent("oldString", "newString");
-		Event event02 = new priorityEvent(new scheduledPriority("Eventual"), new scheduledPriority("Urgent"));
+		Event event02 = new priorityEvent(new scheduledPriority("eventual"), new scheduledPriority("urgent"));
 		task.addEventToHistory(event01);
 		task.addEventToHistory(event02);
 		task.addEventToHistory(event01);

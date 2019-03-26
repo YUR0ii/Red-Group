@@ -12,7 +12,7 @@ import javax.swing.*;
 //The Mark as Complete option also needs to be deactivated
 
 public class ClosedPage extends MainPage{
-	private JFrame closeFrame=new JFrame();
+	private JFrame closeFrame=new JFrame("Completed Tasks");
 	private JPanel panel=new JPanel();
 	private static ArrayList<Task> closedTasks;
 	private ArrayList<closedTaskContainer> closedContainers=new ArrayList<closedTaskContainer>();

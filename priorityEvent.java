@@ -51,6 +51,7 @@ public class priorityEvent extends Event{
 		
 		String day = Event.convertDay(date.getDay());
 		String month = Event.convertMonth(date.getMonth());
+		sentence.clear();
 		if(oldDate==null) {
 			firstFiller="The priority level changed from ";
 			secondFiller=" to ";
@@ -70,7 +71,6 @@ public class priorityEvent extends Event{
 		sentence.add(on);
 		sentence.add(Event.getDateString(date));
 		for(String s: sentence) {
-			System.out.print(s);
 		}
 		return sentence;
 	}

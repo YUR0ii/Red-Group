@@ -6,7 +6,7 @@ public class Task implements Serializable{
 	private String priority;
 	private scheduledPriority[] scheduledPriorities = new scheduledPriority[3];
 	private ArrayList<Event> eventList = new ArrayList<Event>();
-	private String comment="new comment";
+	private String comment="Enter a comment";
 	private boolean complete;
 
 	Task(String toBeName) {
@@ -57,7 +57,7 @@ public class Task implements Serializable{
 	}
 	
 	public String getDateString() {
-		String ds=Event.getDateString(Calendar.getInstance().getTime());
+		String ds=null;
 		Loop: for(scheduledPriority p: scheduledPriorities) {
 			if(p.getActive()) {
 				ds=Event.getDateString(p.getDate());

@@ -281,9 +281,9 @@ public class EditAction implements ActionListener {
 			}
 		});
 
-		JButton printButton = new JButton(); // set printer icon later
-		printButton.setIcon(new ImageIcon("lib/smallprintericon.png"));
-		printButton.setPreferredSize(new Dimension(50, 25));
+		JButton printButton = new JButton("Print"); // set printer icon later
+//		printButton.setIcon(new ImageIcon("lib/smallprintericon.png"));
+//		printButton.setPreferredSize(new Dimension(50, 50));
 		printButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -358,6 +358,7 @@ public class EditAction implements ActionListener {
 		private String ogComment;
 
 		CommentPage(Task t) {
+			this.setTitle("Edit Comment");
 			task = t;
 			ogComment = task.getComment();
 			currentText = task.getComment();
@@ -428,8 +429,10 @@ public class EditAction implements ActionListener {
 			delete.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					recentEvent = new commentEvent(ogComment, "");
-					currentText = "";
+					currentText = "Enter a comment";
 					dispose();
+					task.setComment(currentText);
+					updateComment(currentText);
 				}
 			});
 		}
