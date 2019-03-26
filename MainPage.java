@@ -3,7 +3,6 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
-//sometimes, if a task is dragged onto another task, the other tasks of that priority become the task that was dragged in
 //also, does not make separate dates properly, only one
 
 public class MainPage extends JPanel implements ActionListener
