@@ -115,4 +115,10 @@ public class priorityEvent extends Event{
 		
 	}
 
+	@Override
+	public void editComment(HistoryPage h) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

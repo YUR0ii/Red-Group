@@ -123,4 +123,6 @@ public abstract class Event implements Serializable{
 	}
 	
 	public abstract void setComment(String newcomment);
+	
+	public abstract void editComment(HistoryPage h);
 }

@@ -72,7 +72,7 @@ public class HistoryPage implements MouseListener{
 
 	}
 	// opens the comment page
-	public void openComment(commentEvent event){
+	public void openComment(Event event){
 		event.editComment(thisHistory);
 	}
 	
@@ -123,8 +123,8 @@ public class HistoryPage implements MouseListener{
 				this.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						if(e.getClickCount()==2){
-							openComment((commentEvent)ev);
-							
+							openComment(ev);
+//							System.out.println("this works");
 						}
 
 					}
