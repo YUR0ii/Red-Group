@@ -13,8 +13,16 @@ public class EditAction implements ActionListener {
 		editingTask = task;
 	}
 
+	private static EditAction singleton;
+
+	public static EditAction getInstance()
+	{
+		return singleton;
+	}
+	
 	public void createAndShowGUI() {
 		// create JFrame
+		singleton = this;
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setSize(new Dimension(400, 500));
 		frame.setTitle("Edit Item");
@@ -313,6 +321,10 @@ public class EditAction implements ActionListener {
 		frame.getContentPane().add(buttonPanel);
 		frame.setVisible(true);
 	}
+	
+	public static void update(String currentText) {
+		singleton.updateComment(currentText);
+	}
 
 	public void updateComment(String s) {
 		// update text area
@@ -335,110 +347,24 @@ public class EditAction implements ActionListener {
 		if (count < instLim) {
 			CommentPage c = new CommentPage(t);
 			count++;
+			c.addWindowListener(new WindowAdapter()
+	        {
+	            @Override
+	            public void windowClosing(WindowEvent e)
+	            {
+	                //System.out.println("Closed");
+	            	instanceRemoved();
+	                e.getWindow().dispose();
+	            }
+	        });
 			return c;
 		} else {
 			return null;
 		}
 	}
-
-	class CommentPage extends JFrame {
-		Task task;
-		private String currentText;
-
-		private JSplitPane sp;
-		private JPanel topPanel;
-		private JPanel bottomPanel;
-		private JScrollPane scroll;
-		private JTextArea textArea;
-		private JPanel inputPanel;
-		private JButton commit;
-		private JButton delete;
-		private JLabel title;
-		private Event recentEvent;
-		private String ogComment;
-
-		CommentPage(Task t) {
-			this.setTitle("Edit Comment");
-			task = t;
-			ogComment = task.getComment();
-			currentText = task.getComment();
-			setLocation(400, 200);
-			sp = new JSplitPane();
-			topPanel = new JPanel();
-			bottomPanel = new JPanel();
-			textArea = new JTextArea();
-			textArea.setLineWrap(true);
-			textArea.setWrapStyleWord(true);
-			textArea.setText(currentText);
-			scroll = new JScrollPane(textArea);
-			scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			title = new JLabel("Edit Comment");
-			topPanel.add(title);
-			inputPanel = new JPanel();
-			commit = new JButton("Commit");
-			commit.setPreferredSize(new Dimension(199, 25));
-			delete = new JButton("Delete");
-			delete.setPreferredSize(new Dimension(199, 25));
-			setPreferredSize(new Dimension(400, 400));
-			getContentPane().add(sp);
-			sp.setOrientation(JSplitPane.VERTICAL_SPLIT);
-			sp.setTopComponent(topPanel);
-			sp.setBottomComponent(bottomPanel);
-			topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-			topPanel.setBackground(new Color(247, 232, 210)); 
-			bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
-			bottomPanel.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			bottomPanel.add(scroll);
-			bottomPanel.add(inputPanel);
-			inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 75));
-			inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
-			inputPanel.add(commit);
-			inputPanel.add(delete);
-
-			pack();
-			initiateComponents();
-			setVisible(true);
-		}
-
-		public String getText() {
-			return currentText;
-		}
-		
-		private void initiateComponents() {
-			textArea.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {
-				}
-				public void keyReleased(KeyEvent e) {
-				}
-				public void keyTyped(KeyEvent arg0) {
-					currentText = textArea.getText();
-				}
-			});
-			
-			commit.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					currentText = textArea.getText();
-					recentEvent = new commentEvent(ogComment, currentText);
-					task.setComment(currentText);
-					updateComment(currentText);
-					
-					dispose();
-				}
-			});
-			
-			delete.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					recentEvent = new commentEvent(ogComment, "");
-					currentText = "Enter a comment";
-					dispose();
-					task.setComment(currentText);
-					updateComment(currentText);
-				}
-			});
-		}
-		public Event getRecentEvent() {
-			return recentEvent;
-		}
+	
+	public void instanceRemoved() {
+		count--;
 	}
 	
 	public static void update(Task t) {
