@@ -32,9 +32,9 @@ class CommentPage extends JFrame {
 	private Event recentEvent;
 	private String ogComment;
 
-	CommentPage(Task t) {
+	CommentPage() {
 		this.setTitle("Edit Comment");
-		task = t;
+		task=EditAction.getThisInstance().getTask();
 		ogComment = task.getComment();
 		currentText = task.getComment();
 		setLocation(400, 200);
@@ -97,6 +97,7 @@ class CommentPage extends JFrame {
 				task.setComment(currentText);
 				EditAction.update(currentText);
 				EditAction.instanceRemoved();
+				task.addEventToHistory(recentEvent);
 				dispose();
 			}
 		});
@@ -110,6 +111,7 @@ class CommentPage extends JFrame {
 				dispose();
 				task.setComment(currentText);
 				EditAction.update(currentText);
+				EditAction.instanceRemoved();
 			}
 		});
 	}

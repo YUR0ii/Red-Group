@@ -4,11 +4,12 @@ import java.util.*;
 
 public class scheduledPriority implements Serializable{
 	String level;
-	Date date = new Date();
+	Date date;
 	boolean active=false;
 	
 	scheduledPriority(String Level){
 		level=Level;
+		date=null;
 	}
 	scheduledPriority(String Level, Date Date){
 		level = Level;

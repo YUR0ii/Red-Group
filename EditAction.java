@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.*;
 
@@ -16,7 +18,7 @@ public class EditAction implements ActionListener {
 
 	private static EditAction singleton;
 
-	public static EditAction getInstance()
+	public static EditAction getThisInstance()
 	{
 		return singleton;
 	}
@@ -123,9 +125,19 @@ public class EditAction implements ActionListener {
 		// create and add JSpinners (date selection)
 		JPanel spinnerPanel = new JPanel();
 		spinnerPanel.setLayout(new BoxLayout(spinnerPanel, BoxLayout.Y_AXIS));
-		JSpinner urgentSpinner = new JSpinner(new SpinnerDateModel());
-		JSpinner currentSpinner = new JSpinner(new SpinnerDateModel());
-		JSpinner eventualSpinner = new JSpinner(new SpinnerDateModel());
+		SpinnerDateModel mU=new SpinnerDateModel();
+		SpinnerDateModel mC=new SpinnerDateModel();
+		SpinnerDateModel mE=new SpinnerDateModel();
+		if(!(editingTask.getScheduledPriority(0).getDate()==null)) {
+			mU.setValue(editingTask.getScheduledPriority(0).getDate());
+		}else if(!(editingTask.getScheduledPriority(1).getDate()==null)) {
+			mC.setValue(editingTask.getScheduledPriority(1).getDate());
+		}else if(!(editingTask.getScheduledPriority(2).getDate()==null)) {
+			mE.setValue(editingTask.getScheduledPriority(2).getDate());
+		}
+		JSpinner urgentSpinner=new JSpinner(mU);
+		JSpinner currentSpinner=new JSpinner(mC);
+		JSpinner eventualSpinner=new JSpinner(mE);
 		spinnerPanel.add(urgentSpinner);
 		spinnerPanel.add(currentSpinner);
 		spinnerPanel.add(eventualSpinner);
@@ -266,7 +278,7 @@ public class EditAction implements ActionListener {
 		commentArea.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				getInstance(editingTask);
+				getInstance();
 			}
 		});
 
@@ -344,9 +356,9 @@ public class EditAction implements ActionListener {
 	private final int instLim = 1;
 	private int count = 0;
 	// limit instances of commentpage
-	public CommentPage getInstance(Task t) {
+	public CommentPage getInstance() {
 		if (count < instLim) {
-			c = new CommentPage(t);
+			c = new CommentPage();
 			count++;
 			c.addWindowListener(new WindowAdapter()
 	        {
@@ -364,18 +376,22 @@ public class EditAction implements ActionListener {
 		}
 	}
 	
+	public Task getTask() {
+		return editingTask;
+	}
+	
 	public static void instanceRemoved() {
 		singleton.count--;
 	}
 	
 	public static void makeCommentPage() {
-		
+		singleton.getInstance();
 	}
 	
 	public static void update(Task t) {
 		MainPage.getInstance().updatePage(t);
 		if(t.getComplete()) {
-			MainPage.getClosedInstance().refreshGUI();			
+			MainPage.getClosedInstance().refreshGUI();		
 		}
 	}
 	public static void main(String[] args) {
