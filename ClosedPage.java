@@ -210,7 +210,7 @@ public class ClosedPage extends MainPage{
 				});
 
 				//adds actions to menu
-				this.add(complete);
+//				this.add(complete);
 				this.add(delete);
 				this.add(edit);
 
