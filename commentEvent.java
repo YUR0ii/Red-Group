@@ -1,4 +1,6 @@
-import java.util.ArrayList;
+import java.util.ArrayList
+
+
 
 public class commentEvent extends Event{
 	//i added differentiation between adding, removing, and changing a comment
@@ -75,7 +77,7 @@ public class commentEvent extends Event{
 
 	public void editComment(HistoryPage h) {
 		//creates the comment page when a comment is double clicked
-		CommentPage page=new CommentPage(newComment,getDate(),h);
+		EditAction.makeCommentPage();
 	}
 	
 	public void setComment(String newcomment) {

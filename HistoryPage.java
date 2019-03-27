@@ -46,15 +46,14 @@ public class HistoryPage implements MouseListener{
 		frame.setTitle("History");
 
 		scroll = new JScrollPane(contentPane);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scroll.setPreferredSize(new Dimension(500, 400));
-		scroll.validate();
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 		contentPane.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 		contentPane.setPreferredSize(new Dimension(500, 400));	
 		contentPane.setBackground(new Color(247, 232, 210));
+		contentPane.validate();
 	
 
 		for(sentenceContainer a : allLabels) {
@@ -65,7 +64,7 @@ public class HistoryPage implements MouseListener{
 		frame.setContentPane(panel);
 		panel.setBackground(new Color(247, 232, 210));
 		
-		scroll.revalidate();
+		scroll.validate();
 		contentPane.repaint();
 		
 		frame.pack();
