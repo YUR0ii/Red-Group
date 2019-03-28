@@ -16,7 +16,7 @@ public class ClosedPage extends MainPage{
 	private JPanel panel=new JPanel();
 	private static ArrayList<Task> closedTasks;
 	private ArrayList<closedTaskContainer> closedContainers=new ArrayList<closedTaskContainer>();
-	
+
 	ClosedPage(ArrayList<Task> coTasks){
 		closedTasks=coTasks;
 		JScrollPane scroll = new JScrollPane(panel);
@@ -26,7 +26,7 @@ public class ClosedPage extends MainPage{
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
 	    scroll.setPreferredSize(new Dimension(440,410));
 	    scroll.validate();
-	    
+
 		panel.setPreferredSize(new Dimension(440, 410));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.setBackground(new Color(247, 232, 210));
@@ -42,8 +42,8 @@ public class ClosedPage extends MainPage{
 	    closeFrame.setVisible(true);
 	    closeFrame.setResizable(false);
 		refreshGUI();
-	}	
-	
+	}
+
 	//adds the components to the panel in reverse order
 	public void refreshGUI() {
 		for(closedTaskContainer t: closedContainers) {
@@ -64,7 +64,7 @@ public class ClosedPage extends MainPage{
 	public void setClosedTasks(){
 		closedTasks=completeTasks;
 	}
-	
+
 	public class closedTaskContainer extends JComponent
 	{
 		private Task task;
@@ -94,19 +94,19 @@ public class ClosedPage extends MainPage{
 						menu=new contextMenu();
 						menu.show(e.getComponent(), e.getX(), e.getY());
 					}else if(e.getClickCount()==2){
-						task.edit();
+						//task.edit();
 					}
 					//					setLocation(e.getPoint());
 				}
 			});
 			this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
 		}
-		
+
 		public int getIndex()
 		{
 			return closedContainers.indexOf(this);
 		}
-		
+
 		public String getName()
 		{
 			return task.getName();
@@ -115,7 +115,7 @@ public class ClosedPage extends MainPage{
 		public JLabel getLabel() {
 			return name;
 		}
-		
+
 		public Task getTask() {
 			return task;
 		}
@@ -123,7 +123,7 @@ public class ClosedPage extends MainPage{
 		public void setTask(Task nTask) {
 			task=nTask;
 		}
-		
+
 		public void update() {
 			//changes fonts depending on the priority
 			if(task.getPriorityLevel().equals("urgent")){
@@ -140,13 +140,17 @@ public class ClosedPage extends MainPage{
 				name.setForeground(new Color(127, 126, 123));
 			}
 		}
-		
+
 		class contextMenu extends JPopupMenu
-		{	
+		{
+			JPopupMenu confirm = new JPopupMenu();
 			contextMenu()
 			{
 				//creates an action that uncompletes a task
 				JMenuItem complete = new JMenuItem("Mark as Complete");
+
+			   //gray out complete
+				complete.setEnabled(false);
 				complete.setFocusable(false);
 				//creates an action to edit a task
 				JMenuItem edit = new JMenuItem("Edit");
@@ -166,7 +170,7 @@ public class ClosedPage extends MainPage{
 					public void actionPerformed(ActionEvent e)
 					{
 						//creates an "Are you sure?" popup
-						JPopupMenu confirm = new JPopupMenu();
+						//JPopupMenu confirm = new JPopupMenu();
 
 						JLabel text = new JLabel("Are you sure you want to delete " + task.getName() + "?");
 						JButton del = new JButton("Delete");
@@ -186,7 +190,7 @@ public class ClosedPage extends MainPage{
 								int index=closedTasks.indexOf(task);
 								closedTasks.remove(task);
 								panel.remove(closedContainers.get(index));
-								closedContainers.remove(index);	
+								closedContainers.remove(index);
 								refreshGUI();
 								MainPage.getInstance().updatePage(task);
 								confirm.setVisible(false);
@@ -210,7 +214,7 @@ public class ClosedPage extends MainPage{
 				});
 
 				//adds actions to menu
-//				this.add(complete);
+				this.add(complete);
 				this.add(delete);
 				this.add(edit);
 
@@ -218,3 +222,6 @@ public class ClosedPage extends MainPage{
 		}
 	}
 }
+
+
+
