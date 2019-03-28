@@ -104,7 +104,7 @@ public class MainPage extends JPanel implements ActionListener
 		mainFrame.setLocation(300, 50);
 		mainFrame.pack();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		updateGUI();
+		updateGUI(); 
 		mainFrame.setVisible(true);
 	}
 	//adds functionality to text field for adding tasks
