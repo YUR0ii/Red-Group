@@ -8,146 +8,137 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class Backup {
 
-	private static final File propertiesFile = new File("Z:\\Properties.ser");
-
+	private static final File PROPERTIES_FILE = new File("Z:\\Properties.ser");
 	private static JFileChooser fileChooser = new JFileChooser();
 
-	static {
-		createPropertiesFile();
-	}
+	public static ArrayList[] restoreTasks(Component parent, boolean startup) {
+		String filePath = (String) deserializeObject(PROPERTIES_FILE);
+		// If the properties file exists and contains a string
+		if (filePath instanceof String) {
+			File backup = new File(filePath);
+			if (backup.exists()) {
+				ArrayList<Task>[] tasks = (ArrayList<Task>[]) deserializeObject(backup);
+				// Should honestly include a more rigorous check that tasks is of type
+				// ArrayList<Task>[]
+				if (tasks != null) {
+					return tasks;
+				}
+			}
+		}
 
-	public static ArrayList<ArrayList<Task>> restoreTasks(int index) {
-		createPropertiesFile();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
-		String path = properties.get(index);
+		if (!startup) {
+			JOptionPane.showMessageDialog(parent, "Backup doesnt exist", "Error", JOptionPane.WARNING_MESSAGE);
+		}
 
-		ArrayList<ArrayList<Task>> tasks = (ArrayList<ArrayList<Task>>) deserializeObject(new File(path), true);
-		return tasks;
+		return getDefaultTasks();
 	}
 
 	public static void saveTasks(Component parent, ArrayList<Task> incompleteTasks, ArrayList<Task> completeTasks) {
-		int returnValue = fileChooser.showSaveDialog(parent);
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			File file = fileChooser.getSelectedFile();
-			ArrayList<ArrayList<Task>> tasks = new ArrayList<ArrayList<Task>>();
-			tasks.add(incompleteTasks);
-			tasks.add(completeTasks);
-			serializeObject(tasks, file);
-			// Append properties only if it is unique to prevent duplicates
-			if (!fileExists(file)) {
-				appendProperties(file);
+		boolean success = false;
+
+		if (backupExists()) {
+			ArrayList<Task>[] tasks = new ArrayList[2];
+			tasks[0] = incompleteTasks;
+			tasks[1] = completeTasks;
+			if (serializeObject(tasks, getBackupFile())) {
+				success = true;
 			}
-		}
-	}
-
-	public static ArrayList<String> getBackupNames() {
-		ArrayList<String> filePaths = getBackups();
-		ArrayList<String> names = new ArrayList<String>();
-
-		for (String path : filePaths) {
-			int index = path.lastIndexOf("\\");
-			names.add(path.substring(index + 1));
-		}
-
-		return names;
-	}
-
-	public static ArrayList<String> getBackups() {
-		refreshProperties();
-		ArrayList<String> filePaths = (ArrayList<String>) deserializeObject(propertiesFile, false);
-
-		return filePaths;
-	}
-
-	private static void appendProperties(File file) {
-		refreshProperties();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
-		properties.add(file.getPath());
-
-		serializeObject(properties, propertiesFile);
-	}
-
-	private static boolean fileExists(File file) {
-		refreshProperties();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
-		if (properties.contains(file.getPath())) {
-			return true;
 		} else {
-			return false;
-		}
-	}
+			int returnValue = fileChooser.showSaveDialog(parent);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				ArrayList<Task>[] tasks = new ArrayList[2];
+				tasks[0] = incompleteTasks;
+				tasks[1] = completeTasks;
+				if (serializeObject(tasks, file)) {
+					success = true;
+				}
 
-	// Searches file paths in properties file to make sure those files exist
-	// Removes any file path whose file no longer exists
-	public static void refreshProperties() {
-		createPropertiesFile();
-		ArrayList<String> properties = (ArrayList<String>) deserializeObject(propertiesFile, false);
-		ArrayList<Integer> indicesToRemove = new ArrayList<Integer>();
-
-		// Get the indices of nonexistent files
-		for (int i = 0; i < properties.size(); i++) {
-			if (!new File(properties.get(i)).exists()) {
-				indicesToRemove.add(i);
+				// Update propertiesFile
+				String filePath = file.getPath();
+				serializeObject(filePath, PROPERTIES_FILE);
 			}
 		}
 
-		// Remove nonexistent files from properties file
-		int numRemoves = 0;
-		for (Integer index : indicesToRemove) {
-			properties.remove(index - numRemoves);
-			numRemoves += 1;
+		if (success) {
+			JOptionPane.showMessageDialog(parent, "Backup saved successfully", "Backup Saved",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(parent, "Backup could not be saved", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-
-		serializeObject(properties, propertiesFile);
 	}
 
-	// Creates a new properties file if such a file doesn't exist at
-	// predetermined path
-	private static void createPropertiesFile() {
-		if (!propertiesFile.exists()) {
-			try {
-				propertiesFile.createNewFile();
-			} catch (IOException e) {
-				// e.printStackTrace();
+	private static boolean backupExists() {
+		try {
+			String filePath = (String) deserializeObject(PROPERTIES_FILE);
+			File backup = new File(filePath);
+			if (backup.exists()) {
+				return true;
 			}
+			// If backup file doesn't exist
+		} catch (Exception e) {
+			// If properties file doesn't exist
+			// Backup file cannot be accessed without the properties file
+		}
+
+		return false;
+	}
+
+	private static File getBackupFile() {
+		try {
+			String filePath = (String) deserializeObject(PROPERTIES_FILE);
+			return new File(filePath);
+		} catch (Exception e) {
+			// Properties file doesn't exist or is empty
+			return null;
 		}
 	}
 
-	private static void serializeObject(ArrayList object, File file) {
+	private static ArrayList<Task>[] getDefaultTasks() {
+		ArrayList<Task>[] tasks = new ArrayList[2];
+		tasks[0] = new ArrayList<Task>();
+		tasks[1] = new ArrayList<Task>();
+
+		return tasks;
+	}
+
+	private static boolean serializeObject(Object object, File file) {
+		boolean success;
+
 		try {
 			FileOutputStream fileOut = new FileOutputStream(file);
 			ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
 			objectOut.writeObject(object);
 			objectOut.close();
 			fileOut.close();
+
+			success = true;
 		} catch (IOException e) {
-			// Can't find file to write to
-			// Or error in writing to file
-			// e.printStackTrace();
+			// File not found or cannot write to file
+			success = false;
 		}
+
+		return success;
 	}
 
-	private static ArrayList deserializeObject(File file, boolean restoringTasks) {
-		ArrayList deserialized;
+	private static Object deserializeObject(File file) {
+		Object deserialized = null;
 
 		try {
 			FileInputStream fileIn = new FileInputStream(file);
 			ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-			deserialized = (ArrayList) objectIn.readObject();
+			deserialized = objectIn.readObject();
 			objectIn.close();
 			fileIn.close();
 		} catch (IOException | ClassNotFoundException e) {
-			// Returns empty array is cannot find file or file is empty
-			deserialized = new ArrayList();
-			if (restoringTasks) {
-				deserialized.add(new ArrayList<Task>());
-				deserialized.add(new ArrayList<Task>());
-			}
+			// File not found or file is empty
 		}
 
 		return deserialized;
 	}
+
 }

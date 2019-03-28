@@ -48,6 +48,9 @@ public class MainPage extends JPanel implements ActionListener
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
+		ArrayList<Task>[] tasks = Backup.restoreTasks(mainFrame, true);
+		incompleteTasks = tasks[0];
+		completeTasks = tasks[1];
 		for(Task t: incompleteTasks) {
 			for(scheduledPriority p: t.getScheduledPriorities()) {
 				if(p.getActive()) {
@@ -101,6 +104,7 @@ public class MainPage extends JPanel implements ActionListener
 		mainFrame.setLocation(300, 50);
 		mainFrame.pack();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		updateGUI();
 		mainFrame.setVisible(true);
 	}
 	//adds functionality to text field for adding tasks
@@ -448,10 +452,13 @@ public class MainPage extends JPanel implements ActionListener
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
 				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
-			} else if (e.getComponent().equals(restore))
-			{
-				restoreTasks();
-			} else if (e.getComponent().equals(print)) {
+			} else if (e.getComponent().equals(restore)) {
+				ArrayList<Task>[] tasks = Backup.restoreTasks(mainFrame, false);
+				incompleteTasks = tasks[0];
+				completeTasks = tasks[1];
+				updateGUI();
+			}
+			else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
 				printer.printComponent(mainFrame);
 			}
