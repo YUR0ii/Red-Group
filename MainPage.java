@@ -40,7 +40,7 @@ public class MainPage extends JPanel implements ActionListener
 
 	MainPage()
 	{
-		restoreTasks();
+		restoreTasks(true);
 		//adds listeners
 		file.addMouseListener(new menuListener());
 		closed.addMouseListener(new menuListener());
@@ -48,9 +48,6 @@ public class MainPage extends JPanel implements ActionListener
 		save.addMouseListener(new fileListener());
 		restore.addMouseListener(new fileListener());
 		print.addMouseListener(new fileListener());
-		ArrayList<Task>[] tasks = Backup.restoreTasks(mainFrame, true);
-		incompleteTasks = tasks[0];
-		completeTasks = tasks[1];
 		for(Task t: incompleteTasks) {
 			for(scheduledPriority p: t.getScheduledPriorities()) {
 				if(p.getActive()) {
@@ -104,7 +101,6 @@ public class MainPage extends JPanel implements ActionListener
 		mainFrame.setLocation(300, 50);
 		mainFrame.pack();
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		updateGUI(); 
 		mainFrame.setVisible(true);
 	}
 	//adds functionality to text field for adding tasks
@@ -453,10 +449,7 @@ public class MainPage extends JPanel implements ActionListener
 			if (e.getComponent().equals(save)) {
 				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
 			} else if (e.getComponent().equals(restore)) {
-				ArrayList<Task>[] tasks = Backup.restoreTasks(mainFrame, false);
-				incompleteTasks = tasks[0];
-				completeTasks = tasks[1];
-				updateGUI();
+				restoreTasks(false);
 			}
 			else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
@@ -466,16 +459,12 @@ public class MainPage extends JPanel implements ActionListener
 		}
 	}
 
-	private void restoreTasks()
+	private void restoreTasks(boolean b)
 	{
-		try {
-			int lastList = Backup.getBackups().size() - 1;
-			incompleteTasks = Backup.restoreTasks(lastList).get(0);
-			completeTasks = Backup.restoreTasks(lastList).get(1);
-			updateGUI();
-		} catch (IndexOutOfBoundsException ex) {
-
-		}
+		ArrayList<Task>[] tasks = Backup.restoreTasks(mainFrame, b);
+		incompleteTasks = tasks[0];
+		completeTasks = tasks[1];
+		updateGUI();
 
 	}
 

@@ -31,7 +31,7 @@ public class Backup {
 		}
 
 		if (!startup) {
-			JOptionPane.showMessageDialog(parent, "Backup doesnt exist", "Error", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(parent, "Backup doesn't exist", "Error", JOptionPane.WARNING_MESSAGE);
 		}
 
 		return getDefaultTasks();
