@@ -463,7 +463,7 @@ public class MainPage extends JPanel implements ActionListener
 			}
 			else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
-				printer.printComponent(mainFrame);
+				printer.printComponent(scroll);
 			}
 			fileMenu.setVisible(false);
 		}
