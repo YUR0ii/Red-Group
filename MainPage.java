@@ -448,10 +448,10 @@ public class MainPage extends JPanel implements ActionListener
 		public void mouseClicked(MouseEvent e) {
 			if (e.getComponent().equals(save)) {
 				Backup.saveTasks(mainFrame, incompleteTasks, completeTasks);
-			} else if (e.getComponent().equals(restore)) {
+			} else if (e.getComponent().equals(restore))
+			{
 				restoreTasks(false);
-			}
-			else if (e.getComponent().equals(print)) {
+			} else if (e.getComponent().equals(print)) {
 				Printer printer=new Printer();
 				printer.printComponent(mainFrame);
 			}
