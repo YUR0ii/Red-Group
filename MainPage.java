@@ -162,8 +162,8 @@ public class MainPage extends JPanel implements ActionListener
 		for(int i = 0; i < 3; i++)
 			for(Task tt : (ArrayList<Task>) tasks[i])
 				incompleteContainers.add(new taskContainer(tt));
-		
-		tasks[3].sort(null);
+
+		tasks[3].sort(new taskComparator());
 		
 		for(Task t : (ArrayList<Task>) tasks[3])
 		{
@@ -184,6 +184,16 @@ public class MainPage extends JPanel implements ActionListener
 		scrollPanel.validate();
 		scroll.validate();
 		scrollPanel.repaint();
+	}
+	
+	public class taskComparator implements Comparator<Task> {
+
+		@Override
+		public int compare(Task o1, Task o2) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+		
 	}
 
 	public class taskContainer extends JComponent
