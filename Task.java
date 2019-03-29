@@ -58,12 +58,13 @@ public class Task implements Serializable{
 	
 	public String getDateString() {
 		String ds=null;
-		Loop: for(scheduledPriority p: scheduledPriorities) {
-			if(p.getActive()) {
-				ds=Event.getDateString(p.getDate());
-				break Loop;
+		Loop: for (int i = scheduledPriorities.length - 1; i >= 0; i--) {
+			if (scheduledPriorities[i].getActive()) {
+				ds=Event.getDateString(scheduledPriorities[i].getDate());
+				break Loop; 
 			}
 		}
+		
 		return ds;
 	}
 	
