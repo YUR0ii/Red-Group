@@ -113,6 +113,7 @@ public class MainPage extends JPanel implements ActionListener
 			incompleteTasks.add(temp.getTask());
 			scrollPanel.add(temp);
 			updateGUI();
+			input.setText("");
 		}
 	}
 
@@ -159,26 +160,58 @@ public class MainPage extends JPanel implements ActionListener
 			}
 		}
 		
-		for(int i = 0; i < 3; i++)
-			for(Task tt : (ArrayList<Task>) tasks[i])
-				incompleteContainers.add(new taskContainer(tt));
+		Comparator<Task> com = new Comparator<Task>() {
 
-		tasks[3].sort(new taskComparator());
+			@Override
+			public int compare(Task t1, Task t2) {
+				try {
+					if (t1.getScheduledPriorities()[2].getDate().compareTo(t2.getScheduledPriorities()[2].getDate()) < 0) {
+						return 1;
+					} else if (t1.getScheduledPriorities()[2].getDate().compareTo(t2.getScheduledPriorities()[2].getDate()) > 0) {
+						return -1;
+					} else {
+						return 0;
+					}
+				} catch(Exception e) {
+					return 0;
+				}
+			}
+			
+		};
+		
+		Collections.sort(tasks[3], com);
+		
+		for(int i = 0; i < 3; i++) {
+			for(Task tt : (ArrayList<Task>) tasks[i]) {
+				incompleteContainers.add(new taskContainer(tt));
+				scrollPanel.add(incompleteContainers.get(incompleteContainers.size() - 1));
+			}
+		}
+		
 		
 		for(Task t : (ArrayList<Task>) tasks[3])
 		{
-			System.out.println(t.getDateString());
+			// System.out.println(t.getDateString());
 			if(!(t.getDateString()==null)) {
 				dateStrings.add(t.getDateString());
 				JLabel tempL=new JLabel(t.getDateString());
 				tempL.setFont(dateFont);
-				scrollPanel.add(tempL);
+				boolean exist = false;
+				for (Component c : scrollPanel.getComponents()) {
+					if (c instanceof JLabel) {
+						if (tempL.getText().equals(((JLabel) c).getText())) {
+							exist = true;
+						}
+					}
+				}
+				if (!exist) {
+					scrollPanel.add(tempL);
+				}
 			}			
 			incompleteContainers.add(new taskContainer(t));
+			scrollPanel.add(incompleteContainers.get(incompleteContainers.size() - 1));
 		}
-		
-		for(taskContainer t : incompleteContainers)
-			scrollPanel.add(t);
+
 		
 
 		scrollPanel.validate();
