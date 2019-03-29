@@ -192,7 +192,7 @@ public class MainPage extends JPanel implements ActionListener
 		public int compare(Task o1, Task o2) {
 			// TODO Auto-generated method stub
 			return 0;
-		}
+		} 
 		
 	}
 
