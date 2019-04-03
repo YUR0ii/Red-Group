@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 public class Backup {
 
-	private static final File PROPERTIES_FILE = new File("Z:\\Properties.ser");
+	private static final File PROPERTIES_FILE = new File("C:\\Users\\harun\\Desktop\\miscelaneous\\DUmb STUFF\\Properties");
 	private static JFileChooser fileChooser = new JFileChooser();
 
 	public static ArrayList[] restoreTasks(Component parent, boolean startup) {
